@@ -1191,11 +1191,6 @@ IJ.createRun = async function() {
     IJ.showStatus('ij-run-status', 'err', 'Run code is missing.');
     return;
   }
-  if (!IJ.getScriptUrl()) {
-    IJ.showStatus('ij-run-status', 'err',
-      'Apps Script URL not set. Configure it above first.');
-    return;
-  }
 
   btn.disabled = true;
   btn.innerHTML = '<span class="ij-spinner"></span> Creating run...';
@@ -1221,8 +1216,6 @@ IJ.createRun = async function() {
 };
 
 IJ.refreshScoreboard = async function() {
-  if (!IJ.getScriptUrl()) return;
-
   // Find current run — try admin run code or latest
   let runCode = document.getElementById('ij-admin-run-code')?.value?.trim();
   if (!runCode) return;
