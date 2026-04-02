@@ -1,1 +1,1445 @@
-<!-- Innovation Jam — placeholder, upload via drag-and-drop when ready -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Innovation Jam — Chicago Booth</title>
+<style>
+/* ============================================================
+   INNOVATION JAM — CSS
+   Prefix: ij-
+   Brand: Chicago Booth
+   Maroon #800000 | Gray #58595B | Warm Gray #72635C
+   Font: Arial Bold / Arial Regular
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ij-maroon:    #800000;
+  --ij-maroon-dk: #600000;
+  --ij-maroon-lt: #a00000;
+  --ij-gray:      #58595B;
+  --ij-warm:      #72635C;
+  --ij-white:     #FFFFFF;
+  --ij-off:       #F7F4F4;
+  --ij-border:    #D4CCCC;
+  --ij-text:      #1A1A1A;
+  --ij-muted:     #6B6B6B;
+
+  /* D/F/V tints — very faint */
+  --ij-desirability-tint: rgba(220, 38, 38, 0.07);
+  --ij-feasibility-tint:  rgba(56, 189, 248, 0.08);
+  --ij-viability-tint:    rgba(250, 204, 21, 0.10);
+
+  /* Confidence bar */
+  --ij-confidence-color: #1d6fce;
+
+  --ij-radius-sm: 4px;
+  --ij-radius-md: 8px;
+  --ij-radius-lg: 14px;
+  --ij-shadow:    0 2px 12px rgba(0,0,0,0.12);
+  --ij-shadow-lg: 0 6px 28px rgba(0,0,0,0.18);
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: var(--ij-off);
+  color: var(--ij-text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── SCREENS ─────────────────────────────────────────────── */
+.ij-screen { display: none; flex-direction: column; min-height: 100vh; }
+.ij-screen.ij-active { display: flex; }
+
+/* ── HEADER ──────────────────────────────────────────────── */
+.ij-header {
+  background: var(--ij-maroon);
+  color: var(--ij-white);
+  padding: 0 32px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+.ij-header-logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.ij-header-logo img {
+  height: 32px;
+  filter: brightness(0) invert(1);
+}
+.ij-header-title {
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  font-size: 20px;
+  letter-spacing: 0.5px;
+  color: var(--ij-white);
+}
+.ij-header-subtitle {
+  font-size: 12px;
+  color: rgba(255,255,255,0.7);
+  font-weight: normal;
+}
+.ij-header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.8);
+}
+
+/* ── LOBBY LAYOUT ────────────────────────────────────────── */
+.ij-lobby-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+.ij-lobby-card {
+  background: var(--ij-white);
+  border-radius: var(--ij-radius-lg);
+  box-shadow: var(--ij-shadow-lg);
+  width: 100%;
+  max-width: 560px;
+  overflow: hidden;
+}
+.ij-lobby-top {
+  background: var(--ij-maroon);
+  padding: 32px 36px 28px;
+  color: var(--ij-white);
+  text-align: center;
+}
+.ij-lobby-top h1 {
+  font-size: 32px;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+.ij-lobby-top p {
+  font-size: 14px;
+  color: rgba(255,255,255,0.8);
+}
+.ij-lobby-form {
+  padding: 32px 36px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* ── FORM ELEMENTS ───────────────────────────────────────── */
+.ij-field { display: flex; flex-direction: column; gap: 7px; }
+.ij-label {
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--ij-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+.ij-input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid var(--ij-border);
+  border-radius: var(--ij-radius-md);
+  font-size: 15px;
+  font-family: Arial, sans-serif;
+  color: var(--ij-text);
+  background: var(--ij-white);
+  transition: border-color 0.15s;
+  outline: none;
+}
+.ij-input:focus { border-color: var(--ij-maroon); }
+.ij-input.ij-input-readonly {
+  background: var(--ij-off);
+  color: var(--ij-muted);
+}
+.ij-input-hint {
+  font-size: 11px;
+  color: var(--ij-muted);
+  margin-top: 2px;
+}
+.ij-input-ok  { border-color: #2e7d32 !important; }
+.ij-input-err { border-color: #c62828 !important; }
+
+/* ── COMPANY CHIPS ───────────────────────────────────────── */
+.ij-chip-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ij-chip {
+  padding: 7px 14px;
+  border-radius: 20px;
+  border: 1.5px solid var(--ij-border);
+  background: var(--ij-white);
+  font-size: 12px;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  color: var(--ij-gray);
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+  white-space: nowrap;
+}
+.ij-chip:hover { border-color: var(--ij-maroon); color: var(--ij-maroon); }
+.ij-chip.ij-chip-selected {
+  background: var(--ij-maroon);
+  border-color: var(--ij-maroon);
+  color: var(--ij-white);
+}
+.ij-chip-category {
+  font-size: 10px;
+  font-weight: normal;
+  opacity: 0.75;
+  display: block;
+  margin-top: 1px;
+}
+
+/* ── TIMER WHEELS ────────────────────────────────────────── */
+.ij-timer-wheels {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ij-timer-wheel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.ij-timer-wheel label {
+  font-size: 10px;
+  color: var(--ij-muted);
+  text-transform: uppercase;
+}
+.ij-timer-wheel select {
+  padding: 8px 6px;
+  border: 1.5px solid var(--ij-border);
+  border-radius: var(--ij-radius-md);
+  font-size: 18px;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  color: var(--ij-maroon);
+  background: var(--ij-white);
+  cursor: pointer;
+  outline: none;
+  min-width: 64px;
+  text-align: center;
+}
+.ij-timer-wheel select:focus { border-color: var(--ij-maroon); }
+.ij-timer-sep {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--ij-maroon);
+  margin-top: 16px;
+}
+
+/* ── DIFFICULTY TOGGLE ───────────────────────────────────── */
+.ij-diff-toggle {
+  display: flex;
+  border: 1.5px solid var(--ij-border);
+  border-radius: var(--ij-radius-md);
+  overflow: hidden;
+}
+.ij-diff-btn {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  color: var(--ij-gray);
+  background: var(--ij-white);
+  border: none;
+  transition: all 0.15s;
+  user-select: none;
+}
+.ij-diff-btn.ij-diff-active {
+  background: var(--ij-maroon);
+  color: var(--ij-white);
+}
+.ij-diff-desc {
+  font-size: 11px;
+  color: var(--ij-muted);
+  margin-top: 4px;
+  text-align: center;
+}
+
+/* ── BUTTONS ─────────────────────────────────────────────── */
+.ij-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: var(--ij-radius-md);
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.ij-btn-primary {
+  background: var(--ij-maroon);
+  color: var(--ij-white);
+  width: 100%;
+  font-size: 16px;
+  padding: 14px;
+}
+.ij-btn-primary:hover { background: var(--ij-maroon-lt); }
+.ij-btn-primary:disabled {
+  background: var(--ij-border);
+  color: var(--ij-muted);
+  cursor: not-allowed;
+}
+.ij-btn-secondary {
+  background: var(--ij-off);
+  color: var(--ij-gray);
+  border: 1.5px solid var(--ij-border);
+}
+.ij-btn-secondary:hover { border-color: var(--ij-maroon); color: var(--ij-maroon); }
+.ij-btn-ghost {
+  background: transparent;
+  color: var(--ij-maroon);
+  border: 1.5px solid var(--ij-maroon);
+}
+.ij-btn-ghost:hover { background: var(--ij-maroon); color: var(--ij-white); }
+
+/* ── STATUS MESSAGES ─────────────────────────────────────── */
+.ij-status {
+  padding: 10px 14px;
+  border-radius: var(--ij-radius-md);
+  font-size: 13px;
+  display: none;
+}
+.ij-status.ij-show { display: block; }
+.ij-status-info    { background: #e3f2fd; color: #0d47a1; border: 1px solid #90caf9; }
+.ij-status-ok      { background: #e8f5e9; color: #1b5e20; border: 1px solid #a5d6a7; }
+.ij-status-err     { background: #ffebee; color: #b71c1c; border: 1px solid #ef9a9a; }
+.ij-status-warn    { background: #fff8e1; color: #e65100; border: 1px solid #ffcc02; }
+
+/* ── FOOTER ──────────────────────────────────────────────── */
+.ij-footer {
+  background: var(--ij-gray);
+  color: rgba(255,255,255,0.6);
+  text-align: center;
+  padding: 10px;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+.ij-footer a {
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  margin: 0 8px;
+}
+.ij-footer a:hover { color: rgba(255,255,255,0.9); }
+
+/* ── MODAL OVERLAY ───────────────────────────────────────── */
+.ij-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 9000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.ij-overlay.ij-show { display: flex; }
+.ij-modal {
+  background: var(--ij-white);
+  border-radius: var(--ij-radius-lg);
+  box-shadow: var(--ij-shadow-lg);
+  width: 100%;
+  max-width: 480px;
+  overflow: hidden;
+}
+.ij-modal-head {
+  background: var(--ij-maroon);
+  color: var(--ij-white);
+  padding: 20px 24px;
+  font-weight: bold;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.ij-modal-body { padding: 24px; }
+.ij-modal-foot {
+  padding: 16px 24px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  border-top: 1px solid var(--ij-border);
+}
+.ij-modal-close {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.8);
+  font-size: 20px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+.ij-modal-close:hover { color: white; }
+
+/* ── ADMIN SCREEN ────────────────────────────────────────── */
+.ij-admin-body {
+  flex: 1;
+  padding: 32px;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+}
+.ij-admin-section {
+  background: var(--ij-white);
+  border-radius: var(--ij-radius-lg);
+  box-shadow: var(--ij-shadow);
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+.ij-admin-section-head {
+  background: var(--ij-maroon);
+  color: var(--ij-white);
+  padding: 14px 24px;
+  font-weight: bold;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+}
+.ij-admin-section-body { padding: 24px; }
+.ij-admin-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+.ij-admin-row .ij-field { flex: 1; min-width: 160px; }
+
+/* Scoreboard table */
+.ij-score-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.ij-score-table th {
+  background: var(--ij-maroon);
+  color: var(--ij-white);
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: bold;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.ij-score-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--ij-border);
+  vertical-align: middle;
+}
+.ij-score-table tr:nth-child(even) td { background: var(--ij-off); }
+.ij-score-table tr:hover td { background: #f0e8e8; }
+.ij-rank-1 td:first-child { color: var(--ij-maroon); font-weight: bold; }
+.ij-status-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.ij-badge-playing    { background: #e8f5e9; color: #1b5e20; }
+.ij-badge-complete   { background: var(--ij-maroon); color: white; }
+.ij-badge-registered { background: #e3f2fd; color: #0d47a1; }
+
+/* ── SPINNER ─────────────────────────────────────────────── */
+.ij-spinner {
+  display: inline-block;
+  width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: ij-spin 0.7s linear infinite;
+  vertical-align: middle;
+}
+.ij-spinner-dark {
+  border-color: rgba(0,0,0,0.15);
+  border-top-color: var(--ij-maroon);
+}
+@keyframes ij-spin { to { transform: rotate(360deg); } }
+
+/* ── URL CONFIG NOTICE ───────────────────────────────────── */
+.ij-url-notice {
+  background: #fff8e1;
+  border: 1px solid #ffcc02;
+  border-radius: var(--ij-radius-md);
+  padding: 12px 16px;
+  font-size: 13px;
+  color: #5d4037;
+  margin-bottom: 16px;
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .ij-lobby-form { padding: 24px 20px; }
+  .ij-lobby-top  { padding: 24px 20px; }
+  .ij-admin-body { padding: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     SCREEN 1: LOBBY
+     ============================================================ -->
+<div id="ij-screen-lobby" class="ij-screen ij-active">
+
+  <header class="ij-header">
+    <div class="ij-header-logo">
+      <img src="https://images.squarespace-cdn.com/content/v1/68ff9bf138d63d51324c9b28/9ae04eaf-a113-48fb-8fb5-ff2dfff1a69d/uchicago-booth-logo.png?format=2500w"
+           alt="Chicago Booth"
+           onerror="this.style.display='none'">
+      <div>
+        <div class="ij-header-title">INNOVATION JAM</div>
+        <div class="ij-header-subtitle">De-Risking Challenge — Chicago Booth</div>
+      </div>
+    </div>
+    <div class="ij-header-right" id="ij-run-display">
+      Waiting for run...
+    </div>
+  </header>
+
+  <div class="ij-lobby-body">
+    <div class="ij-lobby-card">
+
+      <div class="ij-lobby-top">
+        <h1>🎯 Ready to Play?</h1>
+        <p>Enter your team details to join the current run</p>
+      </div>
+
+      <div class="ij-lobby-form">
+
+        <!-- Run Name -->
+        <div class="ij-field">
+          <label class="ij-label">Run Code</label>
+          <input type="text" id="ij-run-input" class="ij-input"
+                 placeholder="e.g. APR02-A"
+                 maxlength="10"
+                 style="text-transform:uppercase; letter-spacing:2px; font-weight:bold;">
+          <div class="ij-input-hint" id="ij-run-hint">
+            <span id="ij-run-hint-text">Auto-loading from latest run...</span>
+          </div>
+        </div>
+
+        <!-- Team Name -->
+        <div class="ij-field">
+          <label class="ij-label">Team Name</label>
+          <input type="text" id="ij-team-input" class="ij-input"
+                 placeholder="e.g. Team Alpha"
+                 maxlength="40">
+          <div class="ij-input-hint" id="ij-team-hint"></div>
+        </div>
+
+        <!-- Company Selection -->
+        <div class="ij-field">
+          <label class="ij-label">Your Assigned Company</label>
+          <div class="ij-chip-grid" id="ij-company-chips"></div>
+          <input type="hidden" id="ij-company-selected" value="">
+        </div>
+
+        <!-- Timer -->
+        <div class="ij-field">
+          <label class="ij-label">Session Timer</label>
+          <div class="ij-timer-wheels">
+            <div class="ij-timer-wheel">
+              <select id="ij-timer-h">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+              </select>
+              <label>hr</label>
+            </div>
+            <div class="ij-timer-sep">:</div>
+            <div class="ij-timer-wheel">
+              <select id="ij-timer-m"></select>
+              <label>min</label>
+            </div>
+            <div class="ij-timer-sep">:</div>
+            <div class="ij-timer-wheel">
+              <select id="ij-timer-s"></select>
+              <label>sec</label>
+            </div>
+          </div>
+          <div class="ij-input-hint">Default: 45 minutes. Adjust if your instructor sets a different time.</div>
+        </div>
+
+        <!-- Difficulty -->
+        <div class="ij-field">
+          <label class="ij-label">Difficulty</label>
+          <div class="ij-diff-toggle">
+            <div class="ij-diff-btn ij-diff-active" id="ij-diff-hard"
+                 onclick="IJ.setDifficulty('hard')">
+              🔒 HARD MODE
+            </div>
+            <div class="ij-diff-btn" id="ij-diff-easy"
+                 onclick="IJ.setDifficulty('easy')">
+              💡 EASY MODE
+            </div>
+          </div>
+          <div class="ij-diff-desc" id="ij-diff-desc">
+            Hard: Type your own assumptions — scored against the answer key
+          </div>
+        </div>
+
+        <!-- Status -->
+        <div class="ij-status ij-status-info" id="ij-lobby-status"></div>
+
+        <!-- Submit -->
+        <button class="ij-btn ij-btn-primary" id="ij-ready-btn"
+                onclick="IJ.registerTeam()" disabled>
+          Ready to Play →
+        </button>
+
+      </div><!-- /lobby-form -->
+    </div><!-- /lobby-card -->
+  </div><!-- /lobby-body -->
+
+  <footer class="ij-footer">
+    Innovation Jam &copy; Clarity Group &amp; Chicago Booth
+    <a href="?admin=true" id="ij-admin-link">Admin</a>
+  </footer>
+
+</div><!-- /screen-lobby -->
+
+
+<!-- ============================================================
+     SCREEN 2: ADMIN
+     ============================================================ -->
+<div id="ij-screen-admin" class="ij-screen">
+
+  <header class="ij-header">
+    <div class="ij-header-logo">
+      <img src="https://images.squarespace-cdn.com/content/v1/68ff9bf138d63d51324c9b28/9ae04eaf-a113-48fb-8fb5-ff2dfff1a69d/uchicago-booth-logo.png?format=2500w"
+           alt="Chicago Booth"
+           onerror="this.style.display='none'">
+      <div>
+        <div class="ij-header-title">INNOVATION JAM — ADMIN</div>
+        <div class="ij-header-subtitle">Instructor Control Panel</div>
+      </div>
+    </div>
+    <div class="ij-header-right">
+      <button class="ij-btn ij-btn-secondary" style="padding:6px 14px; font-size:12px;"
+              onclick="IJ.goToLobby()">← Back to Lobby</button>
+    </div>
+  </header>
+
+  <div class="ij-admin-body">
+
+    <!-- Apps Script URL config -->
+    <div class="ij-admin-section">
+      <div class="ij-admin-section-head">⚙️ Apps Script Configuration</div>
+      <div class="ij-admin-section-body">
+        <div id="ij-url-missing" class="ij-url-notice" style="display:none;">
+          ⚠️ Apps Script URL not set. Enter it below to enable Google Sheets sync.
+        </div>
+        <div class="ij-admin-row">
+          <div class="ij-field" style="flex:3;">
+            <label class="ij-label">Apps Script Web App URL</label>
+            <input type="text" id="ij-admin-script-url" class="ij-input"
+                   placeholder="https://script.google.com/macros/s/.../exec">
+          </div>
+          <button class="ij-btn ij-btn-primary" style="width:auto; padding:11px 20px;"
+                  onclick="IJ.saveScriptUrl()">Save URL</button>
+        </div>
+        <div class="ij-status" id="ij-url-status" style="margin-top:12px;"></div>
+      </div>
+    </div>
+
+    <!-- Create Run -->
+    <div class="ij-admin-section">
+      <div class="ij-admin-section-head">🚀 Start a New Run</div>
+      <div class="ij-admin-section-body">
+        <div class="ij-admin-row">
+          <div class="ij-field">
+            <label class="ij-label">Run Code (auto-generated)</label>
+            <input type="text" id="ij-admin-run-code" class="ij-input ij-input-readonly"
+                   readonly placeholder="e.g. APR02-A">
+            <div class="ij-input-hint">Format: MMM##-A. Write this on the whiteboard.</div>
+          </div>
+          <div class="ij-field">
+            <label class="ij-label">Session Letter</label>
+            <select id="ij-admin-run-letter" class="ij-input" style="cursor:pointer;"
+                    onchange="IJ.updateRunCode()">
+              <option value="A">A (first session)</option>
+              <option value="B">B (second session)</option>
+              <option value="C">C (third session)</option>
+              <option value="D">D</option>
+            </select>
+          </div>
+        </div>
+        <div class="ij-admin-row" style="margin-top:16px;">
+          <div class="ij-field">
+            <label class="ij-label">Default Difficulty</label>
+            <div class="ij-diff-toggle" style="max-width:300px;">
+              <div class="ij-diff-btn ij-diff-active" id="ij-admin-diff-hard"
+                   onclick="IJ.adminSetDifficulty('hard')">🔒 HARD</div>
+              <div class="ij-diff-btn" id="ij-admin-diff-easy"
+                   onclick="IJ.adminSetDifficulty('easy')">💡 EASY</div>
+            </div>
+          </div>
+          <div class="ij-field">
+            <label class="ij-label">Default Timer</label>
+            <div class="ij-timer-wheels">
+              <div class="ij-timer-wheel">
+                <select id="ij-admin-timer-h">
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                </select>
+                <label>hr</label>
+              </div>
+              <div class="ij-timer-sep">:</div>
+              <div class="ij-timer-wheel">
+                <select id="ij-admin-timer-m"></select>
+                <label>min</label>
+              </div>
+              <div class="ij-timer-sep">:</div>
+              <div class="ij-timer-wheel">
+                <select id="ij-admin-timer-s"></select>
+                <label>sec</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:20px;">
+          <button class="ij-btn ij-btn-primary" style="width:auto; padding:12px 32px;"
+                  onclick="IJ.createRun()" id="ij-create-run-btn">
+            🚀 Start This Run
+          </button>
+        </div>
+        <div class="ij-status" id="ij-run-status" style="margin-top:12px;"></div>
+      </div>
+    </div>
+
+    <!-- Live Scoreboard -->
+    <div class="ij-admin-section">
+      <div class="ij-admin-section-head" style="display:flex; align-items:center; justify-content:space-between;">
+        <span>📊 Live Scoreboard</span>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span id="ij-scoreboard-run-label" style="font-size:12px; font-weight:normal; opacity:0.8;"></span>
+          <button class="ij-btn" style="background:rgba(255,255,255,0.2); color:white; border:none;
+                          padding:5px 12px; font-size:11px; cursor:pointer;"
+                  onclick="IJ.refreshScoreboard()">⟳ Refresh</button>
+        </div>
+      </div>
+      <div class="ij-admin-section-body" style="padding:0; overflow-x:auto;">
+        <table class="ij-score-table" id="ij-admin-scoreboard">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Team</th>
+              <th>Company</th>
+              <th>Confidence</th>
+              <th>Total Pts</th>
+              <th>Earned</th>
+              <th>Lost</th>
+              <th>AI Calls</th>
+              <th>$ Spent</th>
+              <th>Tests</th>
+              <th>Status</th>
+              <th>Last Update</th>
+            </tr>
+          </thead>
+          <tbody id="ij-scoreboard-body">
+            <tr>
+              <td colspan="12" style="text-align:center; color:var(--ij-muted); padding:24px;">
+                No teams yet — start a run and have teams join.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="padding:12px 24px; font-size:11px; color:var(--ij-muted); border-top:1px solid var(--ij-border);">
+        Auto-refreshes every 5 minutes.
+        <span id="ij-last-refresh"></span>
+      </div>
+    </div>
+
+  </div><!-- /admin-body -->
+
+  <footer class="ij-footer">
+    Innovation Jam Admin — Clarity Group &amp; Chicago Booth
+    <a href="?" onclick="IJ.goToLobby(); return false;">Exit Admin</a>
+  </footer>
+
+</div><!-- /screen-admin -->
+
+
+<!-- ============================================================
+     ADMIN PASSWORD MODAL
+     ============================================================ -->
+<div class="ij-overlay" id="ij-pw-overlay">
+  <div class="ij-modal">
+    <div class="ij-modal-head">
+      🔐 Admin Access
+      <button class="ij-modal-close" onclick="IJ.closeAdminModal()">✕</button>
+    </div>
+    <div class="ij-modal-body">
+      <div class="ij-field">
+        <label class="ij-label">Admin Password</label>
+        <input type="password" id="ij-admin-pw-input" class="ij-input"
+               placeholder="Enter password"
+               onkeydown="if(event.key==='Enter') IJ.checkAdminPw()">
+      </div>
+      <div class="ij-status" id="ij-pw-status" style="margin-top:12px;"></div>
+    </div>
+    <div class="ij-modal-foot">
+      <button class="ij-btn ij-btn-secondary" onclick="IJ.closeAdminModal()">Cancel</button>
+      <button class="ij-btn ij-btn-primary" style="width:auto;"
+              onclick="IJ.checkAdminPw()">Enter</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+'use strict';
+
+// ── NAMESPACE ─────────────────────────────────────────────────────────────────
+const IJ = {};
+
+// ── CONSTANTS ─────────────────────────────────────────────────────────────────
+IJ.ADMIN_PW       = 'Clarity2026';
+IJ.STORAGE_KEY    = 'ij_game_state_v1';
+IJ.SCRIPT_URL_KEY = 'ij_apps_script_url';
+IJ.ADMIN_KEY      = 'ij_admin_auth';
+IJ.DEFAULT_TIMER  = 45 * 60; // 45 minutes in seconds
+
+IJ.COMPANIES = [
+  { id: 'thermomesh', name: 'ThermoMesh',  category: 'B2B Hardware' },
+  { id: 'tasklayer',  name: 'TaskLayer',   category: 'B2B Software' },
+  { id: 'opsedge',   name: 'OpsEdge',     category: 'B2B Services' },
+  { id: 'swiftsip',  name: 'SwiftSip',    category: 'B2C Hardware' },
+  { id: 'snapstudy', name: 'SnapStudy',   category: 'B2C Software' },
+  { id: 'freshnest', name: 'FreshNest',   category: 'B2C Services' },
+  { id: 'brightbites',name:'BrightBites', category: 'B2B2C' },
+  { id: 'clearheart', name: 'ClearHeart', category: 'Highly Regulated' }
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+IJ.state = {
+  run:        '',
+  team:       '',
+  company:    '',
+  difficulty: 'hard',
+  timerSecs:  IJ.DEFAULT_TIMER,
+  registered: false,
+  adminDifficulty: 'hard'
+};
+
+// ── DATA LAYER ────────────────────────────────────────────────────────────────
+IJ.getData = function() {
+  try {
+    return JSON.parse(localStorage.getItem(IJ.STORAGE_KEY) || '{}');
+  } catch(e) { return {}; }
+};
+
+IJ.saveData = function(obj) {
+  try {
+    const current = IJ.getData();
+    localStorage.setItem(IJ.STORAGE_KEY, JSON.stringify({ ...current, ...obj }));
+  } catch(e) { console.warn('IJ saveData error:', e); }
+};
+
+IJ.getScriptUrl = function() {
+  return localStorage.getItem(IJ.SCRIPT_URL_KEY) || '';
+};
+
+IJ.saveScriptUrl = function() {
+  const url = document.getElementById('ij-admin-script-url').value.trim();
+  if (!url || !url.startsWith('https://script.google.com')) {
+    IJ.showStatus('ij-url-status', 'err',
+      'Please enter a valid Apps Script URL starting with https://script.google.com');
+    return;
+  }
+  localStorage.setItem(IJ.SCRIPT_URL_KEY, url);
+  IJ.showStatus('ij-url-status', 'ok',
+    '✓ URL saved. This device will now sync with Google Sheets.');
+  document.getElementById('ij-url-missing').style.display = 'none';
+};
+
+// ── APPS SCRIPT API ───────────────────────────────────────────────────────────
+IJ.appsScriptGet = async function(params) {
+  const baseUrl = IJ.getScriptUrl();
+  if (!baseUrl) throw new Error('Apps Script URL not configured');
+  const url = new URL(baseUrl);
+  Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+  const res = await fetch(url.toString());
+  if (!res.ok) throw new Error('Network error: ' + res.status);
+  return res.json();
+};
+
+IJ.appsScriptPost = async function(body) {
+  const baseUrl = IJ.getScriptUrl();
+  if (!baseUrl) throw new Error('Apps Script URL not configured');
+  const res = await fetch(baseUrl, {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body:    JSON.stringify(body)
+  });
+  if (!res.ok) throw new Error('Network error: ' + res.status);
+  return res.json();
+};
+
+// ── PUSH SCORE TO SHEET ───────────────────────────────────────────────────────
+IJ.pushScore = async function(extraFields) {
+  const data = IJ.getData();
+  if (!data.run || !data.team) return;
+  if (!IJ.getScriptUrl()) return;
+  try {
+    await IJ.appsScriptPost({
+      action:            'updateScore',
+      run:               data.run,
+      team:              data.team,
+      earnedPoints:      data.earnedPoints      || 0,
+      lostPoints:        data.lostPoints        || 0,
+      totalPoints:       data.totalPoints       || 0,
+      confidence:        data.confidence        || 0,
+      deRiskingDollars:  data.deRiskingDollars  || 0,
+      aiCalls:           data.aiCalls           || 0,
+      assumptionsLocked: data.assumptionsLocked || 0,
+      testsRun:          data.testsRun          || 0,
+      status:            data.status            || 'playing',
+      ...extraFields
+    });
+  } catch(e) {
+    console.warn('Score push failed (non-fatal):', e.message);
+  }
+};
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+IJ.init = function() {
+  IJ.buildTimerWheels('ij-timer-h', 'ij-timer-m', 'ij-timer-s');
+  IJ.buildTimerWheels('ij-admin-timer-h', 'ij-admin-timer-m', 'ij-admin-timer-s');
+  IJ.setTimerFromSeconds(IJ.DEFAULT_TIMER, 'ij-timer-h', 'ij-timer-m', 'ij-timer-s');
+  IJ.setTimerFromSeconds(IJ.DEFAULT_TIMER, 'ij-admin-timer-h', 'ij-admin-timer-m', 'ij-admin-timer-s');
+  IJ.buildCompanyChips();
+  IJ.updateRunCode();
+  IJ.wireInputValidation();
+
+  // Check if admin mode requested
+  if (window.location.search.includes('admin=true')) {
+    IJ.openAdminModal();
+    return;
+  }
+
+  // Check if already registered
+  const saved = IJ.getData();
+  if (saved.registered && saved.team && saved.company && saved.run) {
+    // Resume game — for now show lobby with restored state
+    IJ.restoreLobbyState(saved);
+    return;
+  }
+
+  // Try to auto-load latest run
+  IJ.autoLoadRun();
+};
+
+IJ.restoreLobbyState = function(saved) {
+  document.getElementById('ij-run-input').value  = saved.run  || '';
+  document.getElementById('ij-team-input').value = saved.team || '';
+  if (saved.company) IJ.selectCompany(saved.company, true);
+  if (saved.difficulty) IJ.setDifficulty(saved.difficulty);
+  if (saved.timerSecs)
+    IJ.setTimerFromSeconds(saved.timerSecs, 'ij-timer-h', 'ij-timer-m', 'ij-timer-s');
+  IJ.showStatus('ij-lobby-status', 'ok',
+    '✓ Welcome back, ' + saved.team + '! Your session is restored. Click Ready to Play to continue.');
+  IJ.validateLobby();
+};
+
+// ── AUTO LOAD RUN ─────────────────────────────────────────────────────────────
+IJ.autoLoadRun = async function() {
+  const hint = document.getElementById('ij-run-hint-text');
+  if (!IJ.getScriptUrl()) {
+    hint.textContent = 'Enter the run code from the whiteboard.';
+    document.getElementById('ij-run-display').textContent = 'No run loaded';
+    return;
+  }
+  try {
+    hint.textContent = 'Loading...';
+    const data = await IJ.appsScriptGet({ action: 'latestRun' });
+    if (data.success) {
+      const runInput = document.getElementById('ij-run-input');
+      runInput.value = data.run;
+      runInput.classList.add('ij-input-ok');
+      hint.textContent = '✓ Run auto-loaded. Confirm with your instructor.';
+      document.getElementById('ij-run-display').textContent = 'Run: ' + data.run;
+      // Apply admin-set difficulty and timer
+      if (data.difficulty) IJ.setDifficulty(data.difficulty);
+      if (data.timer) {
+        IJ.setTimerFromSeconds(data.timer, 'ij-timer-h', 'ij-timer-m', 'ij-timer-s');
+      }
+      IJ.validateLobby();
+    } else {
+      hint.textContent = 'Enter the run code from the whiteboard.';
+    }
+  } catch(e) {
+    hint.textContent = 'Enter the run code from the whiteboard.';
+  }
+};
+
+// ── TIMER WHEELS ──────────────────────────────────────────────────────────────
+IJ.buildTimerWheels = function(hId, mId, sId) {
+  const mSel = document.getElementById(mId);
+  const sSel = document.getElementById(sId);
+  if (!mSel || !sSel) return;
+  for (let i = 0; i < 60; i++) {
+    const v = i.toString().padStart(2, '0');
+    mSel.innerHTML += `<option value="${i}">${v}</option>`;
+    sSel.innerHTML += `<option value="${i}">${v}</option>`;
+  }
+};
+
+IJ.setTimerFromSeconds = function(totalSecs, hId, mId, sId) {
+  const h = Math.floor(totalSecs / 3600);
+  const m = Math.floor((totalSecs % 3600) / 60);
+  const s = totalSecs % 60;
+  const hEl = document.getElementById(hId);
+  const mEl = document.getElementById(mId);
+  const sEl = document.getElementById(sId);
+  if (hEl) hEl.value = h;
+  if (mEl) mEl.value = m;
+  if (sEl) sEl.value = s;
+};
+
+IJ.getTimerSeconds = function(hId, mId, sId) {
+  const h = parseInt(document.getElementById(hId)?.value || 0);
+  const m = parseInt(document.getElementById(mId)?.value || 45);
+  const s = parseInt(document.getElementById(sId)?.value || 0);
+  return h * 3600 + m * 60 + s;
+};
+
+// ── COMPANY CHIPS ─────────────────────────────────────────────────────────────
+IJ.buildCompanyChips = function() {
+  const grid = document.getElementById('ij-company-chips');
+  grid.innerHTML = IJ.COMPANIES.map(c =>
+    `<div class="ij-chip" id="ij-chip-${c.id}" onclick="IJ.selectCompany('${c.id}')">
+       ${c.name}
+       <span class="ij-chip-category">${c.category}</span>
+     </div>`
+  ).join('');
+};
+
+IJ.selectCompany = function(companyId, silent) {
+  document.querySelectorAll('.ij-chip').forEach(el => el.classList.remove('ij-chip-selected'));
+  const chip = document.getElementById('ij-chip-' + companyId);
+  if (chip) chip.classList.add('ij-chip-selected');
+  document.getElementById('ij-company-selected').value = companyId;
+  if (!silent) IJ.validateLobby();
+};
+
+// ── DIFFICULTY ────────────────────────────────────────────────────────────────
+IJ.setDifficulty = function(mode) {
+  IJ.state.difficulty = mode;
+  document.getElementById('ij-diff-hard').classList.toggle('ij-diff-active', mode === 'hard');
+  document.getElementById('ij-diff-easy').classList.toggle('ij-diff-active', mode === 'easy');
+  document.getElementById('ij-diff-desc').textContent = mode === 'hard'
+    ? 'Hard: Type your own assumptions — scored against the answer key'
+    : 'Easy: Assumption chips are shown — select and drag to rank';
+};
+
+IJ.adminSetDifficulty = function(mode) {
+  IJ.state.adminDifficulty = mode;
+  document.getElementById('ij-admin-diff-hard').classList.toggle('ij-diff-active', mode === 'hard');
+  document.getElementById('ij-admin-diff-easy').classList.toggle('ij-diff-active', mode === 'easy');
+};
+
+// ── RUN CODE GENERATOR ────────────────────────────────────────────────────────
+IJ.updateRunCode = function() {
+  const now    = new Date();
+  const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  const mon    = months[now.getMonth()];
+  const day    = now.getDate().toString().padStart(2, '0');
+  const letter = document.getElementById('ij-admin-run-letter')?.value || 'A';
+  const code   = `${mon}${day}-${letter}`;
+  const el     = document.getElementById('ij-admin-run-code');
+  if (el) el.value = code;
+  return code;
+};
+
+// ── VALIDATION ────────────────────────────────────────────────────────────────
+IJ.wireInputValidation = function() {
+  document.getElementById('ij-run-input').addEventListener('input', IJ.validateLobby);
+  document.getElementById('ij-team-input').addEventListener('input', IJ.validateLobby);
+};
+
+IJ.validateLobby = function() {
+  const run     = document.getElementById('ij-run-input').value.trim().toUpperCase();
+  const team    = document.getElementById('ij-team-input').value.trim();
+  const company = document.getElementById('ij-company-selected').value;
+  const btn     = document.getElementById('ij-ready-btn');
+  btn.disabled  = !(run && team && company);
+};
+
+// ── REGISTER TEAM ─────────────────────────────────────────────────────────────
+IJ.registerTeam = async function() {
+  const run     = document.getElementById('ij-run-input').value.trim().toUpperCase();
+  const team    = document.getElementById('ij-team-input').value.trim();
+  const company = document.getElementById('ij-company-selected').value;
+  const timer   = IJ.getTimerSeconds('ij-timer-h', 'ij-timer-m', 'ij-timer-s');
+  const diff    = IJ.state.difficulty;
+
+  if (!run || !team || !company) {
+    IJ.showStatus('ij-lobby-status', 'err', 'Please fill in all fields.');
+    return;
+  }
+
+  // Validate run format loosely
+  if (!/^[A-Z]{3}\d{2}-[A-Z]$/i.test(run)) {
+    IJ.showStatus('ij-lobby-status', 'err',
+      'Run code format should be like APR02-A. Check the whiteboard.');
+    return;
+  }
+
+  const btn = document.getElementById('ij-ready-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="ij-spinner"></span> Joining...';
+  IJ.showStatus('ij-lobby-status', 'info', 'Registering your team...');
+
+  const companyObj = IJ.COMPANIES.find(c => c.id === company);
+  const companyName = companyObj ? companyObj.name : company;
+
+  // Check if Apps Script URL exists — if not, save locally and continue
+  if (!IJ.getScriptUrl()) {
+    IJ.finalizeRegistration({ run, team, company, companyName, timer, diff });
+    IJ.showStatus('ij-lobby-status', 'warn',
+      '⚠️ No Apps Script URL set — playing offline. Scores won\'t sync to Google Sheets.');
+    btn.disabled = false;
+    btn.innerHTML = 'Ready to Play →';
+    return;
+  }
+
+  // Check for duplicate team name
+  try {
+    const check = await IJ.appsScriptGet({ action: 'checkTeam', run, team });
+    if (check.success && check.exists) {
+      IJ.showStatus('ij-lobby-status', 'err',
+        '⚠️ Team name "' + team + '" is already taken in this run. Choose a different name.');
+      btn.disabled = false;
+      btn.innerHTML = 'Ready to Play →';
+      return;
+    }
+  } catch(e) {
+    // Non-fatal — continue offline
+    console.warn('Team check failed:', e.message);
+  }
+
+  // Register with Apps Script
+  try {
+    const result = await IJ.appsScriptPost({
+      action: 'registerTeam',
+      run, team, company: companyName
+    });
+    if (!result.success) {
+      IJ.showStatus('ij-lobby-status', 'err', result.error || 'Registration failed.');
+      btn.disabled = false;
+      btn.innerHTML = 'Ready to Play →';
+      return;
+    }
+  } catch(e) {
+    IJ.showStatus('ij-lobby-status', 'warn',
+      '⚠️ Could not sync with Google Sheets — playing offline.');
+  }
+
+  IJ.finalizeRegistration({ run, team, company, companyName, timer, diff });
+};
+
+IJ.finalizeRegistration = function({ run, team, company, companyName, timer, diff }) {
+  // Save to localStorage
+  IJ.saveData({
+    run, team, company, companyName,
+    difficulty:        diff,
+    timerSecs:         timer,
+    registered:        true,
+    status:            'playing',
+    earnedPoints:      0,
+    lostPoints:        0,
+    totalPoints:       0,
+    confidence:        0,
+    deRiskingDollars:  0,
+    aiCalls:           0,
+    assumptionsLocked: 0,
+    testsRun:          0,
+    infoCallsUsed:     0,
+    bmcBlocks:         {},
+    gamePhase:         'explore'
+  });
+
+  IJ.showStatus('ij-lobby-status', 'ok',
+    '✓ Team "' + team + '" registered! Loading your company...');
+
+  setTimeout(() => {
+    // Navigate to game screen (Section 2+ — coming next build)
+    IJ.showScreen('game');
+    // Placeholder until game screen is built
+    alert('✓ Registered! Game screen coming in next build. Team: ' + team + ' | Company: ' + companyName + ' | Run: ' + run);
+  }, 800);
+};
+
+// ── ADMIN SCREEN ──────────────────────────────────────────────────────────────
+IJ.openAdminModal = function() {
+  // Check if already authenticated this session
+  if (sessionStorage.getItem(IJ.ADMIN_KEY) === 'true') {
+    IJ.enterAdmin();
+    return;
+  }
+  document.getElementById('ij-pw-overlay').classList.add('ij-show');
+  setTimeout(() => document.getElementById('ij-admin-pw-input').focus(), 100);
+};
+
+IJ.closeAdminModal = function() {
+  document.getElementById('ij-pw-overlay').classList.remove('ij-show');
+  document.getElementById('ij-admin-pw-input').value = '';
+  IJ.hideStatus('ij-pw-status');
+  // Remove admin param from URL without reload
+  history.replaceState(null, '', window.location.pathname);
+};
+
+IJ.checkAdminPw = function() {
+  const pw = document.getElementById('ij-admin-pw-input').value;
+  if (pw === IJ.ADMIN_PW) {
+    sessionStorage.setItem(IJ.ADMIN_KEY, 'true');
+    document.getElementById('ij-pw-overlay').classList.remove('ij-show');
+    IJ.enterAdmin();
+  } else {
+    IJ.showStatus('ij-pw-status', 'err', 'Incorrect password.');
+    document.getElementById('ij-admin-pw-input').value = '';
+    document.getElementById('ij-admin-pw-input').focus();
+  }
+};
+
+IJ.enterAdmin = function() {
+  IJ.showScreen('admin');
+  // Pre-fill saved URL
+  const savedUrl = IJ.getScriptUrl();
+  const urlInput = document.getElementById('ij-admin-script-url');
+  if (urlInput) urlInput.value = savedUrl;
+  if (!savedUrl) {
+    document.getElementById('ij-url-missing').style.display = 'block';
+  }
+  IJ.updateRunCode();
+  IJ.refreshScoreboard();
+};
+
+IJ.createRun = async function() {
+  const runCode   = document.getElementById('ij-admin-run-code').value.trim();
+  const diff      = IJ.state.adminDifficulty;
+  const timerSecs = IJ.getTimerSeconds('ij-admin-timer-h', 'ij-admin-timer-m', 'ij-admin-timer-s');
+  const btn       = document.getElementById('ij-create-run-btn');
+
+  if (!runCode) {
+    IJ.showStatus('ij-run-status', 'err', 'Run code is missing.');
+    return;
+  }
+  if (!IJ.getScriptUrl()) {
+    IJ.showStatus('ij-run-status', 'err',
+      'Apps Script URL not set. Configure it above first.');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="ij-spinner"></span> Creating run...';
+
+  try {
+    const result = await IJ.appsScriptPost({
+      action: 'createRun', runName: runCode,
+      difficulty: diff, timerSeconds: timerSecs
+    });
+    if (result.success) {
+      IJ.showStatus('ij-run-status', 'ok',
+        '✓ Run ' + runCode + ' created! Write this code on the whiteboard.');
+      IJ.refreshScoreboard();
+    } else {
+      IJ.showStatus('ij-run-status', 'err', result.error || 'Failed to create run.');
+    }
+  } catch(e) {
+    IJ.showStatus('ij-run-status', 'err', 'Error: ' + e.message);
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '🚀 Start This Run';
+};
+
+IJ.refreshScoreboard = async function() {
+  if (!IJ.getScriptUrl()) return;
+
+  // Find current run — try admin run code or latest
+  let runCode = document.getElementById('ij-admin-run-code')?.value?.trim();
+  if (!runCode) return;
+
+  document.getElementById('ij-scoreboard-run-label').textContent = 'Run: ' + runCode;
+
+  try {
+    const data = await IJ.appsScriptGet({ action: 'scoreboard', run: runCode });
+    if (data.success) {
+      IJ.renderScoreboard(data.teams || []);
+      const now = new Date();
+      document.getElementById('ij-last-refresh').textContent =
+        'Last refresh: ' + now.toLocaleTimeString();
+    }
+  } catch(e) {
+    console.warn('Scoreboard refresh failed:', e.message);
+  }
+};
+
+IJ.renderScoreboard = function(teams) {
+  const tbody = document.getElementById('ij-scoreboard-body');
+  if (!teams || teams.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="12" style="text-align:center; color:var(--ij-muted); padding:24px;">
+      No teams registered yet.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = teams.map((t, i) => {
+    const statusBadge = t.status === 'complete'
+      ? `<span class="ij-status-badge ij-badge-complete">Complete</span>`
+      : t.status === 'playing'
+        ? `<span class="ij-status-badge ij-badge-playing">Playing</span>`
+        : `<span class="ij-status-badge ij-badge-registered">Registered</span>`;
+
+    const lastUp = t.lastUpdated
+      ? new Date(t.lastUpdated).toLocaleTimeString()
+      : '—';
+
+    const rankClass = i === 0 ? 'ij-rank-1' : '';
+
+    return `<tr class="${rankClass}">
+      <td style="font-weight:bold; color:${i===0?'var(--ij-maroon)':'var(--ij-muted)'};">${t.rank}</td>
+      <td style="font-weight:bold;">${t.team}</td>
+      <td>${IJ.COMPANIES.find(c=>c.name===t.company||c.id===t.company)?.name || t.company}</td>
+      <td>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <div style="flex:1; height:8px; background:var(--ij-border); border-radius:4px; overflow:hidden; max-width:80px;">
+            <div style="height:100%; width:${Math.min(t.confidence/0.8*100,100)}%;
+                        background:var(--ij-confidence-color); border-radius:4px;"></div>
+          </div>
+          <span style="font-size:12px; font-weight:bold;">${t.confidence}%</span>
+        </div>
+      </td>
+      <td style="font-weight:bold;">${t.totalPoints.toFixed(2)}</td>
+      <td style="color:#1b5e20;">+${t.earnedPoints.toFixed(2)}</td>
+      <td style="color:#b71c1c;">−${t.lostPoints.toFixed(2)}</td>
+      <td>${t.aiCalls}</td>
+      <td>$${t.deRiskingDollars.toFixed(2)}</td>
+      <td>${t.testsRun}</td>
+      <td>${statusBadge}</td>
+      <td style="font-size:11px; color:var(--ij-muted);">${lastUp}</td>
+    </tr>`;
+  }).join('');
+};
+
+// Auto-refresh scoreboard every 5 minutes
+IJ.startScoreboardAutoRefresh = function() {
+  setInterval(() => {
+    if (document.getElementById('ij-screen-admin').classList.contains('ij-active')) {
+      IJ.refreshScoreboard();
+    }
+  }, 5 * 60 * 1000);
+};
+
+// ── NAVIGATION ────────────────────────────────────────────────────────────────
+IJ.showScreen = function(name) {
+  document.querySelectorAll('.ij-screen').forEach(s => s.classList.remove('ij-active'));
+  const screen = document.getElementById('ij-screen-' + name);
+  if (screen) screen.classList.add('ij-active');
+};
+
+IJ.goToLobby = function() {
+  history.replaceState(null, '', window.location.pathname);
+  IJ.showScreen('lobby');
+};
+
+// ── STATUS HELPERS ────────────────────────────────────────────────────────────
+IJ.showStatus = function(elId, type, msg) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  el.className = `ij-status ij-status-${type} ij-show`;
+  el.textContent = msg;
+};
+
+IJ.hideStatus = function(elId) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  el.className = 'ij-status';
+  el.textContent = '';
+};
+
+// ── CHEAT CODE LISTENER ───────────────────────────────────────────────────────
+IJ.cheatBuffer = '';
+IJ.cheatCode   = 'jkl;';
+IJ.cheatActive = false;
+
+document.addEventListener('keydown', function(e) {
+  if (!e.ctrlKey) { IJ.cheatBuffer = ''; return; }
+  IJ.cheatBuffer += e.key;
+  if (IJ.cheatBuffer.length > IJ.cheatCode.length)
+    IJ.cheatBuffer = IJ.cheatBuffer.slice(-IJ.cheatCode.length);
+  if (IJ.cheatBuffer === IJ.cheatCode) {
+    IJ.cheatBuffer = '';
+    IJ.toggleCheatMode();
+  }
+});
+
+IJ.toggleCheatMode = function() {
+  IJ.cheatActive = !IJ.cheatActive;
+  const btn = document.getElementById('ij-cheat-btn');
+  if (IJ.cheatActive) {
+    if (!btn) {
+      const b = document.createElement('button');
+      b.id        = 'ij-cheat-btn';
+      b.innerHTML = '⚡ CHEAT MODE ON';
+      b.style.cssText = `
+        position:fixed; bottom:60px; right:20px;
+        background:#333; color:#fff; border:none;
+        padding:8px 16px; border-radius:20px;
+        font-size:12px; font-weight:bold;
+        cursor:pointer; z-index:9999;
+        box-shadow:0 2px 8px rgba(0,0,0,0.4);
+      `;
+      b.onclick = () => { IJ.cheatActive = true; IJ.toggleCheatMode(); };
+      document.body.appendChild(b);
+    } else {
+      btn.style.display = 'block';
+    }
+    console.log('%c⚡ CHEAT MODE ACTIVATED — 20s test timer disabled', 'color:orange; font-size:14px;');
+  } else {
+    if (btn) btn.style.display = 'none';
+    console.log('%c⚡ CHEAT MODE DEACTIVATED — timer restored', 'color:gray; font-size:14px;');
+  }
+  // Expose for game screen to read
+  IJ.saveData({ cheatActive: IJ.cheatActive });
+};
+
+// ── BOOT ──────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  IJ.init();
+  IJ.startScoreboardAutoRefresh();
+});
+</script>
+
+</body>
+</html>
