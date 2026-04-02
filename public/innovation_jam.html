@@ -497,6 +497,227 @@ body {
   .ij-lobby-top  { padding: 24px 20px; }
   .ij-admin-body { padding: 16px; }
 }
+
+/* ── STICKY SCOREBOARD BAR ───────────────────────────────── */
+.ij-score-bar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 8000;
+  background: var(--ij-gray);
+  color: var(--ij-white);
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 0;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+}
+.ij-bar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 14px;
+  border-right: 1px solid rgba(255,255,255,0.15);
+  flex-shrink: 0;
+}
+.ij-bar-item:last-child { border-right: none; }
+.ij-bar-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1;
+  margin-bottom: 2px;
+}
+.ij-bar-value {
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 1;
+  color: var(--ij-white);
+}
+.ij-bar-value.ij-lost  { color: #ff8a80; }
+.ij-bar-value.ij-earned { color: #b9f6ca; }
+.ij-bar-timer {
+  font-size: 18px;
+  font-weight: bold;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 1px;
+  color: var(--ij-white);
+}
+.ij-bar-timer.ij-timer-low { color: #ff8a80; animation: ij-pulse 1s infinite; }
+@keyframes ij-pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+.ij-confidence-wrap {
+  flex: 1;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.ij-confidence-label-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  color: rgba(255,255,255,0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.ij-confidence-track {
+  height: 10px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+}
+.ij-confidence-fill {
+  height: 100%;
+  background: var(--ij-confidence-color);
+  border-radius: 5px;
+  transition: width 0.5s ease;
+  width: 0%;
+}
+.ij-confidence-win-line {
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: #ffd600;
+}
+
+/* ── GAME SCREEN LAYOUT ──────────────────────────────────── */
+.ij-game-body {
+  flex: 1;
+  padding-top: 48px; /* account for fixed bar */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ── NARRATIVE PANE ──────────────────────────────────────── */
+.ij-narrative-pane {
+  background: var(--ij-white);
+  border-bottom: 3px solid var(--ij-maroon);
+  padding: 20px 28px 16px;
+  flex-shrink: 0;
+}
+.ij-narrative-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  gap: 16px;
+}
+.ij-narrative-company {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ij-narrative-company-name {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--ij-maroon);
+}
+.ij-narrative-category {
+  font-size: 11px;
+  background: var(--ij-maroon);
+  color: white;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-weight: bold;
+}
+.ij-narrative-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.ij-narrative-text {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ij-text);
+  max-height: 220px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+.ij-narrative-text p { margin-bottom: 10px; }
+.ij-narrative-text p:last-child { margin-bottom: 0; }
+.ij-narrative-addition {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--ij-border);
+}
+.ij-narrative-addition-label {
+  font-size: 10px;
+  font-weight: bold;
+  color: var(--ij-maroon);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.ij-info-btn {
+  background: var(--ij-maroon);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: var(--ij-radius-md);
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: Arial, sans-serif;
+  transition: background 0.15s;
+}
+.ij-info-btn:hover { background: var(--ij-maroon-lt); }
+.ij-info-btn:disabled {
+  background: var(--ij-border);
+  color: var(--ij-muted);
+  cursor: not-allowed;
+}
+.ij-info-counter {
+  font-size: 11px;
+  color: var(--ij-muted);
+  white-space: nowrap;
+}
+.ij-recommend-btn {
+  background: #1b5e20;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: var(--ij-radius-md);
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  display: none;
+}
+.ij-recommend-btn:hover { background: #2e7d32; }
+
+/* ── GAME CONTENT AREA ───────────────────────────────────── */
+.ij-game-content {
+  flex: 1;
+  padding: 20px 24px;
+  background: var(--ij-off);
+}
+
+/* phase placeholders */
+.ij-phase { display: none; }
+.ij-phase.ij-phase-active { display: block; }
+
+.ij-phase-placeholder {
+  background: var(--ij-white);
+  border-radius: var(--ij-radius-lg);
+  padding: 40px;
+  text-align: center;
+  color: var(--ij-muted);
+  font-size: 15px;
+  box-shadow: var(--ij-shadow);
+}
+.ij-phase-placeholder h3 {
+  font-size: 22px;
+  color: var(--ij-maroon);
+  margin-bottom: 10px;
+}
 </style>
 </head>
 <body>
@@ -767,6 +988,102 @@ body {
 
 
 <!-- ============================================================
+     SCREEN 3: GAME
+     ============================================================ -->
+<div id="ij-screen-game" class="ij-screen">
+
+  <!-- Sticky Scoreboard Bar -->
+  <div class="ij-score-bar" id="ij-score-bar">
+    <div class="ij-bar-item">
+      <div class="ij-bar-label">Earned</div>
+      <div class="ij-bar-value ij-earned" id="ij-bar-earned">0.00</div>
+    </div>
+    <div class="ij-bar-item">
+      <div class="ij-bar-label">Lost</div>
+      <div class="ij-bar-value ij-lost" id="ij-bar-lost">0.00</div>
+    </div>
+    <div class="ij-bar-item">
+      <div class="ij-bar-label">Total</div>
+      <div class="ij-bar-value" id="ij-bar-total">0.00</div>
+    </div>
+    <div class="ij-bar-item">
+      <div class="ij-bar-label">Time Left</div>
+      <div class="ij-bar-timer" id="ij-bar-timer">0:45:00</div>
+    </div>
+    <div class="ij-confidence-wrap">
+      <div class="ij-confidence-label-row">
+        <span>Confidence to Proceed</span>
+        <span id="ij-bar-confidence-pct">0%</span>
+      </div>
+      <div class="ij-confidence-track">
+        <div class="ij-confidence-fill" id="ij-bar-confidence-fill"></div>
+        <div class="ij-confidence-win-line" title="Win at 80%"></div>
+      </div>
+    </div>
+    <div class="ij-bar-item" style="padding-left:16px;">
+      <div class="ij-bar-label" id="ij-bar-team-label">Team</div>
+      <div class="ij-bar-value" id="ij-bar-team-name" style="font-size:12px; max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">—</div>
+    </div>
+  </div>
+
+  <!-- Game Body -->
+  <div class="ij-game-body">
+
+    <!-- Narrative Pane -->
+    <div class="ij-narrative-pane" id="ij-narrative-pane">
+      <div class="ij-narrative-header">
+        <div class="ij-narrative-company">
+          <div class="ij-narrative-company-name" id="ij-narrative-company-name">Company</div>
+          <div class="ij-narrative-category" id="ij-narrative-category">Category</div>
+        </div>
+        <div class="ij-narrative-actions">
+          <span class="ij-info-counter" id="ij-info-counter">Info calls: 0 / 2 (−10 pts each)</span>
+          <button class="ij-info-btn" id="ij-info-btn" onclick="IJ.requestMoreInfo()">
+            🔍 I Need More Information
+          </button>
+          <button class="ij-recommend-btn" id="ij-recommend-btn" onclick="IJ.recommendAssumptions()">
+            ✨ Recommend Critical Assumptions
+          </button>
+        </div>
+      </div>
+      <div class="ij-narrative-text" id="ij-narrative-text">
+        Loading your company narrative...
+      </div>
+    </div>
+
+    <!-- Game Content Phases -->
+    <div class="ij-game-content">
+
+      <!-- Phase: BMC Explorer (coming next chunk) -->
+      <div class="ij-phase ij-phase-active" id="ij-phase-explore">
+        <div class="ij-phase-placeholder">
+          <h3>📋 Business Model Canvas</h3>
+          <p>Click each BMC block to enter critical assumptions.<br>
+          <strong>BMC canvas coming in next build.</strong><br><br>
+          Your narrative is loaded above — read it carefully before the canvas arrives!</p>
+        </div>
+      </div>
+
+      <!-- Phase: Results -->
+      <div class="ij-phase" id="ij-phase-results">
+        <div class="ij-phase-placeholder">
+          <h3>📊 Results coming soon</h3>
+        </div>
+      </div>
+
+      <!-- Phase: Tests -->
+      <div class="ij-phase" id="ij-phase-tests">
+        <div class="ij-phase-placeholder">
+          <h3>🧪 Test loop coming soon</h3>
+        </div>
+      </div>
+
+    </div><!-- /game-content -->
+  </div><!-- /game-body -->
+</div><!-- /screen-game -->
+
+
+<!-- ============================================================
      ADMIN PASSWORD MODAL
      ============================================================ -->
 <div class="ij-overlay" id="ij-pw-overlay">
@@ -820,7 +1137,99 @@ IJ.COMPANIES = [
   { id: 'clearheart', name: 'ClearHeart', category: 'Highly Regulated' }
 ];
 
-// ── STATE ─────────────────────────────────────────────────────────────────────
+// ── COMPANY NARRATIVE DATA ────────────────────────────────────────────────────
+// 3 versions per company. narratives[0]=V1 original, [1]=V2 uncertainty, [2]=V3 impact
+IJ.COMPANY_DATA = {
+
+  thermomesh: {
+    name: 'ThermoMesh', category: 'B2B Hardware',
+    narratives: [
+      `ThermoMesh is a startup designing modular, lightweight magnetic cooling panels for mid-sized data centers. The founding team — a mechanical engineer, a thermal management specialist, and a former data center operations manager — noticed that small data centers were improvising temporary solutions: taping fans to servers, repositioning portable air conditioners, and installing handmade insulators to manage localized hot spots around new AI servers.\n\nThermoMesh designed flexible magnetic cooling panels that attach quickly to existing server racks without major modifications, using passive phase-change materials to redirect heat and reduce energy costs. Their first prototypes used off-the-shelf components and were tested in a partner's small data center, showing an average 8% reduction in localized cooling needs — though results were anecdotal and specific to one site.\n\nEncouraged, they launched a Kickstarter campaign, raising $48,000 against a $100,000 target. They are now refining the design for manufacturability and preparing paid pilots with three regional colocation centers. Their model: direct purchase at $150 per panel with volume discounts.`,
+
+      `<strong>🔍 What ThermoMesh Doesn't Know Yet</strong>\n\nThe most pressing uncertainty is customer perception of the problem itself. ThermoMesh observed improvised workarounds — but has not confirmed whether facility managers experience localized heat as a high-priority operational problem, or merely accept it as a manageable nuisance. These are very different buying situations.\n\nA second major unknown is the purchasing process. ThermoMesh assumes facility managers have direct budget authority for retrofit purchases — but it is entirely unclear whether decisions require sign-off from IT directors, procurement committees, or central facilities management. Selling to the wrong person wastes sales cycles.\n\nThird, ThermoMesh does not know whether customers prefer modular retrofits or would rather wait for a centralized cooling upgrade from an established vendor. Finally, the reliability of magnetic attachment in live data center environments — concerns about long-term adhesion, interference with rack components, fire safety compliance — has not been formally tested.`,
+
+      `<strong>⚠️ What Happens If ThermoMesh Gets It Wrong</strong>\n\nIf facility managers do not perceive localized heat as a high-priority problem, ThermoMesh has no addressable market regardless of how well the product works. The entire revenue model collapses without a motivated buyer.\n\nIf purchasing decisions require procurement committee approval, ThermoMesh's direct-outreach sales model stalls. Sales cycles stretch from weeks to quarters, burning runway the company does not have.\n\nIf customers prefer to wait for centralized cooling upgrades, ThermoMesh is selling into a shrinking opportunity window — early adopters may be too few before larger HVAC vendors address the market.\n\nIf magnetic attachment raises compliance concerns in live environments, ThermoMesh faces redesign costs and lost pilots in a small, relationship-driven industry where reputation damage spreads fast. And if fire safety certification turns out to be mandatory before sale — not a post-pilot consideration — ThermoMesh cannot legally close its first commercial deal, delaying revenue by 12 months or more.`
+    ]
+  },
+
+  tasklayer: {
+    name: 'TaskLayer', category: 'B2B Software',
+    narratives: [
+      `TaskLayer is a software startup aiming to disrupt bloated practice management platforms used by mid-sized accounting firms. The founding team — a former CPA, a UX designer, and a cloud engineer — noticed a common pain: many accounting firms are forced to use cumbersome, outdated software mandated by firm-wide IT policies, even though employees secretly hack together their own personal task lists, calendar reminders, and file systems outside official software.\n\nTaskLayer built a focused task coordination prototype — essentially a smarter Trello customized for accounting workflows — integrating with Outlook, Google Calendar, and Dropbox. In early user research with 12 accountants across four firms, 9 said they used workarounds because official software was overkill and painful. They then created explainer videos and clickable prototypes, gathering positive feedback from accounting staff.\n\nTaskLayer just completed a private beta offered to five friendly firms. Their plan: a SaaS subscription at $12 per user per month, targeting accounting firm middle managers through LinkedIn ads, content marketing, and accounting association outreach.`,
+
+      `<strong>🔍 What TaskLayer Doesn't Know Yet</strong>\n\nThe most dangerous knowledge gap sits at the top of the organization, not the bottom. TaskLayer has strong signal from individual accountants who hate their current software — but almost no signal from the people who control purchasing decisions. At mid-sized firms, software adoption decisions are rarely made by users. Partners, IT directors, and sometimes CFOs must approve external SaaS tools that touch client data. TaskLayer has not yet had a serious procurement conversation with anyone at this level.\n\nA second critical unknown is data security. TaskLayer integrates with tools employees use informally — but formal adoption means routing client-sensitive accounting data through a third-party cloud platform. It is entirely unclear whether firm IT and compliance officers will approve this.\n\nThird, TaskLayer does not know whether firms will view a $12/user/month add-on as reasonable or as an unjustifiable line item when their existing — if painful — practice management software is already budgeted. Paying twice for overlapping functionality requires a strong internal champion, and TaskLayer has not yet identified one inside any beta firm.`,
+
+      `<strong>⚠️ What Happens If TaskLayer Gets It Wrong</strong>\n\nIf firm decision-makers — partners, IT directors, or CFOs — do not approve external SaaS tools for workflow coordination, individual accountants who love the product are irrelevant. The entire bottom-up adoption strategy fails. TaskLayer would need to rebuild its sales motion around a much longer, more expensive enterprise procurement cycle the current team cannot navigate.\n\nIf data security and compliance officers block the Outlook and Dropbox integrations, TaskLayer loses its primary differentiation. The integrations are not a feature — they are the product's core value proposition. Without them, TaskLayer is just another task manager competing against free tools.\n\nIf the $12/user/month price point triggers budget scrutiny that kills deals at procurement, TaskLayer faces a binary choice: lower pricing below sustainable unit economics, or lose customers it has already invested in acquiring.\n\nMost critically — if firms upgrade their incumbent practice management platforms to modern cloud versions in the next 12–18 months, TaskLayer's window closes permanently. The entire business is predicated on a gap between what firms have and what employees need.`
+    ]
+  },
+
+  opsedge: {
+    name: 'OpsEdge', category: 'B2B Services',
+    narratives: [
+      `OpsEdge is a boutique B2B services startup focused on field service process optimization for industrial equipment companies — firms that install and maintain heavy HVAC, power generation, or specialized manufacturing equipment. The founders — a former Six Sigma Black Belt, a dispatch center manager, and a business development lead — believed that poor field service dispatching was a silent cost center at mid-market firms: sending the wrong technician, arriving without needed parts, misaligned scheduling.\n\nThey discovered the opportunity by interviewing dispatchers, service managers, and field technicians, hearing repeated frustration about inefficiencies and customer complaints. They analyzed internal service data from three small clients, finding that up to 22% of service visits were delayed, rescheduled, or unnecessarily escalated — often from basic dispatch mismatches.\n\nThey created a service brochure promising to audit dispatch processes, redesign technician workflows, and retrain coordinators — offering an expected 10–15% improvement in first-time fix rates. They secured two manual pilot projects and charge an initial $15,000 audit fee plus a performance bonus if first-time fix rates improve by more than 10% after six months.`,
+
+      `<strong>🔍 What OpsEdge Doesn't Know Yet</strong>\n\nOpsEdge's most significant uncertainty is whether the pain they identified in interviews translates into a prioritized budget decision. Service managers expressing frustration is not the same as a firm's leadership allocating $15,000 to fix a process problem they may not formally recognize as costing them money. OpsEdge has not validated whether decision-makers view dispatch inefficiency as a top-three operational priority.\n\nA second major unknown is scalability of their delivery model. Both pilot projects were executed personally by the founding team. OpsEdge has not tested whether their methodology can be transferred to junior consultants or operationalized to serve more than two or three clients simultaneously.\n\nThird, the performance-based bonus structure assumes OpsEdge can reliably measure first-time fix rate improvements. But clients control the data — OpsEdge does not know whether clients will share post-implementation metrics honestly or at all.\n\nFinally, OpsEdge has not tested their model in unionized environments, where changing technician dispatch protocols may face formal resistance from labor agreements that override management decisions entirely.`,
+
+      `<strong>⚠️ What Happens If OpsEdge Gets It Wrong</strong>\n\nIf decision-makers do not prioritize dispatch inefficiency as a funded problem, OpsEdge has no pipeline. The entire business depends on convincing leadership — not just operational staff — that 22% delayed service visits represent a quantifiable revenue and cost problem worth $15,000 to fix.\n\nIf the delivery model cannot scale beyond the founding team, OpsEdge is a lifestyle consulting practice with a ceiling of four to six engagements per year — not a scalable business. The planned transition to a digital toolset requires capital and product development capability the team does not currently have.\n\nIf clients do not share post-implementation data, the performance bonus model collapses. OpsEdge cannot prove its methodology works, cannot build case studies to win new clients, and cannot collect the bonus revenue baked into its financial model.\n\nIf unionized work environments prove resistant — likely in heavy industrial sectors — OpsEdge may be locked out of a significant portion of its target market before it has established enough non-union revenue to sustain operations.`
+    ]
+  },
+
+  swiftsip: {
+    name: 'SwiftSip', category: 'B2C Hardware',
+    narratives: [
+      `SwiftSip is a consumer hardware startup designing a portable drink chilling device for campers, hikers, tailgaters, and outdoor festivalgoers. The founding team — two mechanical engineers and a former sporting goods marketing lead — noticed a recurring frustration: people were improvising hacks to keep beverages cold when a traditional cooler was impractical. Wrapping drinks in wet cloths, burying them in snow, buying disposable coolers — none worked reliably.\n\nThey built a first prototype using off-the-shelf thermoelectric Peltier modules, standard rechargeable batteries, and 3D-printed shells. A concept explainer video showing the device in outdoor scenarios generated 320,000 views and 2,200 comments expressing purchase interest. The prototype cooled a drink by approximately 10°F in 10 minutes — functional, but slower than a traditional cooler.\n\nSwiftSip launched a Kickstarter with a $150,000 goal and raised $210,000 in 45 days. They are now finalizing design-for-manufacture refinements, improving battery life, and developing fulfillment partnerships. Their go-to-market strategy focuses on direct-to-consumer e-commerce first, with retail distribution planned only after proving direct sales traction.`,
+
+      `<strong>🔍 What SwiftSip Doesn't Know Yet</strong>\n\nSwiftSip's most pressing uncertainty is whether Kickstarter enthusiasm reflects genuine mainstream market demand or the concentrated excitement of early adopter hardware enthusiasts. Crowdfunding backers skew younger, more technically curious, and more tolerant of product limitations than the average outdoor consumer. SwiftSip does not know whether the broader camping and festival market shares the same interest, or whether performance expectations outside the early adopter group are significantly higher.\n\nA second major unknown is real-world performance tolerance. The prototype cools a drink by 10°F in 10 minutes under controlled conditions — but SwiftSip has not tested the device in high-temperature outdoor environments where thermoelectric efficiency degrades and battery drain accelerates.\n\nThird, the $69 pre-order price point was set during a Kickstarter campaign where scarcity and novelty drive purchase decisions. SwiftSip does not know whether that price holds in a standard e-commerce environment once excitement fades and customers compare it against conventional coolers at lower price points.\n\nFinally, unit economics depend on stable component sourcing — particularly Peltier modules and battery cells — subject to supply chain volatility SwiftSip has not stress-tested at commercial volumes.`,
+
+      `<strong>⚠️ What Happens If SwiftSip Gets It Wrong</strong>\n\nIf mainstream outdoor consumers are significantly less tolerant of the current cooling performance than Kickstarter backers, SwiftSip faces a product credibility crisis post-funding with manufacturing commitments already made. Negative reviews spread quickly in outdoor communities where peer recommendations drive purchase decisions.\n\nIf real-world performance in high-temperature conditions falls materially below lab results, SwiftSip may need to halt fulfillment, redesign the thermal and battery system, and delay delivery to backers — generating refund demands and destroying the social proof the campaign was designed to create.\n\nIf the $69 price point does not hold outside the Kickstarter context, SwiftSip must choose between margin-destroying price reductions and volume-killing premium positioning. Neither supports the unit economics needed to fund retail expansion.\n\nIf component costs rise or supply chain disruptions delay production, SwiftSip cannot fulfill Kickstarter obligations on schedule — generating refund liability and destroying the brand story that underpins every future sales conversation.`
+    ]
+  },
+
+  snapstudy: {
+    name: 'SnapStudy', category: 'B2C Software',
+    narratives: [
+      `SnapStudy is a mobile app startup helping working adults prepare for professional certification exams through bite-sized, personalized learning sessions. The founding team — an instructional designer, a software developer, and a community college administrator — noticed that adult learners complain in online forums about difficulty studying consistently while working full-time. Learners cobble together plans from books, YouTube, and free quizzes — losing momentum or burning out before exam day.\n\nRather than building a full app first, SnapStudy ran a manual pilot: users signed up via a landing page, answered questions about their exam and schedule, and received daily study challenges via email and text. Language came directly from certification forums — "I have no time," "I can't stay consistent." The pilot served 120 participants with daily open rates around 52% and strong qualitative feedback: "finally feels doable," "I actually stick to this."\n\nSnapStudy is now finishing their first real app version with personalized study paths, push notification reminders, micro-quizzes, gamified streaks, and light social features. Their model: freemium with a $5/month premium subscription for progress tracking, exam simulations, and personalized study coaches. Initial marketing targets certification exam groups on Reddit and Facebook.`,
+
+      `<strong>🔍 What SnapStudy Doesn't Know Yet</strong>\n\nSnapStudy's most significant uncertainty is whether strong engagement from the manual pilot will survive the transition to a self-directed app experience. Email and text delivery is inherently push-based — content arrives whether users initiate it or not. An app requires users to download, open, and engage on their own initiative. SnapStudy does not know whether the daily study behavior they cultivated in the manual pilot will transfer to an app environment where competing apps are one tap away.\n\nA second major unknown is the freemium conversion rate. The $5/month premium tier is where SnapStudy makes money. But SnapStudy has no data yet on what percentage of free users will convert, how long conversion takes, or whether the features behind the paywall are compelling enough to motivate payment from a user base that already has access to free study resources.\n\nThird, SnapStudy has not tested whether users preparing for different certification types have similar enough study behaviors to be served by a single platform architecture, or whether each vertical requires meaningfully different content that would multiply product development costs.`,
+
+      `<strong>⚠️ What Happens If SnapStudy Gets It Wrong</strong>\n\nIf app engagement falls significantly below the manual pilot's 52% daily open rate — likely given the passive-to-active delivery shift — SnapStudy loses its core proof point. An app generating 10–15% daily active user rates looks like a completely different business with much less favorable unit economics.\n\nIf freemium conversion rates are low — below 3–5% — SnapStudy cannot generate enough revenue at $5/month to sustain operations. The free tier becomes a cost center that attracts users who never pay, and the business requires either a price increase that reduces conversion further or unsustainable acquisition volumes.\n\nIf certification verticals require meaningfully different content and product logic, SnapStudy's single-platform architecture becomes a liability — serving nobody well enough to convert or refer.\n\nAnd if larger platforms like Coursera, LinkedIn Learning, or Duolingo add targeted microlearning modules for professional certifications, SnapStudy loses its primary differentiation against brands with massive user bases, established content libraries, and marketing budgets that dwarf anything a seed-stage startup can deploy.`
+    ]
+  },
+
+  freshnest: {
+    name: 'FreshNest', category: 'B2C Services',
+    narratives: [
+      `FreshNest is a local service startup offering eco-friendly home organization and decluttering for urban Millennials and young families. The founding team — a former professional organizer, a sustainability consultant, and a digital marketer — noticed that in their own social circles, people felt overwhelmed by clutter, wanted to start fresh, and expressed a desire to live more sustainably — but lacked the time, knowledge, or motivation to execute it themselves.\n\nTo validate the concept, FreshNest conducted in-depth interviews with 25 local households aged 27–39, who expressed wishes that "someone would just come and do it" — but worried about cost, judgment, and not knowing where their stuff would end up. They analyzed regional search volume for "home organizer near me" and "eco-friendly decluttering," finding modest but consistent search trends.\n\nFreshNest launched a simple landing page with early-bird discounts and ran local Facebook and Instagram ads promoting a Fresh Start Package — a three-hour, two-person organizing session with eco-responsible disposal. In two weeks, they secured 18 presale bookings paid upfront. They now deliver services manually: consultation, organizing, eco-responsible sorting, and FreshNest Aftercare tip sheets. Pricing starts at $275/session.`,
+
+      `<strong>🔍 What FreshNest Doesn't Know Yet</strong>\n\nFreshNest's most pressing uncertainty is whether eco-friendliness is a genuine purchase driver or merely a nice-to-have that customers cite in interviews without acting on in purchase decisions. The 18 presale customers were acquired through ads leading with the Fresh Start emotional positioning — not the eco angle specifically. FreshNest does not know which element customers would sacrifice first if pricing pressure required a trade-off.\n\nA second significant unknown is demand consistency across seasons. Home organization is intuitively seasonal — spring cleaning, post-holiday resets, pre-move decluttering — and FreshNest has not yet observed a full calendar year of demand. They do not know whether summer and fall months will generate enough bookings to sustain a full-time operation.\n\nThird, FreshNest has not tested the reliability of their planned referral partnerships. Real estate agents, moving companies, and green living groups are theoretically strong referral sources — but FreshNest has not converted any of these relationships into formal agreements or measured actual referral conversion rates.\n\nFinally, the 18 presale customers were predominantly early adopters motivated by the early-bird discount. FreshNest does not know whether full-price $275 bookings will convert at comparable rates.`,
+
+      `<strong>⚠️ What Happens If FreshNest Gets It Wrong</strong>\n\nIf eco-friendliness is not a meaningful purchase driver, FreshNest loses its primary brand differentiation. Without it, FreshNest competes directly against established professional organizers on price, reputation, and availability — where incumbents with years of reviews have significant advantages. The premium $275 price point becomes difficult to justify.\n\nIf seasonal demand creates significant revenue valleys, FreshNest faces a staffing and cash flow problem with no easy solution. Hiring and training additional organizers during peak months and underutilizing them during slow months is operationally damaging in a service business where team quality drives reviews.\n\nIf referral partnerships with real estate agents and moving companies do not materialize into reliable lead flow, FreshNest remains dependent on paid social advertising where cost per acquisition is rising. Without diversified lead sources, acquisition costs will erode margins to unsustainable levels.\n\nIf full-price bookings convert at significantly lower rates than the discounted presale — a nearly universal dynamic in consumer services — FreshNest's revenue projections overstate near-term performance and the business will require more capital or more time to reach sustainability.`
+    ]
+  },
+
+  brightbites: {
+    name: 'BrightBites', category: 'B2B2C',
+    narratives: [
+      `BrightBites is a startup developing a healthy snack platform for daycare centers, preschools, and afterschool programs. The founding team — a pediatric nutritionist, a former daycare manager, and a food supply chain expert — observed two intersecting frustrations: parents wanted healthier, allergy-friendly snacks provided at childcare centers, but most facilities were stuck with high-sugar, low-nutrition options due to cost, convenience, and supplier lock-in.\n\nRather than pitching centers immediately, BrightBites ran direct-to-parent experiments first. They created a landing page for parents to vote on preferred snack sets and offered pre-order bundles shipped directly to households. Results were strong: 500+ votes in three weeks, 180 pre-order trial bundles sold, and 82% of purchasers said they would prefer to have snacks provided through their daycare center if available.\n\nArmed with this consumer evidence, BrightBites is now negotiating pilots with three regional daycare chains. Their model: sell snack kits directly to daycare centers, which distribute snacks daily and invoice monthly bundled by child headcount. BrightBites stays out of the kitchen entirely — curating and distributing only pre-packaged, compliant healthy snacks sourced from known vendors. Pricing is set at $3 per child per day.`,
+
+      `<strong>🔍 What BrightBites Doesn't Know Yet</strong>\n\nBrightBites' most significant uncertainty is whether daycare center administrators — not parents — will prioritize snack upgrades enough to act on them. The parent-facing experiments generated strong enthusiasm, but parents are not the buyers in this model. Daycare administrators make procurement decisions, manage vendor relationships, and absorb the operational complexity of switching suppliers. BrightBites has not yet had a serious procurement conversation with a center director who controls budget and vendor contracts.\n\nA second major unknown is the $3 per child per day price point in the context of daycare economics. BrightBites validated this price with parents in a direct-to-consumer format. In the B2B2C model, centers must either absorb the cost or pass it to parents as a tuition add-on. BrightBites does not know whether centers will absorb the margin hit, whether parents will accept a tuition increase, or whether the $3 rate creates enough margin for BrightBites to sustain operations.\n\nThird, BrightBites has not yet navigated a full vendor switch at a daycare center. Most centers have existing food service contracts — some exclusive — and displacing an incumbent vendor requires administrative will, contract review, and sometimes board approval. BrightBites does not know how long this process takes or how often it fails.`,
+
+      `<strong>⚠️ What Happens If BrightBites Gets It Wrong</strong>\n\nIf daycare administrators do not prioritize snack upgrades as a funded operational decision — despite parent enthusiasm — BrightBites has a classic B2B2C gap problem. Strong consumer pull without institutional buy-in produces no revenue. BrightBites would need to either build a direct-to-parent subscription model — a fundamentally different business — or invest heavily in center-level sales infrastructure it does not have.\n\nIf the $3 per child per day price point cannot be passed to parents without triggering backlash, centers will not adopt the model regardless of how much they like the product. A single center that attempts the upcharge and faces parent pushback becomes a cautionary tale that spreads through administrator networks.\n\nIf existing food service contracts at target centers include exclusivity clauses or require lengthy notice periods to terminate, BrightBites' pilot timeline extends significantly — burning runway the company has not budgeted for.\n\nIf allergy compliance requirements differ materially across states, BrightBites must maintain multiple SKU sets for different markets — multiplying sourcing and inventory complexity — or limit expansion to markets where its current snack portfolio is already compliant, significantly constraining addressable market.`
+    ]
+  },
+
+  clearheart: {
+    name: 'ClearHeart', category: 'Highly Regulated',
+    narratives: [
+      `ClearHeart is a healthcare technology startup focused on remote patient monitoring for individuals recovering from cardiac surgeries. The founding team — a cardiologist, a biomedical engineer, and a former health insurance executive — observed that after surgery, many patients are readmitted within 30 days for complications like fluid buildup, arrhythmias, or wound infections — often because patients struggle to monitor symptoms early enough at home.\n\nRather than building a new medical device, ClearHeart developed a system combining off-the-shelf FDA-cleared consumer-grade heart monitors with a software dashboard for hospital care teams to track key post-operative metrics. Crucially, they scoped their experiments to avoid triggering FDA device classification requirements: patients voluntarily wear the device, care teams receive alerts but maintain standard medical decision-making, and the system is initially classified as a wellness monitoring service rather than a diagnostic medical device.\n\nClearHeart ran small pilots with two regional hospitals, monitoring 48 patients over 90 days, showing a 22% reduction in readmissions compared to historical baseline and patient compliance averaging 85%. They are now preparing to expand to five more hospitals under pilot contracts. Their pricing model is a per-patient per-month subscription billed to hospitals, with optional performance bonuses tied to readmission reduction targets.`,
+
+      `<strong>🔍 What ClearHeart Doesn't Know Yet</strong>\n\nClearHeart's most consequential uncertainty is regulatory classification stability. The current wellness monitoring framing depends on a careful scoping of what the system does and claims. As ClearHeart scales and potentially makes more explicit efficacy claims in sales conversations, the line between wellness monitoring and diagnostic medical device becomes harder to maintain. ClearHeart has not yet received formal FDA guidance on whether its system will remain outside device classification at commercial scale — it is operating on a legal interpretation that has not been tested under regulatory scrutiny.\n\nA second major unknown is hospital procurement behavior beyond the two pilot sites. Both early hospitals were willing partners — likely influenced by personal relationships with the founding cardiologist. ClearHeart has not yet navigated a cold institutional procurement process, where hospital legal, compliance, IT security, and clinical leadership must all independently approve a new vendor. These processes routinely take 9 to 18 months at large health systems.\n\nThird, ClearHeart does not know whether care teams at scale will respond to alerts consistently — or whether alert fatigue will cause staff to begin ignoring system notifications as false positives accumulate, undermining the clinical value of the entire platform.`,
+
+      `<strong>⚠️ What Happens If ClearHeart Gets It Wrong</strong>\n\nIf the FDA determines that ClearHeart's system constitutes a medical device requiring formal clearance at any point during commercial scaling, ClearHeart must halt sales immediately, potentially recall deployed systems, and undertake a regulatory process that typically costs millions of dollars and takes two to four years. This is not a recoverable setback at the current funding stage — it is an existential threat.\n\nIf hospital procurement processes at new sites take 12 to 18 months rather than 3 to 6 months as modeled, the company burns through runway before generating meaningful commercial revenue. The two pilot hospitals created a misleading baseline — warm relationships compressed a process that cold institutional procurement will not replicate.\n\nIf alert fatigue causes care teams to systematically underrespond to system notifications, ClearHeart's 22% readmission reduction result will not replicate at scale. Hospitals that adopted the system based on pilot outcomes will be disappointed, contracts will not renew, and the clinical evidence base that underpins every future sales conversation will be undermined.\n\nIf larger EMR vendors — Epic, Cerner, Philips — build comparable remote monitoring modules and offer them as bundled additions to existing hospital contracts, ClearHeart loses its primary sales argument entirely.`
+    ]
+  }
+
+};
 IJ.state = {
   run:        '',
   team:       '',
@@ -918,6 +1327,11 @@ IJ.init = function() {
 };
 
 IJ.restoreLobbyState = function(saved) {
+  // If game already in progress, go straight to game screen
+  if (saved.gamePhase && saved.gamePhase !== 'lobby') {
+    IJ.launchGameScreen();
+    return;
+  }
   document.getElementById('ij-run-input').value  = saved.run  || '';
   document.getElementById('ij-team-input').value = saved.team || '';
   if (saved.company) IJ.selectCompany(saved.company, true);
@@ -1136,10 +1550,7 @@ IJ.finalizeRegistration = function({ run, team, company, companyName, timer, dif
     '✓ Team "' + team + '" registered! Loading your company...');
 
   setTimeout(() => {
-    // Navigate to game screen (Section 2+ — coming next build)
-    IJ.showScreen('game');
-    // Placeholder until game screen is built
-    alert('✓ Registered! Game screen coming in next build. Team: ' + team + ' | Company: ' + companyName + ' | Run: ' + run);
+    IJ.launchGameScreen();
   }, 800);
 };
 
@@ -1363,10 +1774,197 @@ IJ.toggleCheatMode = function() {
   IJ.saveData({ cheatActive: IJ.cheatActive });
 };
 
+// ── GAME SCREEN ───────────────────────────────────────────────────────────────
+
+IJ.timer        = null; // interval handle
+IJ.timerRemaining = 0;
+
+IJ.launchGameScreen = function() {
+  const data = IJ.getData();
+  if (!data.company) { IJ.showScreen('lobby'); return; }
+
+  IJ.showScreen('game');
+
+  // Update sticky bar team name
+  document.getElementById('ij-bar-team-name').textContent = data.team || '—';
+
+  // Load narrative
+  IJ.loadNarrative(data.company, data.infoCallsUsed || 0);
+
+  // Restore scoreboard bar values
+  IJ.updateScoreBar();
+
+  // Start timer
+  IJ.timerRemaining = data.timerSecs || IJ.DEFAULT_TIMER;
+  IJ.startTimer();
+
+  // Set game phase
+  IJ.setGamePhase(data.gamePhase || 'explore');
+};
+
+// ── NARRATIVE ─────────────────────────────────────────────────────────────────
+
+IJ.loadNarrative = function(companyId, infoCallsUsed) {
+  const cd = IJ.COMPANY_DATA[companyId];
+  if (!cd) return;
+
+  // Set company name and category
+  document.getElementById('ij-narrative-company-name').textContent = cd.name;
+  document.getElementById('ij-narrative-category').textContent = cd.category;
+
+  // Build narrative text — show versions revealed so far
+  let html = `<p>${cd.narratives[0].replace(/\n\n/g,'</p><p>')}</p>`;
+
+  if (infoCallsUsed >= 1 && cd.narratives[1]) {
+    html += `<div class="ij-narrative-addition">
+      <div class="ij-narrative-addition-label">🔍 Additional Information — Uncertainties</div>
+      <p>${cd.narratives[1].replace(/\n\n/g,'</p><p>')}</p>
+    </div>`;
+  }
+  if (infoCallsUsed >= 2 && cd.narratives[2]) {
+    html += `<div class="ij-narrative-addition">
+      <div class="ij-narrative-addition-label">⚠️ Additional Information — Impact</div>
+      <p>${cd.narratives[2].replace(/\n\n/g,'</p><p>')}</p>
+    </div>`;
+  }
+
+  document.getElementById('ij-narrative-text').innerHTML = html;
+
+  // Update info button state
+  IJ.updateInfoButton(infoCallsUsed);
+};
+
+IJ.updateInfoButton = function(infoCallsUsed) {
+  const btn     = document.getElementById('ij-info-btn');
+  const counter = document.getElementById('ij-info-counter');
+  const recBtn  = document.getElementById('ij-recommend-btn');
+
+  counter.textContent = `Info calls: ${infoCallsUsed} / 2 (−10 pts each)`;
+
+  if (infoCallsUsed >= 2) {
+    btn.disabled = true;
+    btn.textContent = '🔍 No More Info Available';
+    recBtn.style.display = 'inline-block';
+  } else {
+    btn.disabled = false;
+    btn.textContent = infoCallsUsed === 0
+      ? '🔍 I Need More Information'
+      : '🔍 More Information (1 left)';
+    recBtn.style.display = 'none';
+  }
+};
+
+IJ.requestMoreInfo = function() {
+  const data = IJ.getData();
+  const used = (data.infoCallsUsed || 0);
+  if (used >= 2) return;
+
+  const newUsed   = used + 1;
+  const newLost   = (data.lostPoints || 0) + 10;
+  const newTotal  = (data.earnedPoints || 0) - newLost;
+
+  IJ.saveData({
+    infoCallsUsed: newUsed,
+    lostPoints:    newLost,
+    totalPoints:   newTotal
+  });
+
+  // Reload narrative with new version revealed
+  IJ.loadNarrative(data.company, newUsed);
+  IJ.updateScoreBar();
+
+  // Push to Google Sheets
+  IJ.pushScore({});
+};
+
+IJ.recommendAssumptions = function() {
+  // Will connect to BMC auto-populate in next chunk
+  // For now just signal the phase
+  IJ.setGamePhase('explore');
+};
+
+// ── SCORE BAR ─────────────────────────────────────────────────────────────────
+
+IJ.updateScoreBar = function() {
+  const data = IJ.getData();
+  const earned   = data.earnedPoints     || 0;
+  const lost     = data.lostPoints       || 0;
+  const total    = data.totalPoints      || (earned - lost);
+  const conf     = data.confidence       || 0;
+
+  document.getElementById('ij-bar-earned').textContent  = '+' + earned.toFixed(2);
+  document.getElementById('ij-bar-lost').textContent    = lost.toFixed(2);
+  document.getElementById('ij-bar-total').textContent   = total.toFixed(2);
+
+  // Confidence bar — max display 80%
+  const confPct  = Math.min(conf, 80);
+  const fillPct  = (confPct / 80) * 100;
+  document.getElementById('ij-bar-confidence-fill').style.width = fillPct + '%';
+  document.getElementById('ij-bar-confidence-pct').textContent  = conf.toFixed(1) + '%';
+
+  // Win flash
+  if (conf >= 80) {
+    document.getElementById('ij-bar-confidence-fill').style.background = '#ffd600';
+  }
+};
+
+// ── TIMER ─────────────────────────────────────────────────────────────────────
+
+IJ.startTimer = function() {
+  if (IJ.timer) clearInterval(IJ.timer);
+  IJ.renderTimer(IJ.timerRemaining);
+  IJ.timer = setInterval(function() {
+    if (IJ.timerRemaining <= 0) {
+      clearInterval(IJ.timer);
+      IJ.onTimerExpired();
+      return;
+    }
+    IJ.timerRemaining--;
+    IJ.renderTimer(IJ.timerRemaining);
+    // Persist every 10 seconds
+    if (IJ.timerRemaining % 10 === 0) {
+      IJ.saveData({ timerSecs: IJ.timerRemaining });
+    }
+  }, 1000);
+};
+
+IJ.renderTimer = function(secs) {
+  const h  = Math.floor(secs / 3600);
+  const m  = Math.floor((secs % 3600) / 60);
+  const s  = secs % 60;
+  const str = h + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  const el  = document.getElementById('ij-bar-timer');
+  if (!el) return;
+  el.textContent = str;
+  // Red pulse under 5 minutes
+  el.classList.toggle('ij-timer-low', secs < 300);
+};
+
+IJ.onTimerExpired = function() {
+  document.getElementById('ij-bar-timer').textContent = '0:00:00';
+  // Push final score
+  IJ.pushScore({ status: 'complete' });
+};
+
+// ── GAME PHASE ────────────────────────────────────────────────────────────────
+
+IJ.setGamePhase = function(phase) {
+  document.querySelectorAll('.ij-phase').forEach(el => el.classList.remove('ij-phase-active'));
+  const el = document.getElementById('ij-phase-' + phase);
+  if (el) el.classList.add('ij-phase-active');
+  IJ.saveData({ gamePhase: phase });
+};
+
 // ── BOOT ──────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function() {
   IJ.init();
   IJ.startScoreboardAutoRefresh();
+
+  // Resume game if already registered
+  const saved = IJ.getData();
+  if (saved.registered && saved.gamePhase && saved.gamePhase !== 'lobby') {
+    // Will be handled by restoreLobbyState → launchGameScreen path
+  }
 });
 </script>
 
