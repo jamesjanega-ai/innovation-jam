@@ -647,26 +647,6 @@ body {
 
   <div class="ij-admin-body">
 
-    <!-- Apps Script URL config -->
-    <div class="ij-admin-section">
-      <div class="ij-admin-section-head">⚙️ Apps Script Configuration</div>
-      <div class="ij-admin-section-body">
-        <div id="ij-url-missing" class="ij-url-notice" style="display:none;">
-          ⚠️ Apps Script URL not set. Enter it below to enable Google Sheets sync.
-        </div>
-        <div class="ij-admin-row">
-          <div class="ij-field" style="flex:3;">
-            <label class="ij-label">Apps Script Web App URL</label>
-            <input type="text" id="ij-admin-script-url" class="ij-input"
-                   placeholder="https://script.google.com/macros/s/.../exec">
-          </div>
-          <button class="ij-btn ij-btn-primary" style="width:auto; padding:11px 20px;"
-                  onclick="IJ.saveScriptUrl()">Save URL</button>
-        </div>
-        <div class="ij-status" id="ij-url-status" style="margin-top:12px;"></div>
-      </div>
-    </div>
-
     <!-- Create Run -->
     <div class="ij-admin-section">
       <div class="ij-admin-section-head">🚀 Start a New Run</div>
@@ -823,11 +803,11 @@ body {
 const IJ = {};
 
 // ── CONSTANTS ─────────────────────────────────────────────────────────────────
-IJ.ADMIN_PW       = 'Clarity2026';
-IJ.STORAGE_KEY    = 'ij_game_state_v1';
-IJ.SCRIPT_URL_KEY = 'ij_apps_script_url';
-IJ.ADMIN_KEY      = 'ij_admin_auth';
-IJ.DEFAULT_TIMER  = 45 * 60; // 45 minutes in seconds
+IJ.ADMIN_PW      = 'Clarity2026';
+IJ.STORAGE_KEY   = 'ij_game_state_v1';
+IJ.ADMIN_KEY     = 'ij_admin_auth';
+IJ.DEFAULT_TIMER = 45 * 60; // 45 minutes in seconds
+IJ.API_BASE      = '/api/sheets'; // Proxy endpoint — no CORS issues
 
 IJ.COMPANIES = [
   { id: 'thermomesh', name: 'ThermoMesh',  category: 'B2B Hardware' },
@@ -865,28 +845,9 @@ IJ.saveData = function(obj) {
   } catch(e) { console.warn('IJ saveData error:', e); }
 };
 
-IJ.getScriptUrl = function() {
-  return localStorage.getItem(IJ.SCRIPT_URL_KEY) || '';
-};
-
-IJ.saveScriptUrl = function() {
-  const url = document.getElementById('ij-admin-script-url').value.trim();
-  if (!url || !url.startsWith('https://script.google.com')) {
-    IJ.showStatus('ij-url-status', 'err',
-      'Please enter a valid Apps Script URL starting with https://script.google.com');
-    return;
-  }
-  localStorage.setItem(IJ.SCRIPT_URL_KEY, url);
-  IJ.showStatus('ij-url-status', 'ok',
-    '✓ URL saved. This device will now sync with Google Sheets.');
-  document.getElementById('ij-url-missing').style.display = 'none';
-};
-
-// ── APPS SCRIPT API ───────────────────────────────────────────────────────────
+// ── APPS SCRIPT API — routed through /api/sheets proxy ────────────────────────
 IJ.appsScriptGet = async function(params) {
-  const baseUrl = IJ.getScriptUrl();
-  if (!baseUrl) throw new Error('Apps Script URL not configured');
-  const url = new URL(baseUrl);
+  const url = new URL(IJ.API_BASE, window.location.origin);
   Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
   const res = await fetch(url.toString());
   if (!res.ok) throw new Error('Network error: ' + res.status);
@@ -894,9 +855,7 @@ IJ.appsScriptGet = async function(params) {
 };
 
 IJ.appsScriptPost = async function(body) {
-  const baseUrl = IJ.getScriptUrl();
-  if (!baseUrl) throw new Error('Apps Script URL not configured');
-  const res = await fetch(baseUrl, {
+  const res = await fetch(IJ.API_BASE, {
     method:  'POST',
     headers: { 'Content-Type': 'application/json' },
     body:    JSON.stringify(body)
@@ -909,7 +868,6 @@ IJ.appsScriptPost = async function(body) {
 IJ.pushScore = async function(extraFields) {
   const data = IJ.getData();
   if (!data.run || !data.team) return;
-  if (!IJ.getScriptUrl()) return;
   try {
     await IJ.appsScriptPost({
       action:            'updateScore',
@@ -974,11 +932,6 @@ IJ.restoreLobbyState = function(saved) {
 // ── AUTO LOAD RUN ─────────────────────────────────────────────────────────────
 IJ.autoLoadRun = async function() {
   const hint = document.getElementById('ij-run-hint-text');
-  if (!IJ.getScriptUrl()) {
-    hint.textContent = 'Enter the run code from the whiteboard.';
-    document.getElementById('ij-run-display').textContent = 'No run loaded';
-    return;
-  }
   try {
     hint.textContent = 'Loading...';
     const data = await IJ.appsScriptGet({ action: 'latestRun' });
@@ -1123,16 +1076,6 @@ IJ.registerTeam = async function() {
   const companyObj = IJ.COMPANIES.find(c => c.id === company);
   const companyName = companyObj ? companyObj.name : company;
 
-  // Check if Apps Script URL exists — if not, save locally and continue
-  if (!IJ.getScriptUrl()) {
-    IJ.finalizeRegistration({ run, team, company, companyName, timer, diff });
-    IJ.showStatus('ij-lobby-status', 'warn',
-      '⚠️ No Apps Script URL set — playing offline. Scores won\'t sync to Google Sheets.');
-    btn.disabled = false;
-    btn.innerHTML = 'Ready to Play →';
-    return;
-  }
-
   // Check for duplicate team name
   try {
     const check = await IJ.appsScriptGet({ action: 'checkTeam', run, team });
@@ -1234,13 +1177,6 @@ IJ.checkAdminPw = function() {
 
 IJ.enterAdmin = function() {
   IJ.showScreen('admin');
-  // Pre-fill saved URL
-  const savedUrl = IJ.getScriptUrl();
-  const urlInput = document.getElementById('ij-admin-script-url');
-  if (urlInput) urlInput.value = savedUrl;
-  if (!savedUrl) {
-    document.getElementById('ij-url-missing').style.display = 'block';
-  }
   IJ.updateRunCode();
   IJ.refreshScoreboard();
 };
