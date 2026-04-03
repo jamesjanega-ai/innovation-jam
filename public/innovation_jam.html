@@ -718,6 +718,64 @@ body {
   color: var(--ij-maroon);
   margin-bottom: 10px;
 }
+
+/* ── BMC CANVAS ──────────────────────────────────────────── */
+.ij-bmc-wrap{background:var(--ij-white);border-radius:var(--ij-radius-lg);box-shadow:var(--ij-shadow);overflow:hidden;}
+.ij-bmc-header{background:var(--ij-maroon);color:white;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;font-weight:bold;font-size:13px;}
+.ij-bmc-grid{display:grid;grid-template-columns:1fr 1fr 1.4fr 1fr 1fr;grid-template-rows:130px 130px 90px 70px;grid-template-areas:"kp ka vp cr cs" "kp kr vp ch cs" "co co re re re" "sa sa sa sa sa";gap:3px;padding:3px;background:#ccc;}
+.ij-bmc-block{background:var(--ij-white);padding:8px 10px;cursor:pointer;position:relative;transition:filter 0.15s,transform 0.1s;overflow:hidden;user-select:none;}
+.ij-bmc-block:hover{filter:brightness(0.95);transform:scale(1.01);z-index:2;}
+.ij-bmc-block.ij-bmc-examined{background:#f5f0ed!important;}
+.ij-bmc-block.ij-bmc-active{outline:3px solid var(--ij-maroon);outline-offset:-2px;z-index:3;}
+.ij-bmc-block[data-dvf="desirability"]{background:rgba(220,38,38,0.05);}
+.ij-bmc-block[data-dvf="feasibility"]{background:rgba(56,189,248,0.07);}
+.ij-bmc-block[data-dvf="viability"]{background:rgba(250,204,21,0.09);}
+.ij-bmc-block[data-dvf="desirability"].ij-bmc-examined{background:rgba(220,38,38,0.12);}
+.ij-bmc-block[data-dvf="feasibility"].ij-bmc-examined{background:rgba(56,189,248,0.14);}
+.ij-bmc-block[data-dvf="viability"].ij-bmc-examined{background:rgba(250,204,21,0.16);}
+.ij-bmc-block-label{font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:0.5px;color:var(--ij-gray);margin-bottom:4px;}
+.ij-bmc-block-dvf{font-size:9px;color:var(--ij-muted);margin-bottom:4px;}
+.ij-bmc-block-count{position:absolute;top:6px;right:8px;background:var(--ij-maroon);color:white;border-radius:10px;font-size:10px;font-weight:bold;padding:1px 7px;display:none;}
+.ij-bmc-block-count.ij-show{display:block;}
+.ij-bmc-block-score{position:absolute;bottom:6px;right:8px;font-size:10px;font-weight:bold;color:#1b5e20;}
+.ij-bmc-block-locked{position:absolute;bottom:6px;left:8px;font-size:10px;color:var(--ij-muted);display:none;}
+.ij-bmc-block-locked.ij-show{display:block;}
+.ij-bmc-kp{grid-area:kp;}.ij-bmc-ka{grid-area:ka;}.ij-bmc-vp{grid-area:vp;}.ij-bmc-cr{grid-area:cr;}.ij-bmc-cs{grid-area:cs;}.ij-bmc-kr{grid-area:kr;}.ij-bmc-ch{grid-area:ch;}.ij-bmc-co{grid-area:co;}.ij-bmc-re{grid-area:re;}.ij-bmc-sa{grid-area:sa;}
+.ij-bmc-footer{padding:12px 20px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--ij-border);}
+.ij-bmc-legend{display:flex;gap:16px;font-size:11px;color:var(--ij-muted);}
+.ij-bmc-legend span{display:flex;align-items:center;gap:5px;}
+.ij-bmc-legend-dot{width:10px;height:10px;border-radius:50%;}
+/* ── DRAWER ──────────────────────────────────────────────── */
+.ij-drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.3);z-index:7000;}
+.ij-drawer-overlay.ij-open{display:block;}
+.ij-drawer{position:fixed;top:48px;right:0;bottom:0;width:400px;max-width:92vw;background:var(--ij-white);box-shadow:-4px 0 24px rgba(0,0,0,0.18);z-index:7100;display:flex;flex-direction:column;transform:translateX(100%);transition:transform 0.25s ease;}
+.ij-drawer.ij-open{transform:translateX(0);}
+.ij-drawer-head{background:var(--ij-maroon);color:white;padding:14px 16px;display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0;}
+.ij-drawer-head-info{flex:1;}
+.ij-drawer-block-name{font-size:14px;font-weight:bold;}
+.ij-drawer-block-dvf{font-size:11px;opacity:0.8;margin-top:2px;}
+.ij-drawer-close{background:none;border:none;color:rgba(255,255,255,0.8);font-size:20px;cursor:pointer;line-height:1;padding:0 0 0 12px;}
+.ij-drawer-close:hover{color:white;}
+.ij-drawer-body{flex:1;overflow-y:auto;padding:16px;}
+.ij-drawer-foot{padding:12px 16px;border-top:1px solid var(--ij-border);display:flex;gap:10px;flex-shrink:0;}
+.ij-assumption-list{margin-bottom:16px;}
+.ij-assumption-item{background:var(--ij-off);border-radius:var(--ij-radius-md);padding:10px 12px;margin-bottom:8px;font-size:12px;border-left:3px solid var(--ij-border);}
+.ij-assumption-item.ij-matched{border-left-color:#2e7d32;}
+.ij-assumption-item.ij-partial{border-left-color:#f57c00;}
+.ij-assumption-entry-text{font-size:13px;font-weight:bold;color:var(--ij-text);margin-bottom:4px;}
+.ij-assumption-pts{font-size:11px;color:#1b5e20;font-weight:bold;}
+.ij-assumption-reveal{margin-top:6px;padding:6px 8px;background:#e8f5e9;border-radius:var(--ij-radius-sm);font-size:11px;color:#1b5e20;border-left:3px solid #4caf50;}
+.ij-assumption-reveal-label{font-size:9px;font-weight:bold;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:2px;color:#2e7d32;}
+.ij-easy-chips{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+.ij-easy-chip{padding:8px 12px;background:var(--ij-off);border:1.5px solid var(--ij-border);border-radius:var(--ij-radius-md);font-size:12px;cursor:pointer;text-align:left;font-family:Arial,sans-serif;color:var(--ij-text);transition:all 0.15s;}
+.ij-easy-chip:hover{border-color:var(--ij-maroon);background:#fdf5f5;}
+.ij-easy-chip.ij-used{opacity:0.4;cursor:not-allowed;text-decoration:line-through;}
+.ij-slider-group{display:flex;gap:16px;margin-bottom:14px;}
+.ij-slider-field{flex:1;}
+.ij-slider-label{font-size:11px;font-weight:bold;color:var(--ij-gray);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:4px;display:flex;justify-content:space-between;}
+.ij-slider-val{font-size:14px;font-weight:bold;color:var(--ij-maroon);}
+input[type=range].ij-slider{width:100%;accent-color:var(--ij-maroon);}
+
 </style>
 </head>
 <body>
@@ -1054,13 +1112,26 @@ body {
     <!-- Game Content Phases -->
     <div class="ij-game-content">
 
-      <!-- Phase: BMC Explorer (coming next chunk) -->
+      <!-- Phase: BMC Explorer -->
       <div class="ij-phase ij-phase-active" id="ij-phase-explore">
-        <div class="ij-phase-placeholder">
-          <h3>📋 Business Model Canvas</h3>
-          <p>Click each BMC block to enter critical assumptions.<br>
-          <strong>BMC canvas coming in next build.</strong><br><br>
-          Your narrative is loaded above — read it carefully before the canvas arrives!</p>
+        <div class="ij-bmc-wrap">
+          <div class="ij-bmc-header">
+            <span>📋 Business Model Canvas — Click any block to enter critical assumptions</span>
+            <span id="ij-bmc-mode-badge" style="font-size:11px;opacity:0.8;"></span>
+          </div>
+          <div class="ij-bmc-grid" id="ij-bmc-grid"><!-- rendered by JS --></div>
+          <div class="ij-bmc-footer">
+            <div class="ij-bmc-legend">
+              <span><div class="ij-bmc-legend-dot" style="background:rgba(220,38,38,0.35);"></div>Desirability</span>
+              <span><div class="ij-bmc-legend-dot" style="background:rgba(56,189,248,0.4);"></div>Feasibility</span>
+              <span><div class="ij-bmc-legend-dot" style="background:rgba(250,204,21,0.5);"></div>Viability</span>
+            </div>
+            <button class="ij-btn ij-btn-primary" id="ij-prioritize-btn"
+                    style="width:auto;padding:10px 24px;display:none;"
+                    onclick="IJ.prioritizeAssumptions()">
+              🎯 Prioritize Critical Assumptions →
+            </button>
+          </div>
         </div>
       </div>
 
@@ -1082,6 +1153,48 @@ body {
   </div><!-- /game-body -->
 </div><!-- /screen-game -->
 
+
+<!-- DRAWER -->
+<div class="ij-drawer-overlay" id="ij-drawer-overlay" onclick="IJ.closeDrawer()"></div>
+<div class="ij-drawer" id="ij-drawer">
+  <div class="ij-drawer-head">
+    <div class="ij-drawer-head-info">
+      <div class="ij-drawer-block-name" id="ij-drawer-block-name">Block Name</div>
+      <div class="ij-drawer-block-dvf" id="ij-drawer-block-dvf">Desirability</div>
+    </div>
+    <button class="ij-drawer-close" onclick="IJ.closeDrawer()">✕</button>
+  </div>
+  <div class="ij-drawer-body" id="ij-drawer-body">
+    <div class="ij-assumption-list" id="ij-assumption-list"></div>
+    <div id="ij-hard-entry">
+      <div class="ij-field" style="margin-bottom:12px;">
+        <label class="ij-label" style="font-size:11px;">Enter a Critical Assumption</label>
+        <textarea id="ij-assumption-text" style="width:100%;padding:10px;border:1.5px solid var(--ij-border);border-radius:8px;font-size:13px;font-family:Arial,sans-serif;resize:vertical;min-height:80px;outline:none;" placeholder="For this business to succeed, it must be true that..."></textarea>
+      </div>
+    </div>
+    <div id="ij-easy-entry" style="display:none;">
+      <div class="ij-label" style="font-size:11px;margin-bottom:8px;">Select a Critical Assumption:</div>
+      <div class="ij-easy-chips" id="ij-easy-chips"></div>
+    </div>
+    <div class="ij-slider-group">
+      <div class="ij-slider-field">
+        <div class="ij-slider-label">Impact <span class="ij-slider-val" id="ij-impact-val">3</span></div>
+        <input type="range" class="ij-slider" id="ij-impact-slider" min="1" max="5" value="3" oninput="document.getElementById('ij-impact-val').textContent=this.value">
+        <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--ij-muted);"><span>1 Fine</span><span>5 Catastrophic</span></div>
+      </div>
+      <div class="ij-slider-field">
+        <div class="ij-slider-label">Uncertainty <span class="ij-slider-val" id="ij-uncertainty-val">3</span></div>
+        <input type="range" class="ij-slider" id="ij-uncertainty-slider" min="1" max="5" value="3" oninput="document.getElementById('ij-uncertainty-val').textContent=this.value">
+        <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--ij-muted);"><span>1 Certain</span><span>5 Very uncertain</span></div>
+      </div>
+    </div>
+    <div class="ij-status" id="ij-drawer-status" style="margin-bottom:12px;"></div>
+  </div>
+  <div class="ij-drawer-foot">
+    <button class="ij-btn ij-btn-primary" style="flex:1;" onclick="IJ.submitAssumption()">+ Add Assumption</button>
+    <button class="ij-btn ij-btn-secondary" onclick="IJ.lockBlock()" style="white-space:nowrap;">🔒 Lock Block</button>
+  </div>
+</div>
 
 <!-- ============================================================
      ADMIN PASSWORD MODAL
