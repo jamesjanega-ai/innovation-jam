@@ -1326,6 +1326,12 @@ input[type=range].ij-slider{width:100%;accent-color:var(--ij-maroon);}
               text-decoration:none;white-space:nowrap;flex-shrink:0;
               font-family:Arial,sans-serif;letter-spacing:0.3px;"
        title="Admin Panel" onclick="IJ.openAdminModal();return false;">⚙ Admin</a>
+    <a href="#"
+       style="margin-left:6px;padding:4px 10px;background:rgba(255,255,255,0.08);
+              color:rgba(255,200,200,0.8);border-radius:4px;font-size:10px;
+              text-decoration:none;white-space:nowrap;flex-shrink:0;
+              font-family:Arial,sans-serif;letter-spacing:0.3px;"
+       title="Leave game and return to lobby" onclick="IJ.leaveGame();return false;">✕ Leave</a>
   </div>
 
   <!-- Game Body -->
@@ -1477,7 +1483,7 @@ input[type=range].ij-slider{width:100%;accent-color:var(--ij-maroon);}
     <div class="ij-status" id="ij-drawer-status" style="margin-bottom:12px;"></div>
   </div>
   <div class="ij-drawer-foot">
-    <button class="ij-btn ij-btn-primary" style="flex:1;" onclick="IJ.submitAssumption()">+ Add Assumption</button>
+    <button class="ij-btn ij-btn-primary" id="ij-submit-assumption" style="flex:1;" onclick="IJ.submitAssumption()">+ Add Assumption</button>
     <button class="ij-btn ij-btn-secondary" onclick="IJ.lockBlock()" style="white-space:nowrap;">🔒 Lock Block</button>
   </div>
 </div>
@@ -2706,7 +2712,10 @@ IJ.showScreen = function(name) {
 
 IJ.goToLobby = function() {
   history.replaceState(null, '', window.location.pathname);
+  if (IJ.timer) { clearInterval(IJ.timer); IJ.timer = null; }
   IJ.showScreen('lobby');
+  IJ.validateLobby();
+  IJ.autoLoadRun();
 };
 
 // ── STATUS HELPERS ────────────────────────────────────────────────────────────
@@ -3437,7 +3446,7 @@ IJ.openDrawer = function(blockId, readOnly) {
     // If block has 8+ assumptions, disable add button
     const blockData = (data.bmcBlocks||{})[blockId]||{};
     const count = (blockData.assumptions||[]).length;
-    document.getElementById('ij-submit-assumption').disabled = count >= 8;
+    const submitBtn = document.getElementById('ij-submit-assumption'); if(submitBtn) submitBtn.disabled = count >= 8;
   }
 
   // Reset sliders
@@ -3601,7 +3610,7 @@ IJ.submitAssumption = function() {
   textarea.value = '';
   IJ.renderDrawerAssumptions(blockId);
   IJ.showStatus('ij-drawer-status','ok',`+${earnedBase.toFixed(2)} pts${bestScore>=3?' — great match!':bestScore>=1?' — partial match':' — 0 pts, but here is the closest canonical assumption'}`);
-  document.getElementById('ij-submit-assumption').disabled = (count+1) >= 8;
+  const sb2 = document.getElementById('ij-submit-assumption'); if(sb2) sb2.disabled = (count+1) >= 8;
 };
 
 IJ.getBasePoints = function(existingCount) {
@@ -3778,9 +3787,83 @@ IJ.requestMoreInfo = function() {
 };
 
 IJ.recommendAssumptions = function() {
-  // Will connect to BMC auto-populate in next chunk
-  // For now just signal the phase
-  IJ.setGamePhase('explore');
+  const data = IJ.getData();
+  const company = data.company;
+  if (!company || !IJ.CANONICAL[company]) {
+    alert('No canonical assumptions found for this company.');
+    return;
+  }
+
+  const bmcBlocks = data.bmcBlocks || {};
+  let blocksAutoFilled = 0;
+  let penaltyPoints = 0;
+
+  IJ.BMC_BLOCKS.forEach(b => {
+    const blockData = bmcBlocks[b.id] || { assumptions:[], locked:false, score:0 };
+    const canonical = (IJ.CANONICAL[company]||{})[b.id] || [];
+    
+    // Only fill completely empty blocks
+    if (blockData.assumptions && blockData.assumptions.length > 0) return;
+    if (canonical.length === 0) return;
+
+    // Auto-populate with all canonical assumptions at default sliders
+    blockData.assumptions = canonical.map((ca, i) => ({
+      text: ca.text,
+      impact: 3,
+      uncertainty: 3,
+      matchScore: 0,   // auto-populated = no match score
+      points: 0,       // no points awarded for auto-population
+      canonicalId: i.toString(),
+      reveal: null,
+      autoPopulated: true
+    }));
+    blockData.score = 0; // no score for auto-populated blocks
+    blockData.locked = false;
+    bmcBlocks[b.id] = blockData;
+    blocksAutoFilled++;
+    penaltyPoints += 2.5; // penalty per auto-filled block
+  });
+
+  // Apply penalty
+  const newLost  = (data.lostPoints||0) + penaltyPoints;
+  const newTotal = (data.earnedPoints||0) - newLost;
+  IJ.saveData({ bmcBlocks, lostPoints: newLost, totalPoints: newTotal });
+
+  IJ.renderBMC();
+  IJ.updateScoreBar();
+
+  // Hide the recommend button now that it's been used
+  const btn = document.getElementById('ij-recommend-btn');
+  if (btn) {
+    btn.style.display = 'none';
+  }
+
+  // Show notification and reveal the prioritize button
+  document.getElementById('ij-prioritize-btn').style.display = 'block';
+
+  if (blocksAutoFilled > 0) {
+    IJ.showStatus('ij-drawer-status', 'warn',
+      blocksAutoFilled + ' empty block(s) auto-filled with canonical assumptions. ' +
+      'Click each block to adjust Impact & Uncertainty sliders, then Prioritize.');
+  }
+
+  // Brief flash to indicate something happened
+  const bmc = document.querySelector('.ij-bmc-grid');
+  if (bmc) {
+    bmc.style.opacity = '0.5';
+    setTimeout(() => { bmc.style.opacity = '1'; }, 400);
+  }
+};
+
+// FIX: Leave game and return to lobby
+IJ.leaveGame = function() {
+  if (!confirm('Leave this game session? Your progress will be saved and you can rejoin with the same team name.')) return;
+  if (IJ.timer) { clearInterval(IJ.timer); IJ.timer = null; }
+  // Save current state but set gamePhase to lobby so rejoining resumes at lobby
+  IJ.saveData({ gamePhase: 'lobby' });
+  IJ.showScreen('lobby');
+  IJ.validateLobby();
+  IJ.autoLoadRun();
 };
 
 // ── SCORE BAR ─────────────────────────────────────────────────────────────────
