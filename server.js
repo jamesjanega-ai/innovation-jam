@@ -1,14 +1,16 @@
 // ============================================================
 // INNOVATION JAM — server.js
 // Serves innovation_jam.html
-// Proxies Apps Script calls (fixes CORS)
-// Proxies Anthropic API calls (future use)
+// Proxies Apps Script calls (fixes CORS + follows 302 redirects)
 // ============================================================
 
-const express = require('express');
-const path    = require('path');
-const app     = express();
+const express  = require('express');
+const path     = require('path');
+const https    = require('https');
+const http     = require('http');
+const { URL }  = require('url');
 
+const app = express();
 app.use(express.json({ limit: '2mb' }));
 
 // ─── SERVE STATIC FILES ───────────────────────────────────────────────────────
@@ -19,50 +21,81 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', service: 'Innovation Jam', time: new Date().toISOString() });
 });
 
+// ─── POST WITH REDIRECT HELPER ────────────────────────────────────────────────
+// Google Apps Script redirects POST requests (302). Node fetch drops the body
+// on redirect. This helper manually follows the redirect, preserving the body.
+function postWithRedirect(urlStr, bodyObj, redirectCount = 0) {
+  return new Promise((resolve, reject) => {
+    if (redirectCount > 5) return reject(new Error('Too many redirects'));
+
+    const parsed   = new URL(urlStr);
+    const lib      = parsed.protocol === 'https:' ? https : http;
+    const bodyStr  = JSON.stringify(bodyObj);
+
+    const opts = {
+      hostname: parsed.hostname,
+      path:     parsed.pathname + parsed.search,
+      method:   'POST',
+      headers:  {
+        'Content-Type':   'application/json',
+        'Content-Length': Buffer.byteLength(bodyStr)
+      }
+    };
+
+    const req = lib.request(opts, (res) => {
+      // Follow 301/302/303/307/308 redirects
+      if ([301, 302, 303, 307, 308].includes(res.statusCode) && res.headers.location) {
+        const nextUrl = new URL(res.headers.location, urlStr).toString();
+        console.log(`Redirect ${res.statusCode} → ${nextUrl}`);
+        // Consume response body before following redirect
+        res.resume();
+        return postWithRedirect(nextUrl, bodyObj, redirectCount + 1)
+          .then(resolve)
+          .catch(reject);
+      }
+
+      let raw = '';
+      res.setEncoding('utf8');
+      res.on('data', chunk => raw += chunk);
+      res.on('end', () => resolve({ statusCode: res.statusCode, body: raw }));
+    });
+
+    req.on('error', reject);
+    req.write(bodyStr);
+    req.end();
+  });
+}
+
 // ─── APPS SCRIPT PROXY — GET ──────────────────────────────────────────────────
-// Client calls GET /api/sheets?action=latestRun&run=APR02-A
-// Server forwards to Apps Script — no CORS issues server-to-server
 app.get('/api/sheets', async (req, res) => {
   const scriptUrl = process.env.APPS_SCRIPT_URL;
   if (!scriptUrl) {
-    return res.status(500).json({
-      success: false,
-      error: 'APPS_SCRIPT_URL not set in Render environment variables'
-    });
+    return res.status(500).json({ success: false, error: 'APPS_SCRIPT_URL not configured' });
   }
   try {
-    const params   = new URLSearchParams(req.query);
-    const fullUrl  = `${scriptUrl}?${params.toString()}`;
+    const params  = new URLSearchParams(req.query);
+    const fullUrl = `${scriptUrl}?${params.toString()}`;
     const response = await fetch(fullUrl);
-    const data     = await response.json();
+    const data = await response.json();
     res.json(data);
   } catch (err) {
-    console.error('Apps Script GET proxy error:', err.message);
+    console.error('Apps Script GET error:', err.message);
     res.status(500).json({ success: false, error: 'Proxy GET error: ' + err.message });
   }
 });
 
-// ─── APPS SCRIPT PROXY — POST ─────────────────────────────────────────────────
-// Client calls POST /api/sheets with JSON body
-// Server forwards to Apps Script — no CORS issues server-to-server
+// ─── APPS SCRIPT PROXY — POST (with redirect handling) ────────────────────────
 app.post('/api/sheets', async (req, res) => {
   const scriptUrl = process.env.APPS_SCRIPT_URL;
   if (!scriptUrl) {
-    return res.status(500).json({
-      success: false,
-      error: 'APPS_SCRIPT_URL not set in Render environment variables'
-    });
+    return res.status(500).json({ success: false, error: 'APPS_SCRIPT_URL not configured' });
   }
   try {
-    const response = await fetch(scriptUrl, {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(req.body)
-    });
-    const data = await response.json();
-    res.json(data);
+    const { statusCode, body } = await postWithRedirect(scriptUrl, req.body);
+    const data = JSON.parse(body);
+    res.status(statusCode >= 400 ? statusCode : 200).json(data);
   } catch (err) {
-    console.error('Apps Script POST proxy error:', err.message);
+    console.error('Apps Script POST error:', err.message);
     res.status(500).json({ success: false, error: 'Proxy POST error: ' + err.message });
   }
 });
@@ -70,9 +103,7 @@ app.post('/api/sheets', async (req, res) => {
 // ─── ANTHROPIC PROXY ──────────────────────────────────────────────────────────
 app.post('/api/claude', async (req, res) => {
   const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) {
-    return res.status(500).json({ error: 'ANTHROPIC_API_KEY not configured' });
-  }
+  if (!apiKey) return res.status(500).json({ error: 'ANTHROPIC_API_KEY not configured' });
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method:  'POST',
@@ -92,7 +123,7 @@ app.post('/api/claude', async (req, res) => {
   }
 });
 
-// ─── CATCH-ALL → SERVE GAME ───────────────────────────────────────────────────
+// ─── CATCH-ALL ────────────────────────────────────────────────────────────────
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'innovation_jam.html'));
 });
@@ -101,5 +132,4 @@ app.get('*', (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Innovation Jam running on port ${PORT}`);
-  console.log(`Admin: http://localhost:${PORT}?admin=true`);
 });
