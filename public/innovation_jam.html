@@ -719,6 +719,119 @@ body {
   margin-bottom: 10px;
 }
 
+
+/* ── RESULTS VIEW ────────────────────────────────────────── */
+.ij-results-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.ij-results-card {
+  background: var(--ij-white);
+  border-radius: var(--ij-radius-lg);
+  box-shadow: var(--ij-shadow);
+  overflow: hidden;
+}
+.ij-results-card-head {
+  background: var(--ij-maroon);
+  color: white;
+  padding: 10px 16px;
+  font-weight: bold;
+  font-size: 13px;
+}
+.ij-results-card-body { padding: 16px; }
+.ij-scatter-svg { width: 100%; height: 260px; display: block; }
+.ij-scatter-bubble { cursor: pointer; transition: r 0.15s; }
+.ij-scatter-bubble:hover { r: 14; }
+.ij-scatter-tooltip {
+  position: absolute;
+  background: rgba(30,30,30,0.92);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  max-width: 220px;
+  pointer-events: none;
+  z-index: 8500;
+  display: none;
+  line-height: 1.4;
+}
+.ij-assumption-rank-list { display: flex; flex-direction: column; gap: 12px; }
+.ij-assumption-rank-item {
+  background: var(--ij-white);
+  border-radius: var(--ij-radius-lg);
+  box-shadow: var(--ij-shadow);
+  overflow: hidden;
+}
+.ij-ari-head {
+  padding: 12px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  border-bottom: 1px solid var(--ij-border);
+}
+.ij-ari-rank {
+  background: var(--ij-maroon);
+  color: white;
+  border-radius: 50%;
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: bold;
+  flex-shrink: 0;
+}
+.ij-ari-text { flex: 1; font-size: 13px; color: var(--ij-text); line-height: 1.5; }
+.ij-ari-meta { font-size: 11px; color: var(--ij-muted); margin-top: 4px; }
+.ij-ari-score {
+  font-size: 18px; font-weight: bold; color: var(--ij-maroon);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.ij-ari-tests { padding: 12px 16px; display: flex; flex-direction: column; gap: 8px; }
+.ij-test-card {
+  background: var(--ij-off);
+  border-radius: var(--ij-radius-md);
+  padding: 10px 12px;
+  border-left: 4px solid var(--ij-maroon);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.ij-test-card:nth-child(2) { border-left-color: var(--ij-gray); }
+.ij-test-card:nth-child(3) { border-left-color: var(--ij-warm); }
+.ij-test-badge {
+  background: var(--ij-maroon);
+  color: white;
+  border-radius: var(--ij-radius-sm);
+  padding: 2px 8px;
+  font-size: 9px;
+  font-weight: bold;
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.ij-test-badge.ij-validation { background: var(--ij-gray); }
+.ij-test-info { flex: 1; }
+.ij-test-name { font-size: 13px; font-weight: bold; color: var(--ij-text); margin-bottom: 3px; }
+.ij-test-measures { font-size: 11px; color: var(--ij-muted); margin-bottom: 3px; }
+.ij-test-meta { display: flex; gap: 12px; font-size: 10px; color: var(--ij-muted); }
+.ij-test-evidence {
+  font-size: 11px; font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.ij-ev-low { background: #fff8e1; color: #e65100; }
+.ij-ev-mid { background: #e8f5e9; color: #1b5e20; }
+.ij-ev-high { background: #e3f2fd; color: #0d47a1; }
+.ij-results-back {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
 /* ── BMC CANVAS ──────────────────────────────────────────── */
 .ij-bmc-wrap{background:var(--ij-white);border-radius:var(--ij-radius-lg);box-shadow:var(--ij-shadow);overflow:hidden;}
 .ij-bmc-header{background:var(--ij-maroon);color:white;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;font-weight:bold;font-size:13px;}
@@ -2494,6 +2607,325 @@ IJ.toggleCheatMode = function() {
   IJ.saveData({ cheatActive: IJ.cheatActive });
 };
 
+
+
+// ── 44-TEST LIBRARY ───────────────────────────────────────────────────────────
+// dvf: which dimensions tested. totalTime 1-8. cost 1-5. evidence 0-100%.
+// pairAfter: experiment IDs to run if results are ambiguous.
+IJ.TESTS = [
+  {id:106,name:"Customer Interview",disc:true,dvf:["D","V"],totalTime:4,cost:2,evidence:20,measures:"Customer jobs, gains, pains; interview referrals",requires:"Target customer",pairAfter:[116,122,182]},
+  {id:114,name:"Partner & Supplier Interviews",disc:true,dvf:["F","V"],totalTime:5,cost:2,evidence:60,measures:"Key partner bids; partner feedback",requires:"Target partners",pairAfter:[240,274,254]},
+  {id:115,name:"Expert Stakeholder Interviews",disc:true,dvf:["D","V"],totalTime:5,cost:2,evidence:40,measures:"Expert feedback; stakeholder buy-in",requires:"Target stakeholders",pairAfter:[]},
+  {id:116,name:"A Day in the Life",disc:true,dvf:["D"],totalTime:5,cost:2,evidence:60,measures:"Customer jobs, pains, gains; customer quotes",requires:"Customer consent",pairAfter:[130,168,186]},
+  {id:122,name:"Discovery Survey",disc:true,dvf:["D","V"],totalTime:5,cost:2,evidence:20,measures:"Free text responses; willingness to be contacted",requires:"Qualitative source material; audience access",pairAfter:[182,236,126]},
+  {id:126,name:"Search Trend Analysis",disc:true,dvf:["D","V"],totalTime:4,cost:1,evidence:60,measures:"Search volume; related queries",requires:"Online customers",pairAfter:[146,260,168]},
+  {id:130,name:"Web Traffic Analysis",disc:true,dvf:["D","V"],totalTime:5,cost:2,evidence:40,measures:"Attention; drop-offs; sessions",requires:"Existing web traffic",pairAfter:[270,278,142]},
+  {id:134,name:"Discussion Forums",disc:true,dvf:["D"],totalTime:5,cost:1,evidence:40,measures:"Workarounds; feature requests",requires:"Forum data",pairAfter:[106,130]},
+  {id:138,name:"Sales Force Feedback",disc:true,dvf:["D"],totalTime:4,cost:2,evidence:40,measures:"Near misses; feature request types",requires:"Internal sales data",pairAfter:[226,270]},
+  {id:142,name:"Customer Support Analysis",disc:true,dvf:["D"],totalTime:5,cost:2,evidence:40,measures:"Customer feedback; feature request types",requires:"Customer support data",pairAfter:[130,138,218]},
+  {id:146,name:"Online Ad",disc:true,dvf:["D"],totalTime:5,cost:3,evidence:60,measures:"Unique views; clicks",requires:"Web destination",pairAfter:[168,214,270]},
+  {id:152,name:"Link Tracking",disc:true,dvf:["D","V"],totalTime:4,cost:1,evidence:60,measures:"Unique views",requires:"Call to action",pairAfter:[270]},
+  {id:156,name:"Feature Stub",disc:true,dvf:["D"],totalTime:4,cost:1,evidence:70,measures:"Survey completions; views; learn more clicks",requires:"Existing product & analytics",pairAfter:[182,236]},
+  {id:160,name:"404 Test",disc:true,dvf:["D"],totalTime:2,cost:1,evidence:60,measures:"Feature Stub alternative — must go fast, non-critical",requires:"Existing product",pairAfter:[182,236]},
+  {id:162,name:"Email Campaign",disc:true,dvf:["D","V"],totalTime:5,cost:1,evidence:60,measures:"Opens; clicks; bounces; unsubscribes",requires:"Subscriber list; campaign goal",pairAfter:[152,270,248]},
+  {id:168,name:"Social Media Campaign",disc:true,dvf:["D","V"],totalTime:8,cost:2,evidence:60,measures:"Conversations; clicks; views; shares",requires:"Content",pairAfter:[248]},
+  {id:172,name:"Referral Program",disc:true,dvf:["D","V"],totalTime:7,cost:3,evidence:80,measures:"Advocates; shares; friend clicks; conversions",requires:"Passionate customers",pairAfter:[270]},
+  {id:176,name:"3D Print",disc:true,dvf:["D","F","V"],totalTime:6,cost:3,evidence:30,measures:"Customer jobs, pains, gains; customer feedback",requires:"Sketches to model",pairAfter:[186,254]},
+  {id:182,name:"Paper Prototype",disc:true,dvf:["D","V"],totalTime:4,cost:1,evidence:20,measures:"Task completion %; time to complete; customer feedback",requires:"An imagined product",pairAfter:[236,186,200]},
+  {id:186,name:"Storyboard",disc:true,dvf:["D","V"],totalTime:3,cost:2,evidence:40,measures:"Customer jobs, pains, gains; customer quotes",requires:"Customer segment",pairAfter:[182,200,106]},
+  {id:190,name:"Data Sheet",disc:true,dvf:["D","F","V"],totalTime:4,cost:1,evidence:60,measures:"Customer and partner feedback quotes",requires:"Requirements document",pairAfter:[176,274]},
+  {id:194,name:"Brochure",disc:true,dvf:["D","F","V"],totalTime:5,cost:1,evidence:60,measures:"Brochure views; interviews; contact rate; conversion",requires:"Acquisition plan",pairAfter:[248,278,274]},
+  {id:200,name:"Explainer Video",disc:true,dvf:["D","V"],totalTime:7,cost:3,evidence:50,measures:"Click-through rate; unique views; shares; comments",requires:"Traffic",pairAfter:[162,208,222]},
+  {id:204,name:"Boomerang",disc:true,dvf:["D"],totalTime:4,cost:2,evidence:40,measures:"Task completion; time to complete; customer feedback",requires:"Existing or competing product",pairAfter:[226,182,236]},
+  {id:208,name:"Pretend to Own",disc:true,dvf:["D"],totalTime:6,cost:1,evidence:40,measures:"Logbook of when you use it",requires:"Your own willingness",pairAfter:[254,190,194]},
+  {id:214,name:"Product Box",disc:true,dvf:["D"],totalTime:3,cost:2,evidence:40,measures:"Value prop; customer jobs, pains, gains; feedback",requires:"Idea and target customer",pairAfter:[182,126,186]},
+  {id:218,name:"Speed Boat",disc:true,dvf:["D","F"],totalTime:3,cost:2,evidence:50,measures:"Blockers and their severity and urgency; feedback",requires:"Facilitation skills",pairAfter:[270,306,186]},
+  {id:222,name:"Card Sorting",disc:true,dvf:["D"],totalTime:3,cost:2,evidence:40,measures:"Customer jobs, pains, gains; customer quotes",requires:"Target customer",pairAfter:[186,200,182]},
+  {id:226,name:"Buy a Feature",disc:true,dvf:["D","V"],totalTime:3,cost:2,evidence:40,measures:"Feature ranking; customer jobs/pains/gains; feedback",requires:"Feature list; facilitation skills",pairAfter:[156,270,236]},
+  {id:236,name:"Clickable Prototype",disc:false,dvf:["D"],totalTime:4,cost:2,evidence:40,measures:"Task completion; completion %; time to complete; feedback",requires:"Digital product idea",pairAfter:[244,186,200]},
+  {id:240,name:"Single Feature MVP",disc:false,dvf:["D","F","V"],totalTime:7,cost:4,evidence:100,measures:"Customer satisfaction; purchases; cost to deliver",requires:"Evidence of niche customer need",pairAfter:[106,278,266]},
+  {id:244,name:"Mash-Up MVP",disc:false,dvf:["D","F","V"],totalTime:7,cost:3,evidence:100,measures:"Customer satisfaction; purchases; cost to deliver",requires:"A process to automate",pairAfter:[106,278,266]},
+  {id:248,name:"Concierge",disc:false,dvf:["D","F","V"],totalTime:5,cost:1,evidence:100,measures:"Customer satisfaction; purchases; time to complete process",requires:"Time",pairAfter:[244,172,284]},
+  {id:254,name:"Life-Size Prototype",disc:false,dvf:["D","F","V"],totalTime:7,cost:5,evidence:70,measures:"Mock sales; customer feedback; email signups",requires:"Evidence that a solution is needed",pairAfter:[266,200]},
+  {id:260,name:"Simple Landing Page",disc:false,dvf:["D","F","V"],totalTime:5,cost:2,evidence:40,measures:"Unique views; time on page; email signups 10-15%",requires:"Traffic",pairAfter:[106,278,284]},
+  {id:266,name:"Crowdfunding",disc:false,dvf:["D","V"],totalTime:8,cost:5,evidence:70,measures:"Pledges; pledge amount; referrers; views",requires:"Customer segment and value prop",pairAfter:[106,240,162]},
+  {id:270,name:"A/B Split Test",disc:false,dvf:["D","V"],totalTime:5,cost:2,evidence:60,measures:"Control A vs Variant B behavior and conversion",requires:"Significant traffic",pairAfter:[106]},
+  {id:274,name:"Presale",disc:false,dvf:["D","V"],totalTime:5,cost:3,evidence:100,measures:"Unique views; purchases vs abandons",requires:"Ability to fulfill",pairAfter:[284,240,248]},
+  {id:278,name:"Validation Survey",disc:false,dvf:["D","F","V"],totalTime:5,cost:2,evidence:30,measures:"Jobs/pains/gains ranking accuracy >80%; disappointed if discontinued >50%; NPS",requires:"Quantitative source material; existing customers",pairAfter:[172,122,106]},
+  {id:284,name:"Wizard of Oz",disc:false,dvf:["D","F","V"],totalTime:6,cost:2,evidence:100,measures:"Customer satisfaction; purchases; time to complete process",requires:"Time",pairAfter:[244,172,266]},
+  {id:288,name:"Mock Sale",disc:false,dvf:["D","V"],totalTime:5,cost:1,evidence:80,measures:"Payment info submitted; purchase email signups; views; clicks",requires:"Pricing strategy",pairAfter:[106,240,162]},
+  {id:294,name:"Letter of Intent",disc:false,dvf:["D","F","V"],totalTime:3,cost:1,evidence:40,measures:"LOIs sent vs viewed vs signed; customer feedback",requires:"Warm leads",pairAfter:[240,274,254]},
+  {id:300,name:"Pop-Up Store",disc:false,dvf:["D","F","V"],totalTime:5,cost:4,evidence:70,measures:"Sales; presales; mock sales; email signups; customer visits",requires:"Traffic",pairAfter:[274,288,248]},
+  {id:306,name:"Extreme Programming Spike",disc:false,dvf:["F"],totalTime:3,cost:2,evidence:100,measures:"Ability to match acceptance criteria; learning curve description",requires:"Acceptance criteria",pairAfter:[240,190]}
+];
+
+// Helper: get tests for a given D/F/V dimension, sorted easiest first
+IJ.getTestsForDVF = function(dvfChar) {
+  return IJ.TESTS
+    .filter(t => t.dvf.includes(dvfChar))
+    .sort((a,b) => a.totalTime - b.totalTime || a.cost - b.cost);
+};
+
+// Map BMC block id to DVF character
+IJ.blockToDVF = function(blockId) {
+  const d = ['customerSegments','valueProposition','channels','customerRelationships'];
+  const f = ['keyActivities','keyResources','keyPartnerships'];
+  if (d.includes(blockId)) return 'D';
+  if (f.includes(blockId)) return 'F';
+  return 'V';
+};
+
+
+// ── RESULTS VIEW ──────────────────────────────────────────────────────────────
+
+IJ.prioritizeAssumptions = function() {
+  IJ.closeDrawer();
+  IJ.setGamePhase('results');
+  IJ.renderResults();
+};
+
+IJ.buildPrioritizedList = function() {
+  const data = IJ.getData();
+  const bmcBlocks = data.bmcBlocks || {};
+  const all = [];
+  IJ.BMC_BLOCKS.forEach(b => {
+    const blockData = bmcBlocks[b.id] || {};
+    const assumptions = blockData.assumptions || [];
+    assumptions.forEach(a => {
+      all.push({
+        text:        a.text,
+        impact:      a.impact || 3,
+        uncertainty: a.uncertainty || 3,
+        score:       (a.impact||3) * (a.uncertainty||3),
+        blockId:     b.id,
+        blockLabel:  b.label,
+        dvf:         b.dvf,
+        dvfChar:     IJ.blockToDVF(b.id)
+      });
+    });
+  });
+  return all.sort((a,b) => b.score - a.score);
+};
+
+IJ.renderResults = function() {
+  const data = IJ.getData();
+  const list = IJ.buildPrioritizedList();
+  const phase = document.getElementById('ij-phase-results');
+  if (!phase) return;
+
+  if (list.length === 0) {
+    phase.innerHTML = '<div class="ij-phase-placeholder"><h3>No assumptions yet</h3><p>Go back and enter assumptions in the BMC blocks first.</p><button class="ij-btn ij-btn-primary" style="width:auto;margin-top:16px;" onclick="IJ.setGamePhase('explore');IJ.renderBMC();">← Back to BMC</button></div>';
+    return;
+  }
+
+  // Update BMC heat map
+  IJ.updateHeatMap();
+
+  phase.innerHTML = `
+    <div class="ij-results-back">
+      <button class="ij-btn ij-btn-secondary" onclick="IJ.setGamePhase('explore');IJ.renderBMC();">← Back to BMC</button>
+      <span style="font-size:13px;color:var(--ij-muted);">${list.length} critical assumptions prioritized by Impact × Uncertainty</span>
+    </div>
+    <div class="ij-results-grid">
+      <div class="ij-results-card">
+        <div class="ij-results-card-head">🗺️ BMC Heat Map — Priority Intensity</div>
+        <div class="ij-results-card-body" style="padding:8px;">
+          <div id="ij-heatmap-mini" class="ij-bmc-grid" style="grid-template-rows:80px 80px 55px 45px;gap:2px;padding:2px;background:#ccc;"></div>
+          <div style="margin-top:8px;font-size:10px;color:var(--ij-muted);display:flex;align-items:center;gap:6px;">
+            <div style="background:linear-gradient(to right,#fff,#800000);width:80px;height:8px;border-radius:4px;"></div>
+            <span>Low → High Priority</span>
+          </div>
+        </div>
+      </div>
+      <div class="ij-results-card" style="position:relative;">
+        <div class="ij-results-card-head">📍 Impact × Uncertainty Scatterplot</div>
+        <div class="ij-results-card-body" style="padding:8px;position:relative;">
+          <svg class="ij-scatter-svg" id="ij-scatter-svg" viewBox="0 0 320 260" xmlns="http://www.w3.org/2000/svg">
+            <!-- quadrant backgrounds -->
+            <rect x="40" y="10" width="130" height="115" fill="rgba(220,38,38,0.06)" rx="4"/>
+            <rect x="170" y="10" width="140" height="115" fill="rgba(220,38,38,0.03)" rx="4"/>
+            <rect x="40" y="125" width="130" height="125" fill="rgba(56,189,248,0.04)" rx="4"/>
+            <rect x="170" y="125" width="140" height="125" fill="rgba(200,200,200,0.05)" rx="4"/>
+            <!-- quadrant labels -->
+            <text x="105" y="24" text-anchor="middle" font-size="8" fill="#800000" font-weight="bold" font-family="Arial">TEST FIRST</text>
+            <text x="240" y="24" text-anchor="middle" font-size="8" fill="#58595B" font-family="Arial">MONITOR</text>
+            <text x="105" y="240" text-anchor="middle" font-size="8" fill="#1976d2" font-family="Arial">VALIDATE LATER</text>
+            <text x="240" y="240" text-anchor="middle" font-size="8" fill="#aaa" font-family="Arial">LOW PRIORITY</text>
+            <!-- axes -->
+            <line x1="40" y1="125" x2="310" y2="125" stroke="#ddd" stroke-width="1"/>
+            <line x1="155" y1="10" x2="155" y2="250" stroke="#ddd" stroke-width="1"/>
+            <!-- axis labels -->
+            <text x="175" y="258" font-size="9" fill="#888" font-family="Arial">Uncertainty →</text>
+            <text x="8" y="130" font-size="9" fill="#888" font-family="Arial" transform="rotate(-90,8,130)">Impact →</text>
+            <!-- tick labels -->
+            <text x="40" y="258" font-size="8" fill="#bbb" text-anchor="middle" font-family="Arial">1</text>
+            <text x="108" y="258" font-size="8" fill="#bbb" text-anchor="middle" font-family="Arial">2</text>
+            <text x="175" y="258" font-size="8" fill="#bbb" text-anchor="middle" font-family="Arial">3</text>
+            <text x="242" y="258" font-size="8" fill="#bbb" text-anchor="middle" font-family="Arial">4</text>
+            <text x="310" y="258" font-size="8" fill="#bbb" text-anchor="middle" font-family="Arial">5</text>
+            <text x="35" y="250" font-size="8" fill="#bbb" text-anchor="end" font-family="Arial">1</text>
+            <text x="35" y="183" font-size="8" fill="#bbb" text-anchor="end" font-family="Arial">2</text>
+            <text x="35" y="127" font-size="8" fill="#bbb" text-anchor="end" font-family="Arial">3</text>
+            <text x="35" y="70" font-size="8" fill="#bbb" text-anchor="end" font-family="Arial">4</text>
+            <text x="35" y="14" font-size="8" fill="#bbb" text-anchor="end" font-family="Arial">5</text>
+            <!-- bubbles rendered by JS -->
+            <g id="ij-scatter-bubbles"></g>
+          </svg>
+          <div class="ij-scatter-tooltip" id="ij-scatter-tooltip"></div>
+        </div>
+      </div>
+    </div>
+    <div class="ij-assumption-rank-list" id="ij-rank-list"></div>
+  `;
+
+  IJ.renderHeatMapMini(list);
+  IJ.renderScatterplot(list);
+  IJ.renderRankList(list);
+};
+
+IJ.updateHeatMap = function() {
+  const data = IJ.getData();
+  const bmcBlocks = data.bmcBlocks || {};
+  // Calculate max score for normalization
+  let maxScore = 1;
+  IJ.BMC_BLOCKS.forEach(b => {
+    const blockData = bmcBlocks[b.id] || {};
+    const score = (blockData.assumptions||[]).reduce((s,a)=>s+(a.impact||3)*(a.uncertainty||3),0);
+    if (score > maxScore) maxScore = score;
+  });
+  // Apply heat to main BMC (if visible)
+  IJ.BMC_BLOCKS.forEach(b => {
+    const el = document.querySelector(`[data-block="${b.id}"]`);
+    if (!el) return;
+    const blockData = bmcBlocks[b.id] || {};
+    const score = (blockData.assumptions||[]).reduce((s,a)=>s+(a.impact||3)*(a.uncertainty||3),0);
+    const intensity = score / maxScore;
+    const alpha = intensity * 0.35;
+    el.style.boxShadow = `inset 0 0 0 2000px rgba(128,0,0,${alpha})`;
+  });
+};
+
+IJ.renderHeatMapMini = function(list) {
+  const data = IJ.getData();
+  const bmcBlocks = data.bmcBlocks || {};
+  const mini = document.getElementById('ij-heatmap-mini');
+  if (!mini) return;
+  // Calculate scores
+  const scores = {};
+  let maxScore = 1;
+  IJ.BMC_BLOCKS.forEach(b => {
+    const blockData = bmcBlocks[b.id] || {};
+    scores[b.id] = (blockData.assumptions||[]).reduce((s,a)=>s+(a.impact||3)*(a.uncertainty||3),0);
+    if (scores[b.id] > maxScore) maxScore = scores[b.id];
+  });
+  mini.innerHTML = IJ.BMC_BLOCKS.map(b => {
+    const intensity = scores[b.id] / maxScore;
+    const alpha = intensity * 0.6;
+    const bg = `rgba(128,0,0,${alpha})`;
+    return `<div class="ij-bmc-block ij-bmc-${b.area}" data-dvf="${b.dvf}"
+                 style="background:${bg};cursor:default;">
+      <div style="font-size:8px;font-weight:bold;text-transform:uppercase;color:${intensity>0.5?'white':'var(--ij-gray)'};">${b.label}</div>
+      ${scores[b.id]>0?`<div style="font-size:10px;font-weight:bold;color:${intensity>0.5?'white':'var(--ij-maroon)'};">${scores[b.id]}</div>`:''}
+    </div>`;
+  }).join('');
+};
+
+IJ.renderScatterplot = function(list) {
+  const g = document.getElementById('ij-scatter-bubbles');
+  const tooltip = document.getElementById('ij-scatter-tooltip');
+  if (!g) return;
+  // Map uncertainty (1-5) → x (40-310), impact (1-5) → y (250-10)
+  const xScale = u => 40 + (u-1) * 67.5;
+  const yScale = i => 250 - (i-1) * 60;
+  // Jitter overlapping points
+  const positions = {};
+  g.innerHTML = list.map((a,idx) => {
+    const bx = Math.round(xScale(a.uncertainty));
+    const by = Math.round(yScale(a.impact));
+    const key = `${bx},${by}`;
+    positions[key] = (positions[key]||0) + 1;
+    const jitter = positions[key] > 1 ? (positions[key]-1)*8 : 0;
+    const cx = bx + (jitter % 2 === 0 ? jitter/2 : -(jitter+1)/2) * 5;
+    const cy = by + Math.floor(jitter/2) * -5;
+    return `<circle class="ij-scatter-bubble" cx="${cx}" cy="${cy}" r="11"
+               fill="var(--ij-maroon)" fill-opacity="0.8" stroke="white" stroke-width="1.5"
+               data-idx="${idx}"
+               onmouseenter="IJ.showBubbleTooltip(event,${idx})"
+               onmouseleave="IJ.hideBubbleTooltip()"
+               onclick="IJ.scrollToAssumption(${idx})">
+    </circle>
+    <text x="${cx}" y="${cy+4}" text-anchor="middle" font-size="9" fill="white" font-family="Arial" font-weight="bold" pointer-events="none">${idx+1}</text>`;
+  }).join('');
+  IJ.scatterList = list; // store for tooltip
+};
+
+IJ.scatterList = [];
+
+IJ.showBubbleTooltip = function(e, idx) {
+  const a = IJ.scatterList[idx];
+  if (!a) return;
+  const tooltip = document.getElementById('ij-scatter-tooltip');
+  tooltip.innerHTML = `<strong>#${idx+1}</strong><br>${a.text.substring(0,100)}${a.text.length>100?'…':''}<br><br>Impact: ${a.impact} × Uncertainty: ${a.uncertainty} = <strong>${a.score}</strong><br><em>${a.blockLabel}</em>`;
+  tooltip.style.display = 'block';
+  const rect = e.target.closest('.ij-results-card-body').getBoundingClientRect();
+  tooltip.style.left = (e.clientX - rect.left + 12) + 'px';
+  tooltip.style.top  = (e.clientY - rect.top  - 20) + 'px';
+};
+
+IJ.hideBubbleTooltip = function() {
+  const t = document.getElementById('ij-scatter-tooltip');
+  if (t) t.style.display = 'none';
+};
+
+IJ.scrollToAssumption = function(idx) {
+  const el = document.getElementById('ij-rank-item-' + idx);
+  if (el) {
+    el.scrollIntoView({behavior:'smooth', block:'center'});
+    el.style.outline = '3px solid var(--ij-maroon)';
+    setTimeout(() => el.style.outline = '', 1500);
+  }
+};
+
+IJ.renderRankList = function(list) {
+  const container = document.getElementById('ij-rank-list');
+  if (!container) return;
+  container.innerHTML = list.map((a, idx) => {
+    const tests = IJ.getTestsForDVF(a.dvfChar).slice(0,3);
+    const testCards = tests.map((t,ti) => {
+      const evClass = t.evidence >= 70 ? 'ij-ev-high' : t.evidence >= 40 ? 'ij-ev-mid' : 'ij-ev-low';
+      const typeClass = t.disc ? '' : 'ij-validation';
+      const costDots = '●'.repeat(t.cost) + '○'.repeat(5-t.cost);
+      const timeBars = '█'.repeat(Math.round(t.totalTime/8*5)) + '░'.repeat(5-Math.round(t.totalTime/8*5));
+      return `<div class="ij-test-card">
+        <div class="ij-test-badge ${typeClass}">${t.disc?'Discovery':'Validation'}</div>
+        <div class="ij-test-info">
+          <div class="ij-test-name">${ti===0?'⭐ ':''}${t.name}</div>
+          <div class="ij-test-measures">${t.measures}</div>
+          <div class="ij-test-meta">
+            <span title="Cost">💰 ${costDots}</span>
+            <span title="Total Time">⏱ ${timeBars}</span>
+            <span>Requires: ${t.requires}</span>
+          </div>
+        </div>
+        <div class="ij-test-evidence ${evClass}">${t.evidence}%</div>
+      </div>`;
+    }).join('');
+    return `<div class="ij-assumption-rank-item" id="ij-rank-item-${idx}">
+      <div class="ij-ari-head">
+        <div class="ij-ari-rank">${idx+1}</div>
+        <div style="flex:1;">
+          <div class="ij-ari-text">${a.text}</div>
+          <div class="ij-ari-meta">${a.blockLabel} · ${a.dvf.charAt(0).toUpperCase()+a.dvf.slice(1)} · Impact ${a.impact} × Uncertainty ${a.uncertainty}</div>
+        </div>
+        <div class="ij-ari-score">${a.score}<br><span style="font-size:10px;font-weight:normal;color:var(--ij-muted);">priority</span></div>
+      </div>
+      <div class="ij-ari-tests">
+        <div style="font-size:11px;font-weight:bold;color:var(--ij-gray);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.4px;">Recommended Tests — Easiest First</div>
+        ${testCards}
+      </div>
+    </div>`;
+  }).join('');
+};
 
 // ── BMC CANVAS ────────────────────────────────────────────────────────────────
 
