@@ -1343,6 +1343,613 @@ IJ.COMPANY_DATA = {
   }
 
 };
+// ── BMC BLOCK CONFIG ─────────────────────────────────────────────────────────
+IJ.BMC_BLOCKS = [
+  {id:'keyPartners',           label:'Key Partners',           dvf:'feasibility',  area:'kp'},
+  {id:'keyActivities',         label:'Key Activities',         dvf:'feasibility',  area:'ka'},
+  {id:'valueProposition',      label:'Value Propositions',     dvf:'desirability', area:'vp'},
+  {id:'customerRelationships', label:'Customer Relationships', dvf:'desirability', area:'cr'},
+  {id:'customerSegments',      label:'Customer Segments',      dvf:'desirability', area:'cs'},
+  {id:'keyResources',          label:'Key Resources',          dvf:'feasibility',  area:'kr'},
+  {id:'channels',              label:'Channels',               dvf:'desirability', area:'ch'},
+  {id:'costStructure',         label:'Cost Structure',         dvf:'viability',    area:'co'},
+  {id:'revenueStreams',         label:'Revenue Streams',        dvf:'viability',    area:'re'},
+  {id:'strategicAlignment',    label:'Strategic Alignment',    dvf:'viability',    area:'sa'}
+];
+
+// ── CANONICAL ASSUMPTIONS ────────────────────────────────────────────────────
+IJ.CANONICAL = {};
+
+IJ.CANONICAL.thermomesh = {
+  customerSegments:[
+    {text:"Mid-sized data center operators experience localized heat problems severe enough to seek an external solution rather than improvising workarounds.",keywords:["heat","data center","external","solution","operators","localized","problem","severity"],revealed:false},
+    {text:"The purchase decision for cooling retrofit hardware is made by facility managers — not centralized IT procurement committees requiring lengthy approval cycles.",keywords:["purchase","decision","facility manager","procurement","approval","buyer","authority","IT"],revealed:false},
+    {text:"The addressable market of mid-sized colocation centers is large enough to support a scalable direct-sales model at $150 per panel.",keywords:["market","colocation","scalable","direct","sales","addressable","size","$150"],revealed:false},
+    {text:"AI server proliferation creates a fast-growing, reachable segment of data center operators with urgent budget authority for retrofit purchases.",keywords:["AI","server","budget","retrofit","segment","reachable","growing","urgent"],revealed:false},
+    {text:"Customers within the target segment are similar enough operationally that a single panel design can serve the majority without significant customization.",keywords:["customization","segment","design","similar","constraints","standard","majority","one-size"],revealed:false}
+  ],
+  valueProposition:[
+    {text:"An 8% reduction in localized cooling needs is significant enough to justify the purchase price over improvised alternatives.",keywords:["8%","cooling","justify","price","improvised","reduction","significant","workaround"],revealed:false},
+    {text:"Facility managers perceive magnetic modular retrofits as meaningfully superior to waiting for a centralized cooling system upgrade.",keywords:["magnetic","modular","retrofit","centralized","superior","upgrade","cooling","wait"],revealed:false},
+    {text:"Ease of installation with no major rack modifications is a primary purchase driver, not just a secondary benefit.",keywords:["installation","easy","rack","modification","driver","purchase","quick","attach"],revealed:false},
+    {text:"Energy cost savings over 12-18 months are sufficient to justify the upfront cost in customers financial models.",keywords:["energy","savings","ROI","upfront","cost","financial","payback","justify"],revealed:false},
+    {text:"The passive cooling approach is perceived as reliable and durable by technically sophisticated facility managers.",keywords:["passive","reliable","durable","technically","sophisticated","trust","quality","phase-change"],revealed:false}
+  ],
+  channels:[
+    {text:"Direct outreach to data center operations managers is a cost-effective and scalable customer acquisition strategy.",keywords:["direct","outreach","operations","managers","acquisition","cost-effective","scalable","sales"],revealed:false},
+    {text:"HVAC system integrators and data center infrastructure resellers are willing to act as channel partners for ThermoMesh.",keywords:["HVAC","integrator","reseller","channel","partner","distribution","indirect","third-party"],revealed:false},
+    {text:"Kickstarter contacts from independent data center operators represent a warm pipeline that can be converted to paying customers.",keywords:["Kickstarter","contacts","pipeline","warm","convert","leads","operators","follow-up"],revealed:false},
+    {text:"Industry conferences and trade publications focused on data center infrastructure are effective channels for reaching decision-makers.",keywords:["conference","trade","publication","industry","event","reach","decision","data center"],revealed:false},
+    {text:"LinkedIn outreach and targeted online advertising can efficiently reach facility managers and operations directors.",keywords:["LinkedIn","online","advertising","digital","targeted","facility","manager","reach"],revealed:false}
+  ],
+  customerRelationships:[
+    {text:"Mid-sized data center operators will trust a startup for mission-critical infrastructure without extensive third-party certifications.",keywords:["trust","startup","mission-critical","certification","credibility","risk","adoption","validation"],revealed:false},
+    {text:"Customers are willing to participate in paid pilot programs at $150 per panel before committing to volume purchases.",keywords:["pilot","paid","$150","volume","commit","trial","willingness","pay"],revealed:false},
+    {text:"Post-installation technical support expectations can be managed within ThermoMesh founding team capacity without dedicated support staff.",keywords:["support","technical","post-install","team","capacity","service","manage","bandwidth"],revealed:false},
+    {text:"Satisfied pilot customers will provide referrals and allow their installations to be used as published case studies.",keywords:["referral","case study","satisfied","reference","word-of-mouth","advocate","testimonial","publish"],revealed:false},
+    {text:"Customers will not require long-term service agreements or performance warranties ThermoMesh cannot currently fulfill at scale.",keywords:["warranty","service agreement","guarantee","performance","SLA","contract","obligation","fulfill"],revealed:false}
+  ],
+  keyActivities:[
+    {text:"ThermoMesh can manufacture panels at sufficient quality using off-the-shelf components without proprietary manufacturing processes.",keywords:["manufacture","quality","consistent","off-the-shelf","components","production","scale","assemble"],revealed:false},
+    {text:"Design-for-manufacturability refinements can be completed within budget without cost overruns eroding the margin at $150 per panel.",keywords:["manufacturability","budget","overrun","margin","$150","cost","refine","timeline"],revealed:false},
+    {text:"The 8% cooling efficiency result is reliably replicable across different data center configurations and server rack types.",keywords:["replicable","8%","efficiency","configurations","rack","replicate","consistent","validate"],revealed:false},
+    {text:"The team can deliver installation guidance and technical support remotely without requiring on-site presence at every pilot location.",keywords:["remote","installation","guidance","support","on-site","presence","pilot","training"],revealed:false},
+    {text:"The three-person founding team can simultaneously manage pilot logistics, product refinement, and direct sales without critical gaps.",keywords:["founding team","capacity","simultaneously","logistics","refinement","sales","bandwidth","small"],revealed:false}
+  ],
+  keyResources:[
+    {text:"The founding team expertise in mechanical engineering and thermal management is sufficient without additional near-term hires.",keywords:["expertise","mechanical","thermal","founding","team","hire","skills","sufficient"],revealed:false},
+    {text:"Off-the-shelf phase-change materials and magnetic attachment systems remain available from suppliers at stable costs.",keywords:["supply chain","phase-change","magnetic","stable","suppliers","sourcing","availability","cost"],revealed:false},
+    {text:"ThermoMesh panel design contains sufficient proprietary innovation to prevent easy replication by larger competitors.",keywords:["proprietary","IP","innovation","replicate","defensible","patent","design","compete"],revealed:false},
+    {text:"The company has sufficient financial runway to complete manufacturability refinements and run paid pilots before needing outside investment.",keywords:["runway","capital","financial","investment","funding","sustain","timeline","money"],revealed:false},
+    {text:"Access to partner data center testing environments is sufficient to validate product performance across the range of configurations.",keywords:["testing","environment","partner","validate","performance","access","configurations","data center"],revealed:false}
+  ],
+  keyPartnerships:[
+    {text:"Three regional colocation centers participating in paid pilots will generate sufficient performance data to validate product claims.",keywords:["colocation","pilot","performance","data","validate","three","regional","centers"],revealed:false},
+    {text:"Component suppliers will maintain consistent quality and pricing as order volumes increase from prototype to commercial scale.",keywords:["supplier","consistent","pricing","quality","volume","scale","commercial","reliable"],revealed:false},
+    {text:"HVAC system integrators will view ThermoMesh as complementary rather than competitive, making channel partnerships achievable.",keywords:["HVAC","integrator","complementary","competitive","channel","partnership","aligned","conflict"],revealed:false},
+    {text:"The partner data center used for early prototype testing is willing to serve as a formal reference customer.",keywords:["reference","customer","partner","formal","testimonial","case study","willing","data center"],revealed:false},
+    {text:"Fire safety and data center compliance bodies will not require expensive third-party certification before the product can be legally sold.",keywords:["fire safety","compliance","certification","regulatory","third-party","requirement","approval","legal"],revealed:false}
+  ],
+  costStructure:[
+    {text:"The bill of materials for each panel supports a profitable margin at $150 per unit even at current low production volumes.",keywords:["BOM","margin","$150","profitable","volume","unit cost","materials","economics"],revealed:false},
+    {text:"Volume-based discounts on component sourcing will improve unit economics meaningfully as production scales.",keywords:["volume discount","sourcing","economics","scale","production","improve","component","pricing"],revealed:false},
+    {text:"The cost of customer acquisition through direct sales outreach is sustainable relative to average order value and customer lifetime value.",keywords:["customer acquisition","CAC","direct","sales","sustainable","order value","LTV","cost"],revealed:false},
+    {text:"Fire safety compliance and regulatory certification costs are manageable within current budget without requiring a retail price increase.",keywords:["compliance","certification","cost","budget","manageable","regulatory","fire safety","price"],revealed:false},
+    {text:"Design-for-manufacturability improvements will reduce per-unit production costs without requiring major capital investment in new tooling.",keywords:["per-unit","production","cost","reduce","capital","tooling","manufacturing","improvement"],revealed:false}
+  ],
+  revenueStreams:[
+    {text:"Mid-sized data center operators are willing to purchase panels outright at $150 per unit rather than expecting a leasing or subscription model.",keywords:["purchase","outright","$150","leasing","subscription","willingness","pay","model"],revealed:false},
+    {text:"Volume discount pricing will drive larger initial orders from pilot customers without eroding margins to unprofitable levels.",keywords:["volume","discount","order","pilot","margin","unprofitable","pricing","erode"],revealed:false},
+    {text:"Initial paid pilots will generate enough revenue to partially self-fund ongoing product refinement and sales operations.",keywords:["pilot","revenue","self-fund","refinement","sales","operations","sustain","cash flow"],revealed:false},
+    {text:"Future revenue expansion through service agreements, warranty programs, or next-generation products is achievable after establishing the direct-purchase model.",keywords:["service agreement","warranty","next-generation","expansion","future","revenue","upsell","recurring"],revealed:false},
+    {text:"The energy savings narrative is compelling enough to close purchases without offering outcome-based pricing guarantees.",keywords:["energy savings","narrative","compelling","guarantee","outcome","pricing","close","ROI"],revealed:false}
+  ],
+  strategicAlignment:[
+    {text:"The modular retrofit market for data center cooling is large and durable enough to justify building a standalone company.",keywords:["modular","retrofit","market","standalone","durable","large","justify","company"],revealed:false},
+    {text:"AI server proliferation creates urgent, growing demand for localized cooling solutions that ThermoMesh can capture now.",keywords:["AI","timing","demand","urgent","growing","proliferation","localized","opportunity"],revealed:false},
+    {text:"The founding team has the risk tolerance and commitment to navigate the capital-intensive path to manufacturing at scale.",keywords:["risk tolerance","commitment","capital-intensive","manufacturing","scale","founding team","path","hardware"],revealed:false},
+    {text:"Regulatory evolution around data center energy efficiency and fire safety will not create compliance barriers exceeding ThermoMesh capacity.",keywords:["regulatory","compliance","barrier","energy efficiency","fire safety","evolution","capacity","manageable"],revealed:false},
+    {text:"The innovation aligns with durable industry trends: AI infrastructure growth, energy efficiency mandates, and retrofitting over replacement.",keywords:["trend","AI infrastructure","energy efficiency","retrofitting","durable","alignment","long-term","strategic"],revealed:false}
+  ]
+};
+
+
+IJ.CANONICAL.tasklayer = {
+  customerSegments:[
+    {text:"Mid-sized accounting firms have both the pain with incumbent software and the budget authority to adopt an external task coordination tool.",keywords:["accounting","mid-sized","firm","budget","authority","adopt","pain","incumbent"],revealed:false},
+    {text:"Frustration with practice management software is widespread and severe enough across mid-sized firms to constitute a real market problem.",keywords:["incumbent","practice management","frustration","widespread","severe","market","problem","workaround"],revealed:false},
+    {text:"Accounting firm middle managers are both primary users and effective internal champions who can drive adoption upward to partners.",keywords:["middle manager","director","champion","adoption","internal","drive","upward","influence"],revealed:false},
+    {text:"The segment is reachable at reasonable cost through LinkedIn advertising and accounting association networks without a large field sales team.",keywords:["LinkedIn","association","network","reachable","cost","sales","field","target"],revealed:false},
+    {text:"Firms using 50-500 seats with major incumbent platforms represent a large enough addressable market at $12 per user per month.",keywords:["addressable","market","$12","seats","incumbent","large","SaaS","monthly"],revealed:false}
+  ],
+  valueProposition:[
+    {text:"A lightweight cloud-native task coordination layer solves a meaningfully different and more urgent problem than what firms already have.",keywords:["lightweight","cloud-native","coordination","urgent","different","solve","layer","task"],revealed:false},
+    {text:"Integration with Outlook, Google Calendar, and Dropbox is the critical differentiator that makes TaskLayer feel native to how accountants already work.",keywords:["Outlook","integration","Dropbox","Calendar","differentiator","native","workflow","familiar"],revealed:false},
+    {text:"Accounting-specific workflow templates — engagement letters, client deadlines, tax filing statuses — create enough domain specificity to beat general tools.",keywords:["accounting","template","engagement letter","deadline","tax","domain","specific","workflow"],revealed:false},
+    {text:"The simplicity of TaskLayer relative to incumbent platforms is perceived as a professional advantage, not a lack of sophistication.",keywords:["simple","simplicity","professional","advantage","incumbent","complexity","lightweight","clean"],revealed:false},
+    {text:"Individual accountants who love the product are effective internal advocates who will push for firm-wide adoption.",keywords:["advocate","individual","bottom-up","adoption","love","push","grassroots","champion"],revealed:false}
+  ],
+  channels:[
+    {text:"LinkedIn advertising can cost-effectively reach accounting firm middle managers and partners who are the actual decision-making audience.",keywords:["LinkedIn","reach","decision-makers","partners","managers","advertising","cost-effective","audience"],revealed:false},
+    {text:"Warm outreach through accounting associations and professional networks produces qualified leads that convert at higher rates than cold digital advertising.",keywords:["warm","association","professional","network","qualified","leads","convert","outreach"],revealed:false},
+    {text:"Content marketing — blog posts, guides, and templates designed for accounting workflow problems — can drive organic inbound interest.",keywords:["content","blog","guide","template","organic","inbound","SEO","marketing"],revealed:false},
+    {text:"The five current beta firms can generate word-of-mouth referrals within the tight-knit accounting industry where peer recommendations carry significant weight.",keywords:["word-of-mouth","referral","beta","peer","accounting","community","tight-knit","recommendation"],revealed:false},
+    {text:"The sales cycle through chosen channels is short enough — measured in weeks not quarters — to allow the team to reach revenue targets within current runway.",keywords:["sales cycle","weeks","runway","revenue","timeline","channel","short","target"],revealed:false}
+  ],
+  customerRelationships:[
+    {text:"Accounting firm partners and IT directors will trust a small SaaS startup with client-sensitive workflow data.",keywords:["trust","partner","IT director","SaaS","startup","sensitive","data","credibility"],revealed:false},
+    {text:"A self-serve onboarding model is sufficient — firms do not require dedicated implementation support to get started.",keywords:["self-serve","onboarding","implementation","support","professional services","sufficient","start","independent"],revealed:false},
+    {text:"Firms that adopt TaskLayer will not churn quickly when their incumbent practice management vendor releases an updated cloud version.",keywords:["churn","incumbent","upgrade","cloud","switching cost","retention","sticky","version"],revealed:false},
+    {text:"Satisfied beta firms will allow TaskLayer to publish case studies and use their names as references for new prospects.",keywords:["case study","reference","beta","satisfied","publish","testimonial","allow","name"],revealed:false},
+    {text:"The $12 per user per month price creates a low enough commitment that trial and cancellation risk is acceptable without a lengthy vendor evaluation.",keywords:["$12","price","commitment","trial","cancellation","risk","evaluation","low"],revealed:false}
+  ],
+  keyActivities:[
+    {text:"The three-person founding team can simultaneously maintain the beta product, conduct sales conversations, and support existing customers.",keywords:["founding team","maintain","sales","support","simultaneously","capacity","bandwidth","three"],revealed:false},
+    {text:"The integration architecture with Outlook, Google Calendar, and Dropbox is stable and maintainable as those platforms evolve.",keywords:["integration","architecture","stable","Outlook","maintain","evolve","API","reliable"],revealed:false},
+    {text:"Accounting-workflow-specific features can be built and iterated rapidly based on beta firm feedback without deep domain expertise beyond the founding CPA.",keywords:["iterate","accounting","features","rapid","feedback","build","beta","specific"],revealed:false},
+    {text:"The team can convert the current private beta into a production-ready, secure SaaS product within current runway.",keywords:["production","secure","SaaS","beta","convert","ready","runway","timeline"],revealed:false},
+    {text:"TaskLayer can execute a LinkedIn-and-content-driven go-to-market motion effectively without a dedicated sales or marketing hire.",keywords:["go-to-market","LinkedIn","content","motion","execute","dedicated","hire","founder-led"],revealed:false}
+  ],
+  keyResources:[
+    {text:"The founding team combination of accounting domain expertise, UX design, and cloud engineering is sufficient through the next funding milestone.",keywords:["domain expertise","accounting","UX","cloud","engineering","founding team","milestone","sufficient"],revealed:false},
+    {text:"TaskLayer product architecture is secure and compliant enough to satisfy the IT and data governance requirements of mid-sized accounting firms.",keywords:["security","compliance","architecture","data governance","IT","satisfy","requirement","accounting"],revealed:false},
+    {text:"The current beta codebase can scale to support dozens of simultaneous firm accounts without significant infrastructure investment.",keywords:["scale","codebase","infrastructure","firm","accounts","investment","simultaneous","performance"],revealed:false},
+    {text:"TaskLayer has sufficient financial runway to reach a meaningful number of paying customers before needing additional capital.",keywords:["runway","capital","paying","customers","financial","sufficient","raise","sustain"],revealed:false},
+    {text:"The workflow templates and accounting-specific IP represent a defensible product advantage that generic tools cannot easily replicate.",keywords:["IP","template","defensible","advantage","replicate","accounting","specific","moat"],revealed:false}
+  ],
+  keyPartnerships:[
+    {text:"Microsoft and Google will not restrict or break TaskLayer integrations with Outlook, Google Calendar, and Dropbox at commercial scale.",keywords:["Microsoft","Google","API","integration","restrict","break","terms","Outlook"],revealed:false},
+    {text:"Accounting associations are willing to promote or feature TaskLayer to their member firms through newsletters or endorsed partner programs.",keywords:["association","promote","feature","member","endorsement","partnership","accounting","professional"],revealed:false},
+    {text:"The five beta firms will remain engaged through the transition from free beta to paid subscription when invoices begin.",keywords:["beta","paid","transition","subscription","remain","engaged","convert","loyal"],revealed:false},
+    {text:"At least one beta firm will serve as a formal reference customer allowing TaskLayer to describe their use case in marketing materials.",keywords:["reference","formal","marketing","use case","describe","testimonial","permission","one"],revealed:false},
+    {text:"Future integration partnerships with major accounting software vendors are achievable without requiring TaskLayer to be acquired or white-labeled.",keywords:["integration","accounting software","partnership","future","QuickBooks","white-label","acquired","expand"],revealed:false}
+  ],
+  costStructure:[
+    {text:"Cloud infrastructure costs at current scale remain low enough to support healthy SaaS margins at $12 per user per month.",keywords:["cloud","infrastructure","margin","$12","SaaS","healthy","scale","low"],revealed:false},
+    {text:"Customer acquisition costs through LinkedIn advertising and content marketing are sustainable relative to the lifetime value of a firm account.",keywords:["CAC","LTV","LinkedIn","content","sustainable","acquisition","firm","lifetime"],revealed:false},
+    {text:"The cost of maintaining integrations with Outlook, Google Calendar, and Dropbox does not grow disproportionately as the customer base scales.",keywords:["integration","maintenance","cost","scale","disproportionate","Outlook","grow","API"],revealed:false},
+    {text:"TaskLayer can reach breakeven without requiring paid sales staff — founder-led sales is sufficient at this stage.",keywords:["founder-led","sales","breakeven","milestone","paid staff","sufficient","cash flow","stage"],revealed:false},
+    {text:"Compliance and security investments required to satisfy firm IT requirements are one-time or low-recurring costs, not ongoing expenses that erode margins.",keywords:["compliance","security","one-time","recurring","erode","margin","investment","IT"],revealed:false}
+  ],
+  revenueStreams:[
+    {text:"Accounting firms will pay $12 per user per month for a task coordination layer on top of their existing software stack.",keywords:["$12","pay","user","month","layer","existing","stack","willingness"],revealed:false},
+    {text:"Firm-wide team adoption — not individual seat purchases — is the realistic revenue model and what TaskLayer must achieve.",keywords:["firm-wide","adoption","team","individual","seat","realistic","model","broad"],revealed:false},
+    {text:"Annual prepayment or multi-month commitment deals are achievable with mid-sized firms, providing revenue predictability.",keywords:["annual","prepayment","commitment","predictability","multi-month","deal","revenue","stability"],revealed:false},
+    {text:"Revenue per firm scales meaningfully with firm size — larger firms with more seats provide enough incremental revenue to justify complexity.",keywords:["revenue","scale","firm size","seats","incremental","justify","complexity","larger"],revealed:false},
+    {text:"Churn rates after the first 12 months will be low enough that customer lifetime value justifies current acquisition costs.",keywords:["churn","retention","12 months","LTV","acquisition","justify","low","lifetime"],revealed:false}
+  ],
+  strategicAlignment:[
+    {text:"The window of opportunity created by incumbent software dissatisfaction will remain open long enough for TaskLayer to establish a defensible customer base.",keywords:["window","opportunity","incumbent","dissatisfaction","defensible","open","timing","establish"],revealed:false},
+    {text:"Building a standalone SaaS business is the right strategic path — not white-labeling to an incumbent or pivoting to serve a different vertical.",keywords:["standalone","SaaS","white-label","pivot","vertical","path","strategic","independent"],revealed:false},
+    {text:"The accounting software market is large and fragmented enough to support a new entrant focused exclusively on mid-sized firms.",keywords:["accounting software","fragmented","large","entrant","focused","mid-sized","market","support"],revealed:false},
+    {text:"The founding team has the sales motion, domain credibility, and professional network to close deals with risk-averse accounting firm partners.",keywords:["credibility","network","domain","risk-averse","close","deal","accounting","professional"],revealed:false},
+    {text:"Regulatory evolution around data privacy and client confidentiality in accounting will not create compliance requirements TaskLayer cannot meet.",keywords:["regulatory","data privacy","confidentiality","compliance","accounting","evolution","requirement","manageable"],revealed:false}
+  ]
+};
+
+
+IJ.CANONICAL.opsedge = {
+  customerSegments:[
+    {text:"Mid-market industrial equipment firms experience dispatch inefficiency at a scale that justifies a $15,000 external consulting engagement.",keywords:["dispatch","inefficiency","$15,000","industrial","mid-market","justify","consulting","scale"],revealed:false},
+    {text:"Service operations leaders at target firms have budget authority for process improvement consulting without requiring board-level approval.",keywords:["budget","authority","process improvement","consulting","approval","board","leaders","operations"],revealed:false},
+    {text:"The target segment is large enough across HVAC, power generation, and industrial equipment to support a scalable consulting business.",keywords:["HVAC","power generation","industrial","large","segment","scalable","consulting","addressable"],revealed:false},
+    {text:"Decision-makers at target firms are reachable through industry conferences, trade associations, and warm referral networks.",keywords:["conference","trade association","referral","warm","reachable","decision-makers","network","reach"],revealed:false},
+    {text:"Firms in the target segment share similar enough dispatch and field service structures that OpsEdge methodology applies across clients.",keywords:["similar","dispatch","field service","methodology","apply","consistent","structure","standardize"],revealed:false}
+  ],
+  valueProposition:[
+    {text:"A 10-15% improvement in first-time fix rates is financially significant for target firms and not something they would achieve through internal tweaks.",keywords:["10-15%","first-time fix","significant","financial","internal","improvement","measurable","ROI"],revealed:false},
+    {text:"The combination of process audit, workflow redesign, and dispatcher retraining is perceived as a complete and credible solution.",keywords:["audit","redesign","retraining","complete","credible","solution","combination","holistic"],revealed:false},
+    {text:"OpsEdge founding team credentials — Six Sigma Black Belt, dispatch center management, industrial services — establish trust with sophisticated operational buyers.",keywords:["Six Sigma","credentials","trust","sophisticated","Black Belt","dispatch","industrial","credibility"],revealed:false},
+    {text:"The performance-based bonus structure is perceived by clients as a confidence signal that OpsEdge believes in its own methodology.",keywords:["performance bonus","confidence","signal","methodology","believe","aligned","incentive","trust"],revealed:false},
+    {text:"Clients view an external consulting intervention as faster and more reliable than attempting internal process redesign with existing stretched staff.",keywords:["external","faster","reliable","internal","redesign","staff","consulting","versus"],revealed:false}
+  ],
+  channels:[
+    {text:"Warm referrals from the founding team existing industrial services network are sufficient to generate enough qualified leads near-term.",keywords:["referral","warm","network","industrial","qualified","leads","founding team","sufficient"],revealed:false},
+    {text:"Industry conferences and trade events focused on field service management are cost-effective venues for reaching decision-makers.",keywords:["conference","trade","field service","cost-effective","venue","decision-makers","event","reach"],revealed:false},
+    {text:"The service brochure and case study format is an effective sales tool for a skeptical, operationally-minded buyer audience.",keywords:["brochure","case study","sales","skeptical","operational","buyer","tool","effective"],revealed:false},
+    {text:"Word-of-mouth referrals from satisfied pilot clients can build a sustainable pipeline without significant marketing investment in the first 18 months.",keywords:["word-of-mouth","satisfied","pilot","sustainable","pipeline","marketing","18 months","referral"],revealed:false},
+    {text:"LinkedIn outreach and content marketing focused on field service efficiency metrics can supplement warm referrals and generate inbound interest.",keywords:["LinkedIn","content","field service","efficiency","supplement","outreach","metrics","digital"],revealed:false}
+  ],
+  customerRelationships:[
+    {text:"Industrial equipment firms will trust a three-person boutique consulting firm to access sensitive internal service data and dispatch logs.",keywords:["trust","boutique","sensitive","data","dispatch","logs","access","industrial"],revealed:false},
+    {text:"Clients will actively cooperate with post-implementation measurement efforts sharing first-time fix rate data six months after engagement completion.",keywords:["cooperate","measurement","first-time fix","data","six months","post-implementation","share","cooperation"],revealed:false},
+    {text:"Satisfied clients will provide referrals to peer firms in their industry generating warm leads that convert at significantly higher rates.",keywords:["referral","peer","satisfied","warm","convert","industry","high rate","word-of-mouth"],revealed:false},
+    {text:"The consulting relationship does not create dependency — clients feel equipped to sustain improvements independently after OpsEdge exits.",keywords:["dependency","sustainable","independent","sustain","exit","relationship","equipped","empowered"],revealed:false},
+    {text:"The $15,000 fee plus performance bonus structure creates appropriate shared-risk alignment that clients find fair and motivating.",keywords:["$15,000","performance bonus","shared risk","fair","motivating","alignment","structure","fee"],revealed:false}
+  ],
+  keyActivities:[
+    {text:"OpsEdge methodology can be reliably documented and standardized to deliver consistent results across different clients without complete reinvention each time.",keywords:["methodology","documented","standardized","consistent","audit","retraining","reliable","results"],revealed:false},
+    {text:"The founding team can conduct client engagements, develop new business, and build intellectual property simultaneously.",keywords:["founding team","conduct","simultaneously","new business","IP","intellectual property","capacity","balance"],revealed:false},
+    {text:"Post-implementation measurement of first-time fix rate improvements can be conducted rigorously enough to produce defensible publishable results.",keywords:["measurement","first-time fix","rigorous","defensible","publishable","post-implementation","results","data"],revealed:false},
+    {text:"OpsEdge can train and onboard junior consultants to deliver core methodology elements within 12-18 months, breaking the founder-delivery bottleneck.",keywords:["junior","consultant","train","onboard","12-18 months","bottleneck","scale","methodology"],revealed:false},
+    {text:"The transition from manual consulting to a digital toolset can be planned and initiated without requiring outside product development resources.",keywords:["digital toolset","transition","manual","product development","outside","plan","initiate","resources"],revealed:false}
+  ],
+  keyResources:[
+    {text:"The founding team combined operational expertise in Six Sigma, dispatch management, and industrial services sales is sufficient without external subject matter experts.",keywords:["Six Sigma","operational","expertise","dispatch","industrial","founding team","sufficient","external"],revealed:false},
+    {text:"OpsEdge has enough financial runway from completed pilot engagements and founder contributions to sustain operations while closing next engagements.",keywords:["runway","financial","pilot","sustain","founder","capital","operations","engagement"],revealed:false},
+    {text:"The proprietary playbooks, assessment frameworks, and retraining curricula OpsEdge develops represent defensible intellectual property competitors cannot replicate quickly.",keywords:["playbook","framework","curriculum","IP","defensible","proprietary","retraining","assessment"],revealed:false},
+    {text:"Access to anonymized client service data from early engagements is sufficient to build the quantitative case study evidence needed to win new clients.",keywords:["anonymized","data","case study","evidence","quantitative","win","new clients","access"],revealed:false},
+    {text:"OpsEdge founding team network within the industrial services sector is broad enough to generate referrals across multiple sub-verticals.",keywords:["network","industrial services","broad","referral","multiple","verticals","sector","contacts"],revealed:false}
+  ],
+  keyPartnerships:[
+    {text:"The two completed pilot clients are willing to serve as formal references and allow OpsEdge to publish quantitative results from their engagements.",keywords:["pilot","reference","formal","publish","quantitative","results","willing","two"],revealed:false},
+    {text:"Industrial equipment distributors and original equipment manufacturers are potential referral partners willing to recommend OpsEdge to their service-intensive customers.",keywords:["distributor","OEM","referral","partner","service-intensive","industrial","introduce","recommend"],revealed:false},
+    {text:"Field service management software vendors are open to partnership conversations that create mutual referral opportunities without competitive conflict.",keywords:["software","field service","vendor","partnership","mutual","referral","non-competitive","technology"],revealed:false},
+    {text:"Trade associations representing industrial equipment service firms are willing to feature OpsEdge in member communications or speaking programs.",keywords:["trade association","feature","member","speaking","communications","credibility","industrial","program"],revealed:false},
+    {text:"Future technology partners will be available to collaborate on the digital toolset OpsEdge plans without requiring full in-house product development capability.",keywords:["technology","partner","digital toolset","collaborate","future","in-house","capability","build"],revealed:false}
+  ],
+  costStructure:[
+    {text:"The cost of delivering each engagement — founder time, travel, materials — is low enough relative to the $15,000 fee to generate meaningful contribution margin.",keywords:["$15,000","margin","engagement","cost","founder","travel","meaningful","deliver"],revealed:false},
+    {text:"Business development costs — primarily founder time and travel to industry events — are sustainable relative to current revenue.",keywords:["business development","founder","travel","events","sustainable","revenue","cost","time"],revealed:false},
+    {text:"The performance bonus revenue is collectible and material — clients pay it when triggered and it contributes meaningfully to the total revenue model.",keywords:["performance bonus","collectible","material","triggered","revenue","contribute","pay","meaningful"],revealed:false},
+    {text:"Scaling the delivery model through junior consultant hires is financially viable — they can be compensated at rates that preserve engagement margins.",keywords:["junior","consultant","hire","viable","margin","compensate","scale","delivery"],revealed:false},
+    {text:"The eventual development of a digital toolset can be funded through consulting revenue without requiring outside capital.",keywords:["digital toolset","consulting revenue","fund","outside capital","self-fund","development","eventual","capital"],revealed:false}
+  ],
+  revenueStreams:[
+    {text:"Mid-market industrial firms will pay $15,000 for a field service process audit and redesign engagement without requiring capital expenditure approval.",keywords:["$15,000","pay","audit","redesign","capital expenditure","approval","discretionary","operational"],revealed:false},
+    {text:"The performance-based bonus structure will generate additional revenue in the majority of engagements not just exceptional ones.",keywords:["performance bonus","majority","engagements","additional","revenue","trigger","generate","structure"],revealed:false},
+    {text:"Repeat engagements and expanded scope are achievable with satisfied clients, creating revenue beyond the initial engagement.",keywords:["repeat","expand","scope","satisfied","beyond","initial","revenue","upsell"],revealed:false},
+    {text:"A future subscription or licensing model for digital dispatch tools represents a credible revenue expansion path.",keywords:["subscription","licensing","digital","dispatch","future","expansion","credible","recurring"],revealed:false},
+    {text:"OpsEdge can reach a sustainable revenue run rate sufficient to pay three founders reasonable salaries within 18 months through consulting fees alone.",keywords:["sustainable","run rate","18 months","salaries","founders","consulting","fees","alone"],revealed:false}
+  ],
+  strategicAlignment:[
+    {text:"Building a standalone field service consulting firm rather than joining an established consultancy or selling the methodology is the right long-term path.",keywords:["standalone","field service","consulting","established","sell","methodology","long-term","path"],revealed:false},
+    {text:"The manual consulting model is the correct starting point for building the domain expertise and client evidence needed to eventually develop a digital product.",keywords:["manual","starting point","domain expertise","evidence","digital product","eventually","correct","foundation"],revealed:false},
+    {text:"The industrial equipment services market is large, fragmented, and underserved by established management consultancies.",keywords:["industrial","fragmented","underserved","consultancy","large","market","opportunity","boutique"],revealed:false},
+    {text:"The founding team risk tolerance and financial position are compatible with the slow relationship-driven revenue ramp typical of B2B consulting.",keywords:["risk tolerance","relationship","B2B","consulting","ramp","slow","financial","compatible"],revealed:false},
+    {text:"Regulatory and labor trends in industrial services — compliance requirements, technician shortages, customer demand — will sustain demand for field service optimization.",keywords:["regulatory","labor","compliance","technician shortage","demand","sustain","trend","optimization"],revealed:false}
+  ]
+};
+
+IJ.CANONICAL.swiftsip = {
+  customerSegments:[
+    {text:"Outdoor enthusiasts — campers, hikers, tailgaters, and festivalgoers — experience drink temperature management as a genuine recurring frustration significant enough to motivate a hardware purchase.",keywords:["outdoor","camper","tailgater","festival","temperature","frustration","purchase","hardware"],revealed:false},
+    {text:"The target segment extends meaningfully beyond Kickstarter early adopters to include mainstream outdoor consumers who discover the product through standard channels.",keywords:["mainstream","Kickstarter","early adopter","extend","segment","outdoor","beyond","consumer"],revealed:false},
+    {text:"The addressable market across camping, tailgating, hiking, and festival use cases is large and concentrated enough to support a direct-to-consumer hardware business.",keywords:["addressable","market","large","camping","tailgating","DTC","hardware","concentrated"],revealed:false},
+    {text:"Target customers are willing to carry and maintain a rechargeable electronic device as part of their outdoor kit — added complexity versus a passive bottle is acceptable.",keywords:["rechargeable","electronic","carry","maintain","complexity","acceptable","kit","outdoor"],revealed:false},
+    {text:"US and Canadian outdoor enthusiasts represent a sufficient initial market to validate the business model before international expansion.",keywords:["US","Canada","initial","market","validate","international","expansion","sufficient"],revealed:false}
+  ],
+  valueProposition:[
+    {text:"Active cooling reducing drink temperature by 10 degrees in 10 minutes without ice is meaningfully better than passive insulation alternatives in SwiftSip target use cases.",keywords:["10 degrees","10 minutes","active cooling","passive","insulation","better","ice","alternative"],revealed:false},
+    {text:"Portability and modularity are the primary purchase drivers — customers value the ability to chill a single can or bottle on demand more than raw cooling capacity.",keywords:["portable","modular","single can","on demand","capacity","primary","driver","convenience"],revealed:false},
+    {text:"Kickstarter backers enthusiasm reflects genuine unmet need rather than novelty-driven crowdfunding behavior that will not translate to mainstream adoption.",keywords:["Kickstarter","genuine","unmet","novelty","crowdfunding","translate","mainstream","behavior"],revealed:false},
+    {text:"The SwiftSip form factor — hand-sized, rechargeable, attachable — fits naturally into existing outdoor activity routines without requiring behavior change.",keywords:["form factor","hand-sized","attachable","routine","behavior change","natural","fit","outdoor"],revealed:false},
+    {text:"The $69 price point represents acceptable value relative to alternatives — disposable coolers, large coolers, insulated bottles — for customers who prioritize portability.",keywords:["$69","acceptable","value","cooler","insulated","bottle","portability","price"],revealed:false}
+  ],
+  channels:[
+    {text:"Direct-to-consumer e-commerce is a sufficient initial channel to validate mainstream demand beyond the Kickstarter audience before pursuing retail.",keywords:["DTC","e-commerce","initial","validate","mainstream","Kickstarter","channel","sufficient"],revealed:false},
+    {text:"Influencer marketing through outdoor camping tailgating and festival lifestyle creators is cost-effective for reaching the target segment at scale.",keywords:["influencer","outdoor","camping","lifestyle","cost-effective","scale","creator","marketing"],revealed:false},
+    {text:"Retail distribution through outdoor specialty stores — REI, Academy Sports — is achievable after establishing direct sales traction.",keywords:["retail","REI","Academy Sports","distribution","after","direct","traction","specialty"],revealed:false},
+    {text:"The explainer video format is an effective and repeatable content format for driving purchase consideration across social and digital channels.",keywords:["explainer video","repeatable","content","social","digital","consideration","format","effective"],revealed:false},
+    {text:"Post-Kickstarter organic word-of-mouth from satisfied early backers will generate meaningful referral traffic to the e-commerce store.",keywords:["word-of-mouth","Kickstarter","backer","referral","organic","e-commerce","satisfied","traffic"],revealed:false}
+  ],
+  customerRelationships:[
+    {text:"Kickstarter backers who receive devices on schedule and experience performance that meets expectations will become vocal advocates rather than passive one-time buyers.",keywords:["Kickstarter","backer","on-schedule","expectations","advocate","vocal","satisfied","review"],revealed:false},
+    {text:"Customers will not require significant post-purchase support — device setup, charging, and operation are intuitive enough for outdoor enthusiasts to manage independently.",keywords:["post-purchase","support","intuitive","setup","charging","operation","independent","enthusiast"],revealed:false},
+    {text:"Negative reviews from disappointed early users will not spread faster than positive word-of-mouth during the critical post-Kickstarter launch window.",keywords:["negative review","disappointed","spread","positive","word-of-mouth","launch","window","critical"],revealed:false},
+    {text:"A warranty and returns policy covering manufacturing defects without excessive friction will maintain customer trust during inevitable first-production-run quality issues.",keywords:["warranty","returns","defect","trust","manufacturing","quality","first run","friction"],revealed:false},
+    {text:"The SwiftSip brand identity — portable, innovative, outdoor-native — creates enough emotional resonance to support repeat purchases when next-generation products are released.",keywords:["brand","identity","emotional","resonance","repeat","next-generation","outdoor","loyalty"],revealed:false}
+  ],
+  keyActivities:[
+    {text:"Design-for-manufacture refinements can be completed on schedule and within budget without requiring a fundamental redesign of the thermal or battery system.",keywords:["design-for-manufacture","schedule","budget","redesign","thermal","battery","fundamental","complete"],revealed:false},
+    {text:"Battery life improvements can be achieved through engineering refinements to a level that satisfies mainstream consumer expectations for a full day of outdoor use.",keywords:["battery life","engineering","refinement","full day","mainstream","expectation","outdoor","improve"],revealed:false},
+    {text:"The founding team can manage Kickstarter fulfillment logistics, ongoing e-commerce operations, and product refinement simultaneously without critical failures.",keywords:["fulfillment","logistics","e-commerce","Kickstarter","simultaneously","founding team","refinement","manage"],revealed:false},
+    {text:"Quality control processes at the manufacturing partner level are sufficient to maintain acceptable defect rates across the first production run.",keywords:["quality control","manufacturing","defect","acceptable","production","partner","process","rate"],revealed:false},
+    {text:"SwiftSip can execute an influencer and social media marketing strategy effectively without a dedicated marketing team beyond the founding marketing lead.",keywords:["influencer","social media","marketing","execute","dedicated","team","founder-led","effective"],revealed:false}
+  ],
+  keyResources:[
+    {text:"The $210,000 raised through Kickstarter is sufficient to fund design-for-manufacture refinements, first production run tooling, initial inventory, and fulfillment.",keywords:["$210,000","Kickstarter","sufficient","tooling","inventory","fulfillment","fund","production"],revealed:false},
+    {text:"The founding team mechanical engineering expertise is sufficient to complete thermal and battery system optimizations without outside consultants.",keywords:["mechanical engineering","expertise","thermal","battery","optimization","outside","consultant","sufficient"],revealed:false},
+    {text:"Thermoelectric Peltier modules and battery cells are available from multiple suppliers at stable enough pricing to support the unit economics at $69 retail.",keywords:["Peltier","battery","supplier","stable","pricing","unit economics","multiple","sourcing"],revealed:false},
+    {text:"SwiftSip 3D printing and prototyping capability enables rapid iteration on form factor and ergonomics without expensive external tooling until final specifications are locked.",keywords:["3D printing","prototyping","rapid","iteration","form factor","ergonomics","tooling","capability"],revealed:false},
+    {text:"The founding marketing lead existing relationships with outdoor media, influencers, and retail buyers represent a meaningful head start in building brand awareness.",keywords:["marketing","outdoor","media","influencer","retail","relationship","head start","buyers"],revealed:false}
+  ],
+  keyPartnerships:[
+    {text:"Manufacturing partners capable of producing the SwiftSip device at required quality, volume, and cost are available to work with a first-time hardware startup.",keywords:["manufacturing","partner","quality","volume","cost","first-time","hardware","startup"],revealed:false},
+    {text:"Fulfillment partners can handle Kickstarter backer shipments and ongoing e-commerce orders at cost and reliability levels that meet backer expectations.",keywords:["fulfillment","Kickstarter","backer","e-commerce","reliability","expectations","partner","handle"],revealed:false},
+    {text:"Outdoor retail buyers at REI, Academy Sports, and comparable chains will consider SwiftSip for shelf placement after the brand demonstrates direct-to-consumer traction.",keywords:["REI","retail","buyer","shelf","placement","traction","DTC","consider"],revealed:false},
+    {text:"Battery and Peltier module suppliers will maintain consistent component quality and pricing as SwiftSip scales from prototype to commercial production quantities.",keywords:["Peltier","battery","supplier","consistent","quality","pricing","scale","commercial"],revealed:false},
+    {text:"Outdoor lifestyle influencers with matching audiences are willing to create authentic content in exchange for product and reasonable partnership terms.",keywords:["influencer","authentic","content","audience","partnership","terms","outdoor","lifestyle"],revealed:false}
+  ],
+  costStructure:[
+    {text:"The bill of materials — Peltier modules, battery cells, housing, and assembly — supports acceptable margins at the $69 retail price even at first-production-run volumes.",keywords:["BOM","Peltier","battery","$69","margin","first run","volume","acceptable"],revealed:false},
+    {text:"Component sourcing costs will improve meaningfully with scale — second and third production runs will achieve significantly better unit economics.",keywords:["sourcing","scale","second run","unit economics","improve","component","production","better"],revealed:false},
+    {text:"Fulfillment and shipping costs per unit are manageable within the current pricing structure without requiring SwiftSip to charge separately for shipping.",keywords:["fulfillment","shipping","per unit","manageable","pricing","charge","free shipping","cost"],revealed:false},
+    {text:"Customer acquisition costs through influencer marketing and social advertising remain sustainable relative to the $69 average order value.",keywords:["CAC","influencer","social advertising","sustainable","$69","order value","acquisition","relative"],revealed:false},
+    {text:"Warranty and returns costs for manufacturing defects in the first production run are budgeted conservatively enough to absorb realistic failure rates.",keywords:["warranty","returns","defect","first run","budget","conservative","failure rate","absorb"],revealed:false}
+  ],
+  revenueStreams:[
+    {text:"The $69 price point is sufficient to generate positive contribution margin at realistic production costs — this is not a loss-leader strategy.",keywords:["$69","contribution margin","production","positive","loss-leader","profitable","realistic","price"],revealed:false},
+    {text:"Mainstream e-commerce customers will convert at rates comparable to or better than Kickstarter backers once the product is available for immediate purchase.",keywords:["mainstream","e-commerce","convert","Kickstarter","immediate","purchase","comparable","better"],revealed:false},
+    {text:"Retail distribution through outdoor specialty stores will generate incremental revenue at wholesale margins that still contribute positively to the business.",keywords:["retail","wholesale","incremental","revenue","outdoor","specialty","margin","contribute"],revealed:false},
+    {text:"Accessory and next-generation product revenue — spare batteries, carrying cases, upgraded device models — represents an achievable revenue expansion path.",keywords:["accessory","next-generation","battery","case","upgrade","expansion","revenue","upsell"],revealed:false},
+    {text:"International expansion to European and Australian outdoor markets represents a material revenue opportunity accessible within 24 months of US launch.",keywords:["international","Europe","Australia","expansion","24 months","outdoor","revenue","market"],revealed:false}
+  ],
+  strategicAlignment:[
+    {text:"Building a standalone consumer hardware brand rather than licensing the technology to an established outdoor gear manufacturer is the right long-term strategic path.",keywords:["standalone","consumer hardware","brand","license","technology","outdoor","manufacturer","long-term"],revealed:false},
+    {text:"The direct-to-consumer first strategy — proving demand online before pursuing retail — is the correct sequencing for a first-time hardware startup.",keywords:["DTC","first","retail","sequencing","prove","demand","online","hardware startup"],revealed:false},
+    {text:"The outdoor enthusiast market is large, growing, and underserved by innovative portable cooling solutions with room for a new brand to establish early credibility.",keywords:["outdoor","large","growing","underserved","innovative","portable","cooling","market"],revealed:false},
+    {text:"The founding team combined hardware engineering and consumer marketing expertise is the right combination to navigate both technical complexity and brand-building requirements.",keywords:["hardware","engineering","consumer","marketing","expertise","combination","technical","brand"],revealed:false},
+    {text:"Macro trends — growth in outdoor recreation, festival culture, and premium portable gear spending — will sustain and expand the addressable market over a multi-year horizon.",keywords:["outdoor recreation","festival","premium","gear","macro","trend","addressable","sustain"],revealed:false}
+  ]
+};
+
+
+IJ.CANONICAL.snapstudy = {
+  customerSegments:[
+    {text:"Working adults preparing for professional certification exams experience study consistency as their primary obstacle — not content access or exam difficulty.",keywords:["consistency","obstacle","certification","adult","working","primary","study","habit"],revealed:false},
+    {text:"The target segment is large and growing across multiple certification verticals with shared behavioral characteristics that support a single platform.",keywords:["segment","large","certification","multiple","verticals","behavioral","growing","shared"],revealed:false},
+    {text:"Adult learners in certification prep are willing to pay for a structured personalized experience rather than continuing to self-assemble free resources.",keywords:["willing","pay","structured","personalized","free resources","self-assemble","certification","adult"],revealed:false},
+    {text:"The target segment is reachable cost-effectively through Reddit and Facebook advertising targeting certification exam communities at the point of active need.",keywords:["Reddit","Facebook","advertising","certification","community","reachable","cost-effective","target"],revealed:false},
+    {text:"Users who complete certification exams represent a short customer lifetime but are replaced by a continuously replenishing cohort of new candidates entering preparation cycles.",keywords:["short lifetime","replenishing","cohort","certification","complete","churn","structural","new candidates"],revealed:false}
+  ],
+  valueProposition:[
+    {text:"Personalized bite-sized daily study sessions delivered through a mobile app are meaningfully superior to self-assembled study plans from books, YouTube, and free quizzes.",keywords:["bite-sized","personalized","daily","mobile","superior","self-assembled","YouTube","free"],revealed:false},
+    {text:"Gamified streaks, progress tracking, and light social accountability features are effective motivational mechanisms for adult professional learners specifically.",keywords:["gamified","streaks","progress","social","accountability","motivational","adult","professional"],revealed:false},
+    {text:"The manual pilot 52% daily open rate reflects genuine behavior change driven by SnapStudy content and delivery design, not novelty or low-friction email.",keywords:["52%","open rate","behavior change","genuine","manual pilot","novelty","content","design"],revealed:false},
+    {text:"The freemium model creates enough perceived value in the free tier to drive habit formation and premium conversion without feeling like bait and switch.",keywords:["freemium","free tier","habit","premium","conversion","perceived value","drive","model"],revealed:false},
+    {text:"SnapStudy messaging drawn directly from certification forum language resonates with the emotional reality of adult learners in a way generic learning platform marketing does not.",keywords:["messaging","forum","language","emotional","resonates","adult","generic","authentic"],revealed:false}
+  ],
+  channels:[
+    {text:"Reddit and Facebook advertising targeting certification exam communities can acquire users at a cost-per-install supporting positive unit economics at $5 per month.",keywords:["Reddit","Facebook","certification","cost-per-install","unit economics","$5","acquire","advertising"],revealed:false},
+    {text:"Organic discovery through app store search for certification-specific study apps represents a meaningful and growing acquisition channel over time.",keywords:["app store","organic","search","certification","discovery","growing","acquisition","channel"],revealed:false},
+    {text:"Community-driven word-of-mouth within certification exam forums and study groups can generate referral traffic without significant paid investment.",keywords:["community","word-of-mouth","forum","study group","referral","organic","traffic","certification"],revealed:false},
+    {text:"Content marketing — blog posts, study guides, and exam preparation resources indexed for certification-specific search queries — can drive inbound organic traffic.",keywords:["content","blog","guide","SEO","certification","inbound","organic","search"],revealed:false},
+    {text:"Partnerships with professional associations, certification bodies, and employers that sponsor employee certifications represent an achievable B2B2C channel.",keywords:["partnership","association","certification body","employer","sponsor","B2B2C","channel","achievable"],revealed:false}
+  ],
+  customerRelationships:[
+    {text:"Users who form a daily study habit with SnapStudy during exam preparation will maintain app engagement through their full study cycle without significant dropout.",keywords:["daily habit","engagement","study cycle","dropout","maintain","consistent","full","certification"],revealed:false},
+    {text:"The push notification strategy — personalized reminders calibrated to individual study schedules — will be welcomed rather than dismissed or disabled.",keywords:["push notification","personalized","reminder","schedule","welcomed","disabled","calibrated","individual"],revealed:false},
+    {text:"Peer accountability features — study squads and social encouragement — will be adopted and valued by a meaningful portion of users rather than treated as unwanted pressure.",keywords:["peer accountability","study squad","social","encouragement","adopted","meaningful","community","value"],revealed:false},
+    {text:"Users who pass their certification exams will attribute meaningful credit to SnapStudy and actively recommend it to colleagues beginning their own preparation.",keywords:["pass","certification","attribute","recommend","credit","colleague","advocate","word-of-mouth"],revealed:false},
+    {text:"Users who cancel after passing their exam represent an acceptable churn profile — short lifetime, high satisfaction — and do not damage brand reputation or referral potential.",keywords:["cancel","churn","acceptable","short lifetime","satisfaction","brand","reputation","structure"],revealed:false}
+  ],
+  keyActivities:[
+    {text:"The SnapStudy app can be completed and launched at a quality level that matches or exceeds the experience quality of the manual pilot.",keywords:["app","quality","manual pilot","launch","match","exceed","experience","complete"],revealed:false},
+    {text:"Content curation and quiz development across multiple certification verticals can be executed at sufficient quality and volume to support personalized study paths.",keywords:["content","quiz","certification","vertical","quality","volume","personalized","study path"],revealed:false},
+    {text:"The personalization engine matching daily content to individual schedules, weaknesses, and exam timelines can be built and calibrated effectively from manual pilot data.",keywords:["personalization","engine","schedule","weakness","exam timeline","calibrate","effective","individual"],revealed:false},
+    {text:"The founding team can manage simultaneous product development, paid marketing campaign execution, and user support operations during the critical post-launch window.",keywords:["founding team","simultaneous","product","marketing","campaign","support","manage","operations"],revealed:false},
+    {text:"SnapStudy can iterate rapidly on engagement features — notification timing, streak mechanics, social features — based on early app cohort data.",keywords:["iterate","engagement","notification","streak","social","rapid","cohort","data"],revealed:false}
+  ],
+  keyResources:[
+    {text:"The founding team combination of instructional design expertise, software development capability, and community college administration experience is sufficient for the near term.",keywords:["instructional design","software","community college","expertise","founding team","sufficient","combination","administration"],revealed:false},
+    {text:"The behavioral data and content insights from the 120-person manual pilot provide a sufficient foundation for personalization algorithm development.",keywords:["120 person","manual pilot","behavioral data","personalization","algorithm","foundation","sufficient","insights"],revealed:false},
+    {text:"SnapStudy has sufficient financial runway to sustain operations through app launch, initial paid marketing, and the time required to reach a meaningful paying subscriber base.",keywords:["runway","launch","paid marketing","paying","subscriber","sustain","financial","sufficient"],revealed:false},
+    {text:"The content library — micro-quizzes, study challenges, and exam simulations — can be built and maintained using the instructional designer expertise supplemented by freelance contributors.",keywords:["content library","quiz","exam simulation","instructional designer","freelance","build","maintain","expertise"],revealed:false},
+    {text:"SnapStudy technical architecture is scalable enough to handle rapid user growth following launch without infrastructure failures during the critical first impression window.",keywords:["architecture","scalable","user growth","infrastructure","failure","rapid","launch","technical"],revealed:false}
+  ],
+  keyPartnerships:[
+    {text:"Professional certification bodies — PMI, SHRM, AICPA — are willing to acknowledge or endorse SnapStudy as a preparation resource, lending third-party credibility.",keywords:["PMI","SHRM","AICPA","endorse","acknowledge","certification body","preparation","credibility"],revealed:false},
+    {text:"Employers that actively sponsor employee certification programs are willing to purchase SnapStudy premium access in bulk for sponsored employees.",keywords:["employer","sponsor","certification","bulk","purchase","premium","B2B","access"],revealed:false},
+    {text:"App stores — Apple App Store and Google Play — will feature or recommend SnapStudy in certification or education categories providing organic discovery.",keywords:["App Store","Google Play","feature","recommend","certification","education","Apple","organic"],revealed:false},
+    {text:"Freelance subject matter experts in each certification vertical are available and willing to contribute content at rates consistent with SnapStudy content budget.",keywords:["freelance","subject matter","expert","certification","content","budget","rates","vertical"],revealed:false},
+    {text:"Reddit and Facebook will not materially restrict or increase the cost of advertising to certification exam communities as SnapStudy scales spend.",keywords:["Reddit","Facebook","restrict","advertising","cost","certification","community","platform"],revealed:false}
+  ],
+  costStructure:[
+    {text:"Customer acquisition costs through Reddit and Facebook advertising combined with organic and referral channels are sustainable at a blended rate supporting positive LTV at $5 per month.",keywords:["CAC","Reddit","Facebook","organic","blended","sustainable","$5","LTV"],revealed:false},
+    {text:"Content development and curation costs per certification vertical are manageable within budget without requiring SnapStudy to build an in-house curriculum team per exam type.",keywords:["content","development","vertical","manageable","in-house","curriculum","team","exam type"],revealed:false},
+    {text:"Cloud infrastructure and app delivery costs at current and projected user volumes are low enough to support healthy SaaS-like margins at scale.",keywords:["cloud","infrastructure","app delivery","SaaS","margin","healthy","scale","low"],revealed:false},
+    {text:"The freemium tier does not create cost burdens through support, infrastructure, or content delivery that undermine the economics of the paying subscriber base.",keywords:["freemium","cost burden","support","infrastructure","economics","paying","subscriber","undermine"],revealed:false},
+    {text:"SnapStudy can reach operating sustainability — covering team salaries, marketing spend, and product development — at a subscriber count achievable within 18 months.",keywords:["sustainability","18 months","subscriber","salary","marketing","product development","achievable","operating"],revealed:false}
+  ],
+  revenueStreams:[
+    {text:"At least 5% of free tier users will convert to the $5 per month premium subscription within 60 days of achieving consistent daily study habits.",keywords:["5%","convert","$5","premium","60 days","consistent","daily habit","free tier"],revealed:false},
+    {text:"The $5 per month price is low enough to minimize conversion friction while high enough to generate meaningful revenue when multiplied across a growing subscriber base.",keywords:["$5","price","friction","convert","revenue","growing","subscriber","monthly"],revealed:false},
+    {text:"Premium features — progress tracking, exam simulations, personalized study coaches — are compelling enough to motivate conversion beyond what the free tier provides.",keywords:["premium","progress tracking","exam simulation","coach","compelling","conversion","free tier","motivate"],revealed:false},
+    {text:"Employer bulk purchasing — companies sponsoring employee certifications buying premium access in groups — represents an achievable B2B revenue stream within 24 months.",keywords:["employer","bulk","B2B","premium","certification","sponsor","24 months","group"],revealed:false},
+    {text:"Next-certification upsells — users who pass one exam and begin preparing for another returning to SnapStudy — represent meaningful revenue recovery that offsets structural churn.",keywords:["upsell","next certification","pass","return","churn","offset","recovery","structural"],revealed:false}
+  ],
+  strategicAlignment:[
+    {text:"Building a standalone certification preparation app rather than licensing the methodology to an established learning platform is the right strategic path.",keywords:["standalone","certification","app","license","methodology","learning platform","strategic","path"],revealed:false},
+    {text:"The professional certification preparation market is large, growing, and underserved by existing platforms for the specific segment of working adult learners.",keywords:["certification","large","growing","underserved","platforms","working adult","segment","market"],revealed:false},
+    {text:"The freemium model is the correct monetization strategy — it matches the low-friction trial behavior of adult learners who are skeptical of subscription commitments for study tools.",keywords:["freemium","monetization","low-friction","trial","adult","skeptical","subscription","correct"],revealed:false},
+    {text:"The founding team domain expertise gives SnapStudy a genuine product quality advantage over general-purpose learning platforms entering the certification prep space without pedagogical knowledge.",keywords:["domain expertise","advantage","general-purpose","learning platform","quality","certification prep","genuine","founding team"],revealed:false},
+    {text:"Macro trends — growth in professional certification requirements, increasing adult learner comfort with mobile-first education, employer investment in upskilling — will sustain and expand the addressable market.",keywords:["certification","mobile","upskilling","employer","macro","trend","addressable","sustain"],revealed:false}
+  ]
+};
+
+IJ.CANONICAL.freshnest = {
+  customerSegments:[
+    {text:"Urban Millennials and young families aged 27-39 experience home clutter as a significant enough emotional and practical burden that they are willing to pay $275 for professional help.",keywords:["Millennial","27-39","clutter","emotional","$275","willing","pay","professional"],revealed:false},
+    {text:"The target segment values eco-responsible disposal — donation, recycling, reuse — as a meaningful differentiator that justifies choosing FreshNest over a conventional organizer.",keywords:["eco","donation","recycling","reuse","differentiator","justify","choose","conventional"],revealed:false},
+    {text:"The addressable market in FreshNest metro area is large and dense enough to sustain a local service business at target booking volumes without requiring geographic expansion in the first 18 months.",keywords:["metro","local","dense","addressable","booking","sustain","geographic","expansion"],revealed:false},
+    {text:"The target segment is reachable cost-effectively through Facebook and Instagram advertising without requiring expensive traditional media or out-of-home advertising.",keywords:["Facebook","Instagram","advertising","reachable","cost-effective","traditional","out-of-home","media"],revealed:false},
+    {text:"Customers within the target segment share similar enough organizational needs, living situations, and eco-values that a standardized Fresh Start Package serves the majority.",keywords:["similar","organizational","living situation","eco-values","standardized","Fresh Start","majority","package"],revealed:false}
+  ],
+  valueProposition:[
+    {text:"Professional home organization combined with eco-responsible disposal is perceived as meaningfully superior to DIY decluttering or hiring a conventional organizer.",keywords:["professional","eco","disposal","superior","DIY","conventional","organizer","combination"],revealed:false},
+    {text:"The emotional positioning — a fresh start, a reset, relief from overwhelm — resonates more powerfully with purchase decisions than the functional features of the service.",keywords:["emotional","fresh start","reset","overwhelm","resonates","purchase","functional","relief"],revealed:false},
+    {text:"The three-hour two-person Fresh Start Package is the right scope — large enough to deliver visible results that generate reviews and referrals, but contained enough to feel affordable.",keywords:["three-hour","two-person","Fresh Start","visible results","reviews","referrals","contained","affordable"],revealed:false},
+    {text:"FreshNest Aftercare tip sheets and follow-up guidance create enough perceived ongoing value to differentiate the service from a one-time transaction and support rebooking.",keywords:["Aftercare","tip sheets","follow-up","ongoing value","differentiate","one-time","transaction","perceived"],revealed:false},
+    {text:"The $275 price point represents acceptable value relative to the emotional relief and practical outcome delivered — customers do not experience post-purchase regret that suppresses reviews.",keywords:["$275","acceptable","emotional relief","practical","regret","post-purchase","value","outcome"],revealed:false}
+  ],
+  channels:[
+    {text:"Facebook and Instagram advertising targeting urban Millennials can generate bookings at a cost per acquisition that supports healthy margins at $275 per session.",keywords:["Facebook","Instagram","Millennial","urban","bookings","CAC","margin","$275"],revealed:false},
+    {text:"Real estate agents and moving companies are willing to formalize referral relationships with FreshNest in exchange for reciprocal referrals or modest referral fees.",keywords:["real estate","moving company","referral","formal","reciprocal","fee","relationship","partner"],revealed:false},
+    {text:"Customer reviews on Google, Yelp, and social media generated from satisfied early bookings will drive meaningful organic discovery and inbound bookings without continued paid spend.",keywords:["review","Google","Yelp","social media","organic","discovery","inbound","satisfied"],revealed:false},
+    {text:"Green living groups, sustainability communities, and local eco-focused events represent audience concentrations where FreshNest combined positioning resonates strongly.",keywords:["green living","sustainability","eco","local","event","audience","resonate","community"],revealed:false},
+    {text:"Search demand for home organizer near me and related terms in FreshNest metro area is sufficient to support a local SEO strategy that generates consistent inbound leads.",keywords:["SEO","local","home organizer","search demand","inbound","metro","consistent","keyword"],revealed:false}
+  ],
+  customerRelationships:[
+    {text:"Customers who experience a successful Fresh Start session will rebook for follow-up sessions, seasonal refreshes, or expanded rooms creating multi-session lifetime value.",keywords:["rebook","follow-up","seasonal","multi-session","lifetime value","achievable","repeat","success"],revealed:false},
+    {text:"Customers will not feel judged, embarrassed, or uncomfortable having a professional team handle their personal belongings — the trust barrier is manageable with right positioning.",keywords:["judged","embarrassed","trust","personal","belongings","manageable","positioning","comfortable"],revealed:false},
+    {text:"FreshNest Aftercare communication creates enough ongoing engagement to maintain brand presence between sessions and drive rebooking without feeling intrusive or salesy.",keywords:["Aftercare","engagement","brand","rebook","intrusive","communication","ongoing","presence"],revealed:false},
+    {text:"Satisfied customers will actively recommend FreshNest to friends, family, and social networks — word-of-mouth referrals will become a primary acquisition channel within 12 months.",keywords:["recommend","word-of-mouth","12 months","primary","acquisition","friends","social","referral"],revealed:false},
+    {text:"Negative service experiences — damaged items, disposal of belongings customers wanted to keep — will not generate public complaints that disproportionately damage the brand before sufficient positive reviews are established.",keywords:["negative","damaged","disposal","complaints","brand","positive reviews","established","experiences"],revealed:false}
+  ],
+  keyActivities:[
+    {text:"FreshNest can consistently deliver high-quality emotionally sensitive organizing sessions that meet customer expectations for professionalism, eco-responsibility, and visible results.",keywords:["quality","emotionally sensitive","professionalism","eco","visible results","consistent","expectations","deliver"],revealed:false},
+    {text:"The eco-responsible disposal process — sorting donations, coordinating recycling pickups, arranging reuse — can be executed within the three-hour session window without extending service time.",keywords:["disposal","donation","recycling","reuse","three-hour","window","execute","coordinate"],revealed:false},
+    {text:"The founding team can manage simultaneous service delivery, customer acquisition, partnership development, and team building without quality failures during the critical reputation-building phase.",keywords:["founding team","simultaneous","delivery","acquisition","partnership","team building","quality","manage"],revealed:false},
+    {text:"FreshNest can recruit, train, and retain additional organizers who maintain the brand quality standards, eco-values, and customer sensitivity as booking volume grows beyond founding team capacity.",keywords:["recruit","train","retain","organizer","quality","eco-values","sensitivity","volume"],revealed:false},
+    {text:"The donation, recycling, and reuse logistics — maintaining relationships with local charities, recycling centers, and resale partners — can be managed reliably without creating scheduling delays.",keywords:["donation","recycling","logistics","charity","resale","reliable","delay","partner"],revealed:false}
+  ],
+  keyResources:[
+    {text:"The founding professional organizer methodology and training capability are sufficient to onboard additional team members who deliver consistent service quality.",keywords:["methodology","training","onboard","consistent","quality","professional organizer","capability","sufficient"],revealed:false},
+    {text:"FreshNest has sufficient financial runway — from presale bookings and founder capital — to sustain operations through the period required to build enough reviews and word-of-mouth.",keywords:["runway","presale","founder","sustain","reviews","word-of-mouth","financial","sufficient"],revealed:false},
+    {text:"The sustainability consultant knowledge of local donation centers, recycling programs, and reuse networks represents a defensible operational advantage.",keywords:["sustainability","donation centers","recycling","reuse","defensible","advantage","operational","local"],revealed:false},
+    {text:"The digital marketer capability to manage Facebook and Instagram advertising, local SEO, and review generation is sufficient to sustain and grow the customer acquisition pipeline.",keywords:["digital marketer","Facebook","Instagram","SEO","review","acquisition","pipeline","sufficient"],revealed:false},
+    {text:"FreshNest early customer reviews — from the 18 presale bookings — represent a foundational reputation asset that creates a meaningful head start over new entrants.",keywords:["18 presale","reviews","reputation","head start","foundational","asset","bookings","early"],revealed:false}
+  ],
+  keyPartnerships:[
+    {text:"Local real estate agents are willing to formalize referral agreements with FreshNest and actively recommend the service to clients preparing homes for sale or settling into new purchases.",keywords:["real estate","referral","formal","recommend","prepare","sale","purchase","agent"],revealed:false},
+    {text:"Moving companies operating in FreshNest metro area view the service as complementary rather than competitive and are willing to recommend FreshNest to clients in the pre-move decluttering window.",keywords:["moving company","complementary","competitive","recommend","metro","willing","refer","declutter"],revealed:false},
+    {text:"Local donation centers, thrift stores, and recycling programs will maintain reliable pickup or drop-off arrangements with FreshNest at projected volumes.",keywords:["donation","thrift","recycling","pickup","drop-off","reliable","volume","arrangement"],revealed:false},
+    {text:"Green living groups, sustainability influencers, and eco-focused community organizations are willing to promote FreshNest to their audiences without requiring significant financial compensation.",keywords:["green living","influencer","eco","promote","audience","compensation","community","sustainability"],revealed:false},
+    {text:"Local media — neighborhood blogs, community newsletters, and metro lifestyle publications — are interested in featuring FreshNest as a local sustainability story providing earned media.",keywords:["local media","blog","newsletter","lifestyle","feature","sustainability","earned media","story"],revealed:false}
+  ],
+  costStructure:[
+    {text:"The cost of delivering each Fresh Start session — team labor, transportation, disposal logistics, and materials — is low enough relative to $275 to generate meaningful contribution margin.",keywords:["labor","transportation","disposal","materials","$275","margin","contribution","delivery"],revealed:false},
+    {text:"Facebook and Instagram customer acquisition costs are sustainable relative to average session revenue and expected customer lifetime value including potential multi-session rebooking.",keywords:["Facebook","Instagram","CAC","sustainable","session revenue","LTV","multi-session","rebook"],revealed:false},
+    {text:"Hiring and compensating additional organizers at market rates for local service labor preserves sufficient margin per session to support business growth without requiring a price increase.",keywords:["hire","compensate","organizer","market rates","margin","session","growth","price increase"],revealed:false},
+    {text:"Seasonal demand fluctuations — lower booking volumes in summer and fall — can be managed within the current cost structure without requiring layoffs or significant price discounting.",keywords:["seasonal","demand","fluctuation","summer","fall","layoffs","discounting","manage"],revealed:false},
+    {text:"Legal and liability costs — insurance coverage for property damage, sentimental item loss, and team conduct incidents — are manageable within current pricing.",keywords:["legal","liability","insurance","property damage","sentimental","manageable","coverage","incident"],revealed:false}
+  ],
+  revenueStreams:[
+    {text:"Full-price bookings at $275 per session will convert at rates comparable to the discounted presale — the early-bird promotion validated demand not just price sensitivity.",keywords:["$275","full price","convert","presale","early-bird","demand","validated","price sensitivity"],revealed:false},
+    {text:"Multi-session upsells — larger homes, additional rooms, seasonal refreshes, or organizational system follow-ups — are achievable with a meaningful percentage of first-time customers.",keywords:["upsell","multi-session","larger home","room","seasonal refresh","follow-up","first-time","achievable"],revealed:false},
+    {text:"Rebooking rates — customers returning for seasonal resets or maintenance sessions — will be high enough to create a growing base of recurring revenue.",keywords:["rebook","seasonal reset","maintenance","recurring revenue","growing","high rate","return","base"],revealed:false},
+    {text:"Partnership referral arrangements — where FreshNest pays modest referral fees to real estate agents or moving companies — preserve enough margin per referred booking to make the channel economically worthwhile.",keywords:["referral fee","real estate","moving company","margin","referred","worthwhile","preserve","channel"],revealed:false},
+    {text:"FreshNest can reach a sustainable revenue run rate covering team compensation, marketing spend, and operating costs within 18 months through session fees alone.",keywords:["sustainable","18 months","run rate","compensation","marketing","operating","session fees","alone"],revealed:false}
+  ],
+  strategicAlignment:[
+    {text:"Building a standalone local service brand rather than franchising immediately, joining a home services platform, or pivoting to digital-only content is the right strategic path.",keywords:["standalone","local","franchise","platform","pivot","digital","content","strategic"],revealed:false},
+    {text:"The eco-friendly positioning is a durable strategic differentiator — not a passing trend — that will attract and retain customers with genuine sustainability values.",keywords:["eco-friendly","durable","differentiator","trend","sustainability","attract","retain","genuine"],revealed:false},
+    {text:"The local metro market is large enough to sustain a profitable independent service business before geographic expansion or franchising becomes necessary.",keywords:["local metro","profitable","independent","geographic expansion","franchise","necessary","large","sustain"],revealed:false},
+    {text:"The founding team combination of professional organizing expertise, sustainability knowledge, and digital marketing capability is the right mix to build both service quality and customer acquisition.",keywords:["professional organizing","sustainability","digital marketing","combination","service quality","acquisition","founding team","build"],revealed:false},
+    {text:"Macro trends — urban population density, Millennial household formation, growing consumer interest in intentional living and sustainability — will sustain and expand demand for premium eco-friendly home organization.",keywords:["urban","Millennial","intentional living","eco-friendly","demand","premium","macro","trend"],revealed:false}
+  ]
+};
+
+
+IJ.CANONICAL.brightbites = {
+  customerSegments:[
+    {text:"Daycare center administrators — not parents — are the primary decision-makers for snack vendor selection and they experience parent pressure around snack quality as a significant operational pain.",keywords:["administrator","decision-maker","vendor","parent pressure","snack","quality","operational","B2B"],revealed:false},
+    {text:"Regional daycare chains operating multiple centers under centralized procurement represent a more efficient and scalable sales target than independent single-location centers.",keywords:["regional","daycare chain","centralized","procurement","scalable","efficient","multiple","centers"],revealed:false},
+    {text:"Parents at daycare centers are willing to accept a modest tuition increase equivalent to $3 per child per day to fund a healthy snack upgrade.",keywords:["parent","tuition","$3","willing","accept","healthy","snack","increase"],revealed:false},
+    {text:"The addressable market of daycare centers, preschools, and afterschool programs actively seeking to upgrade their snack offerings is large enough to support a scalable pilot-to-contract model.",keywords:["addressable","daycare","preschool","afterschool","upgrade","snack","large","scalable"],revealed:false},
+    {text:"Daycare centers across BrightBites target geography share similar enough snack compliance requirements and parent demographics that a standardized snack bundle platform can serve the majority.",keywords:["compliance","demographics","standardized","bundle","similar","majority","geography","daycare"],revealed:false}
+  ],
+  valueProposition:[
+    {text:"Pre-curated portioned allergy-safe snack bundles delivered to daycare centers are meaningfully superior to what centers currently source — operationally simpler, compliance-friendlier, more parent-satisfying.",keywords:["pre-curated","allergy-safe","bundle","operationally simple","compliance","parent satisfaction","superior","delivery"],revealed:false},
+    {text:"The combination of parent satisfaction improvement and operational simplicity is compelling enough to overcome the inertia of existing vendor relationships and procurement processes.",keywords:["parent satisfaction","operational simplicity","overcome","inertia","vendor","procurement","compelling","combination"],revealed:false},
+    {text:"The 82% of parent purchasers who expressed preference for center-provided BrightBites snacks represents genuine institutional demand signal not just consumer enthusiasm.",keywords:["82%","parent","institutional","demand","signal","preference","center-provided","genuine"],revealed:false},
+    {text:"BrightBites positioning as a compliance-safe allergy-managed platform reduces legal and reputational risk for daycare administrators making it a risk-reduction purchase as much as a quality upgrade.",keywords:["compliance","allergy","risk-reduction","legal","reputational","administrator","platform","safe"],revealed:false},
+    {text:"The $3 per child per day price point is perceived by daycare administrators as reasonable relative to the parent satisfaction and compliance simplification BrightBites delivers.",keywords:["$3","per child","reasonable","administrator","parent satisfaction","compliance","value","price"],revealed:false}
+  ],
+  channels:[
+    {text:"Direct outreach to regional daycare chain procurement managers — supported by quantified parent demand evidence — is a sufficient and credible sales approach.",keywords:["direct","outreach","procurement","chain","evidence","parent demand","credible","sufficient"],revealed:false},
+    {text:"Parent advocacy is a viable channel activation mechanism — parents who experienced BrightBites directly can be mobilized to request the service at their daycare centers.",keywords:["parent","advocacy","mobilize","request","daycare","bottom-up","channel","activation"],revealed:false},
+    {text:"Pediatric nutrition associations, early childhood education networks, and daycare administrator professional groups are accessible channels for reaching procurement decision-makers.",keywords:["pediatric nutrition","early childhood","network","administrator","professional","association","accessible","reach"],revealed:false},
+    {text:"The direct-to-parent landing page and pre-order experiment results serve as compelling sales collateral in B2B conversations with center administrators.",keywords:["landing page","pre-order","collateral","B2B","compelling","administrator","data","evidence"],revealed:false},
+    {text:"Word-of-mouth referrals between daycare chain administrators — a tight professional community — will generate warm inbound interest once BrightBites completes its first successful pilots.",keywords:["word-of-mouth","administrator","professional community","inbound","warm","pilot","referral","tight-knit"],revealed:false}
+  ],
+  customerRelationships:[
+    {text:"Daycare center administrators will trust BrightBites — a startup without an established food service track record — to manage allergy-safe snack compliance reliably.",keywords:["trust","startup","food service","allergy","compliance","reliable","administrator","track record"],revealed:false},
+    {text:"The monthly headcount-based invoicing model is administratively simple enough for daycare center staff to manage without creating billing friction, disputes, or payment delays.",keywords:["headcount","invoicing","monthly","simple","billing","friction","dispute","administrative"],revealed:false},
+    {text:"Centers that adopt BrightBites will not experience the parent backlash, tuition sensitivity, or staff resistance that would motivate early contract termination.",keywords:["parent backlash","tuition","sensitivity","staff resistance","contract termination","early","adoption","survive"],revealed:false},
+    {text:"Satisfied center administrators will refer BrightBites to peer administrators at other chains and independent centers creating a referral flywheel.",keywords:["satisfied","refer","peer","administrator","chain","referral","flywheel","independent"],revealed:false},
+    {text:"BrightBites can manage center relationships at current scale — three pilot chains — with founding team capacity alone without requiring dedicated account management hires.",keywords:["three pilots","founding team","capacity","account management","hire","manage","current","scale"],revealed:false}
+  ],
+  keyActivities:[
+    {text:"BrightBites can manage snack curation, vendor sourcing, compliance verification, and distribution logistics for three simultaneous pilot chains without operational failures that damage center relationships.",keywords:["curation","vendor","compliance","distribution","logistics","three chains","simultaneous","operational"],revealed:false},
+    {text:"The headcount-based invoicing and monthly billing cycle can be administered accurately across centers with variable daily attendance — sick days, holidays, enrollment fluctuations.",keywords:["headcount","invoicing","billing","variable","attendance","sick days","holidays","accurate"],revealed:false},
+    {text:"BrightBites can navigate vendor onboarding, contract review, and compliance documentation processes at target daycare chains without requiring specialized legal or regulatory expertise.",keywords:["onboarding","contract","compliance","documentation","navigate","legal","regulatory","expertise"],revealed:false},
+    {text:"Snack bundle curation and portfolio management — adding new SKUs, removing discontinued products, adjusting for seasonal availability — can be executed by the founding team.",keywords:["SKU","portfolio","curation","seasonal","discontinued","founding team","manage","adjust"],revealed:false},
+    {text:"BrightBites can simultaneously manage pilot program operations, new chain sales conversations, and snack vendor relationship development without critical gaps in any area.",keywords:["simultaneously","pilot","operations","sales","vendor","relationship","manage","chain"],revealed:false}
+  ],
+  keyResources:[
+    {text:"The founding team combination of pediatric nutrition expertise, daycare operations management experience, and food supply chain knowledge is sufficient without near-term specialist hires.",keywords:["pediatric nutrition","daycare operations","supply chain","founding team","sufficient","specialist","expertise","combination"],revealed:false},
+    {text:"BrightBites relationships with pre-vetted allergy-safe snack vendors provide reliable access to compliant product inventory at pricing that supports margins at $3 per child per day.",keywords:["pre-vetted","allergy-safe","vendor","reliable","compliant","inventory","pricing","$3"],revealed:false},
+    {text:"The consumer demand evidence — 500 votes, 180 pre-orders, 82% center preference — represents a defensible quantified asset that meaningfully differentiates BrightBites in B2B sales conversations.",keywords:["500 votes","180 pre-orders","82%","quantified","defensible","asset","differentiate","B2B"],revealed:false},
+    {text:"BrightBites has sufficient financial runway to sustain operations through pilot program execution and the time required to convert pilots to full contracts.",keywords:["runway","financial","pilot","sustain","convert","full contract","sufficient","operations"],revealed:false},
+    {text:"The food supply chain expert vendor network and logistics knowledge represents an operational advantage that competing startups without food distribution experience cannot replicate quickly.",keywords:["supply chain","vendor network","logistics","operational advantage","replicate","food distribution","expertise","defensible"],revealed:false}
+  ],
+  keyPartnerships:[
+    {text:"Pre-vetted healthy snack vendors are willing to supply BrightBites at pilot scale volumes without requiring minimum order quantities that exceed current demand.",keywords:["vendor","supply","pilot scale","minimum order","quantity","willing","healthy","snack"],revealed:false},
+    {text:"The three regional daycare chains in current pilot negotiations will sign contracts and begin implementation within a timeline consistent with BrightBites runway.",keywords:["three chains","pilot","contract","sign","implementation","timeline","runway","consistent"],revealed:false},
+    {text:"Local and regional food distributors are available and willing to handle last-mile delivery to individual daycare center locations at costs that preserve margin.",keywords:["distributor","last-mile","delivery","local","regional","margin","willing","center"],revealed:false},
+    {text:"State and local health departments in BrightBites initial markets are accessible for compliance guidance to verify snack portfolio meets local regulatory requirements before pilot launch.",keywords:["health department","compliance","guidance","state","local","accessible","pilot","launch"],revealed:false},
+    {text:"Pediatric nutrition and early childhood education advocacy organizations are willing to endorse or recommend BrightBites as a compliant high-quality snack partner lending third-party credibility.",keywords:["pediatric nutrition","early childhood","advocate","endorse","recommend","compliant","credibility","organization"],revealed:false}
+  ],
+  costStructure:[
+    {text:"The cost of sourcing, curating, and delivering snack bundles — including vendor costs, packaging, and last-mile distribution — is low enough relative to $3 per child per day to generate meaningful contribution margin.",keywords:["sourcing","packaging","distribution","$3","contribution margin","last-mile","cost","bundle"],revealed:false},
+    {text:"Headcount variability — sick days, holidays, summer breaks, and enrollment fluctuations — does not create sufficient revenue unpredictability to undermine the financial model.",keywords:["headcount","variability","sick days","summer","enrollment","unpredictability","financial model","fluctuation"],revealed:false},
+    {text:"The cost of managing allergy compliance documentation, vendor certification, and regulatory verification is manageable within current operational budget.",keywords:["allergy","compliance","documentation","vendor certification","regulatory","manageable","budget","operational"],revealed:false},
+    {text:"Sales and business development costs — primarily founding team time and travel for pilot negotiations — are sustainable relative to expected contract value per chain.",keywords:["sales","business development","founding team","pilot negotiations","sustainable","contract value","chain","travel"],revealed:false},
+    {text:"Scaling from three pilot chains to broader regional coverage can be financed through pilot contract revenue — BrightBites does not require outside capital for initial growth phase.",keywords:["scaling","regional","financed","pilot revenue","outside capital","growth","three chains","self-fund"],revealed:false}
+  ],
+  revenueStreams:[
+    {text:"Daycare centers will pay $3 per child per day consistently across billing cycles and will pass this cost to parents as a tuition add-on without generating complaints that motivate cancellation.",keywords:["$3","per child","consistently","billing","tuition add-on","parent","complaint","cancellation"],revealed:false},
+    {text:"Monthly headcount-based invoicing produces predictable enough revenue — despite daily attendance variability — to support operational planning and cash flow management.",keywords:["headcount","invoicing","predictable","revenue","attendance","cash flow","monthly","planning"],revealed:false},
+    {text:"Contract expansion within pilot chains — adding more centers within the same chain after initial locations prove successful — represents an achievable near-term revenue growth path.",keywords:["expansion","pilot chain","centers","successful","near-term","revenue","growth","within"],revealed:false},
+    {text:"Premium snack tier upsells — specialty or organic snack bundles at a higher per-child rate — are achievable with centers serving higher-income parent demographics.",keywords:["premium","upsell","organic","specialty","higher income","per-child","achievable","tier"],revealed:false},
+    {text:"BrightBites can reach a sustainable revenue run rate covering team salaries, vendor costs, and distribution expenses through daycare chain contracts alone within 18 months.",keywords:["sustainable","18 months","run rate","salaries","vendor","distribution","chain contracts","alone"],revealed:false}
+  ],
+  strategicAlignment:[
+    {text:"Building a standalone B2B2C snack platform rather than pivoting to a direct-to-parent subscription model or selling the parent demand evidence to an established food service company is the right strategic path.",keywords:["standalone","B2B2C","pivot","direct-to-parent","sell","food service","strategic","path"],revealed:false},
+    {text:"The B2B2C model — selling to institutions while activating consumer demand — is the correct strategic architecture for this market where parent enthusiasm is real but purchasing authority sits with administrators.",keywords:["B2B2C","institutional","consumer demand","architecture","correct","model","strategic","market"],revealed:false},
+    {text:"The childcare center snack market is large, fragmented, and underserved by innovative healthy food platforms creating a durable window of opportunity.",keywords:["childcare","snack market","fragmented","underserved","healthy","durable","window","opportunity"],revealed:false},
+    {text:"The founding team risk tolerance and operational capacity are compatible with the slow relationship-driven sales cycles typical of institutional food service.",keywords:["risk tolerance","operational capacity","slow","relationship","institutional","food service","compatible","sales cycle"],revealed:false},
+    {text:"Macro trends — growing parental awareness of child nutrition, increasing regulatory pressure on daycare food quality, and expansion of afterschool program enrollment — will sustain demand.",keywords:["nutrition","parental awareness","regulatory pressure","daycare","afterschool","enrollment","macro","sustain"],revealed:false}
+  ]
+};
+
+IJ.CANONICAL.clearheart = {
+  customerSegments:[
+    {text:"Hospital administrators and clinical leadership experience 30-day cardiac readmission rates as a high-priority problem driven by Medicare penalties and value-based care contracts and actively seek external monitoring solutions.",keywords:["hospital","readmission","Medicare","value-based care","penalty","fund","external","monitoring"],revealed:false},
+    {text:"The decision-making authority for remote patient monitoring adoption is concentrated enough in a clinical champion with administrative sign-off that ClearHeart can close contracts without prohibitive multi-stakeholder processes.",keywords:["clinical champion","decision-making","administrative","sign-off","close","contract","authority","concentrated"],revealed:false},
+    {text:"Regional hospitals and community health systems — not just large academic medical centers — represent an accessible and sufficiently large segment to build a commercial business.",keywords:["regional","community health","academic","accessible","segment","large","hospital","system"],revealed:false},
+    {text:"Hospitals operating under value-based care contracts with Medicare face enough direct financial penalty from readmissions to justify a per-patient per-month subscription cost generating acceptable ROI.",keywords:["value-based care","Medicare","financial penalty","readmission","justify","per-patient","subscription","ROI"],revealed:false},
+    {text:"The segment of post-cardiac-surgery patients appropriate for remote monitoring is large enough within each hospital patient population to make per-patient economics viable at contract scale.",keywords:["post-cardiac","surgery","patient","population","per-patient","economics","viable","segment"],revealed:false}
+  ],
+  valueProposition:[
+    {text:"A 22% reduction in 30-day cardiac readmissions demonstrated in the two-hospital pilot is clinically and financially significant enough to justify adoption without requiring a larger randomized controlled trial.",keywords:["22%","readmission","pilot","clinically significant","financially","justify","adoption","trial"],revealed:false},
+    {text:"The wellness monitoring classification — avoiding new FDA device requirements while still delivering clinically useful data — is perceived by hospital legal and compliance teams as a genuine risk management advantage.",keywords:["wellness","FDA","device","classification","compliance","legal","risk management","advantage"],revealed:false},
+    {text:"The combination of off-the-shelf FDA-cleared wearables and a purpose-built care team dashboard is meaningfully superior to what hospitals currently do — periodic phone check-ins and patient self-reporting.",keywords:["FDA-cleared","wearable","dashboard","care team","superior","phone check-in","self-reporting","current"],revealed:false},
+    {text:"The per-patient per-month subscription model with optional performance bonuses aligns ClearHeart financial incentives with hospital outcomes in a way that risk-averse administrators find credible.",keywords:["per-patient","subscription","performance bonus","aligned","financial incentives","outcomes","model","hospital"],revealed:false},
+    {text:"Patient compliance at 85% daily wear rate is high enough to generate reliable actionable data for care teams — not just partial signal requiring significant clinical judgment to interpret.",keywords:["85%","compliance","wear rate","reliable","actionable","data","care team","daily"],revealed:false}
+  ],
+  channels:[
+    {text:"The founding cardiologist professional network within the regional medical community is sufficient to generate warm introductions to clinical champions at target hospitals.",keywords:["cardiologist","network","warm","introduction","clinical champion","hospital","professional","regional"],revealed:false},
+    {text:"Medical conferences, cardiology association meetings, and health system innovation forums are effective channels for reaching both clinical champions and hospital administrative decision-makers.",keywords:["medical conference","cardiology","association","health system","innovation","forum","clinical","administrative"],revealed:false},
+    {text:"Published pilot outcome data — peer-reviewed or presented at clinical conferences — will generate inbound interest from hospitals seeking evidence-based remote monitoring solutions.",keywords:["published","peer-reviewed","conference","outcome data","inbound","evidence-based","remote monitoring","interest"],revealed:false},
+    {text:"Health system innovation networks where forward-thinking hospital administrators share vendor experiences will generate word-of-mouth referrals between institutions.",keywords:["health system","innovation network","administrator","vendor","word-of-mouth","referral","institution","forward-thinking"],revealed:false},
+    {text:"Value-based care consulting firms and healthcare advisory groups working with hospital systems on readmission reduction strategies are willing to recommend ClearHeart as part of a broader intervention toolkit.",keywords:["value-based care","consulting","advisory","readmission","recommend","healthcare","strategy","ClearHeart"],revealed:false}
+  ],
+  customerRelationships:[
+    {text:"Hospital care teams — nurses, care coordinators, and attending cardiologists — will incorporate ClearHeart dashboard review into their existing daily workflows without requiring significant time additions that generate staff resistance.",keywords:["care team","nurse","cardiologist","dashboard","workflow","daily","time","incorporate"],revealed:false},
+    {text:"Hospitals will renew annual contracts after the initial pilot period based on measured readmission outcomes — contract renewal is driven by clinical results not just relationship inertia.",keywords:["renew","annual","contract","pilot","readmission","clinical results","outcomes","renewal"],revealed:false},
+    {text:"Clinical champions at pilot hospitals — typically a cardiologist or cardiovascular service line director — will actively advocate for ClearHeart within their institution and provide references to peer institutions.",keywords:["clinical champion","cardiologist","cardiovascular","advocate","institution","reference","pilot","director"],revealed:false},
+    {text:"Patient trust in the monitoring system and willingness to share health data with their hospital care team through a startup platform is sufficient to sustain the 85% compliance rate beyond the pilot window.",keywords:["patient","trust","health data","startup","platform","85%","compliance","willingness"],revealed:false},
+    {text:"ClearHeart can manage hospital relationships, clinical support questions, and system troubleshooting at current and near-term scale with founding team capacity alone.",keywords:["founding team","manage","hospital","clinical support","troubleshoot","capacity","scale","near-term"],revealed:false}
+  ],
+  keyActivities:[
+    {text:"ClearHeart can expand from two pilot hospitals to five additional sites simultaneously — managing patient onboarding, care team training, technical integration, and clinical support — without quality failures.",keywords:["expand","five sites","simultaneously","onboarding","training","integration","clinical support","pilot"],revealed:false},
+    {text:"The software dashboard can be maintained, updated, and improved in response to care team feedback without requiring engineering resources that exceed current team capacity or timeline commitments.",keywords:["software","dashboard","maintain","update","care team","feedback","engineering","capacity"],revealed:false},
+    {text:"Alert algorithm calibration — reducing false positive rates that contribute to care team alert fatigue — can be achieved through ongoing data analysis and model refinement.",keywords:["alert","algorithm","false positive","alert fatigue","calibrate","data analysis","model","refinement"],revealed:false},
+    {text:"ClearHeart can manage the clinical evidence development process — collecting outcome data, preparing publications, and presenting at conferences — alongside commercial expansion.",keywords:["clinical evidence","outcome data","publication","conference","commercial expansion","manage","alongside","development"],revealed:false},
+    {text:"Patient onboarding — device setup, compliance coaching, and ongoing engagement — can be delivered at scale through a combination of hospital staff training and remote support without ClearHeart on-site.",keywords:["patient onboarding","device setup","compliance coaching","remote support","hospital staff","training","scale","engagement"],revealed:false}
+  ],
+  keyResources:[
+    {text:"The founding team combination of cardiology clinical expertise, biomedical engineering capability, and health insurance industry knowledge is sufficient to navigate clinical, technical, and reimbursement challenges simultaneously.",keywords:["cardiology","biomedical engineering","health insurance","founding team","sufficient","clinical","technical","reimbursement"],revealed:false},
+    {text:"The off-the-shelf FDA-cleared wearable devices ClearHeart currently uses will remain available from consumer device manufacturers at stable pricing and quality.",keywords:["FDA-cleared","wearable","consumer device","stable","pricing","quality","available","off-the-shelf"],revealed:false},
+    {text:"The 48-patient pilot dataset is sufficient to support early commercial sales conversations and initial publication efforts without requiring a larger randomized controlled trial first.",keywords:["48 patients","pilot","dataset","commercial","sales","publication","sufficient","support"],revealed:false},
+    {text:"ClearHeart has sufficient financial runway to complete five additional hospital pilots, build a publishable evidence base, and reach a commercial contract renewal cycle before needing additional capital.",keywords:["runway","five pilots","evidence base","commercial","contract renewal","sufficient","financial","sustain"],revealed:false},
+    {text:"ClearHeart regulatory interpretation — wellness monitoring classification — is sufficiently well-documented and legally defensible to withstand scrutiny from hospital compliance teams and informal FDA inquiry at current scale.",keywords:["regulatory","wellness","classification","documented","defensible","compliance","scrutiny","interpretation"],revealed:false}
+  ],
+  keyPartnerships:[
+    {text:"Consumer wearable device manufacturers — Garmin, Withings, or comparable — will maintain stable API access, data sharing agreements, and product availability as ClearHeart scales from pilot to commercial deployment.",keywords:["wearable","manufacturer","API","data sharing","stable","Garmin","Withings","scale"],revealed:false},
+    {text:"The two pilot hospitals are willing to serve as formal reference sites allowing ClearHeart to cite their outcomes in sales conversations, publish case studies, and facilitate peer introductions to other health systems.",keywords:["pilot hospital","reference","formal","outcomes","case study","peer introduction","publish","facilitate"],revealed:false},
+    {text:"Electronic medical record vendors — particularly Epic and Cerner — will not block or restrict ClearHeart data integration pathways and will maintain API access that allows dashboard data to flow into clinical workflows.",keywords:["Epic","Cerner","EMR","integration","restrict","API","data","pathway"],revealed:false},
+    {text:"Medicare and major commercial insurers will not alter reimbursement structures or value-based care penalty frameworks in ways that reduce hospital financial motivation for readmission reduction.",keywords:["Medicare","insurer","reimbursement","value-based care","penalty","reduce","motivation","readmission"],revealed:false},
+    {text:"Healthcare legal counsel with FDA regulatory expertise is accessible and affordable enough for ClearHeart to maintain ongoing regulatory guidance without incurring costs that materially constrain operational budget.",keywords:["legal","FDA","regulatory","counsel","expertise","accessible","affordable","guidance"],revealed:false}
+  ],
+  costStructure:[
+    {text:"The cost of hardware procurement, software infrastructure, patient onboarding, and clinical support per patient per month is low enough relative to subscription pricing to generate meaningful contribution margin.",keywords:["hardware","software","onboarding","clinical support","per patient","margin","contribution","subscription"],revealed:false},
+    {text:"Hospital IT integration costs — connecting ClearHeart dashboard to EMR systems, hospital networks, and care team workflows — are manageable one-time expenses per site rather than recurring costs.",keywords:["IT integration","EMR","one-time","manageable","per site","hospital","network","cost"],revealed:false},
+    {text:"The cost of regulatory compliance — legal counsel, documentation, and ongoing monitoring of FDA classification guidance — is a manageable operating expense not a capital-intensive investment.",keywords:["regulatory compliance","legal","FDA","documentation","manageable","operating","guidance","monitoring"],revealed:false},
+    {text:"Clinical evidence development costs — data analysis, publication preparation, conference presentation — are sustainable within current budget as a growth investment not a financial burden.",keywords:["clinical evidence","publication","conference","sustainable","budget","growth","data analysis","investment"],revealed:false},
+    {text:"Scaling from seven hospitals to twenty or more does not require proportional increases in founding team headcount — the platform and support model is sufficiently systematized.",keywords:["scale","20 hospitals","proportional","headcount","systematized","platform","support","model"],revealed:false}
+  ],
+  revenueStreams:[
+    {text:"Hospitals will pay a per-patient per-month subscription fee that generates sufficient revenue across realistic patient volumes per hospital to cover operating costs and contribute to growth.",keywords:["per-patient","subscription","hospital","revenue","operating costs","growth","realistic","volume"],revealed:false},
+    {text:"Performance bonus revenue — triggered when readmission reductions exceed contractual thresholds — will materialize in a meaningful proportion of contracts contributing incremental revenue.",keywords:["performance bonus","readmission","threshold","contractual","materialize","meaningful","trigger","contract"],revealed:false},
+    {text:"Annual contract renewal rates will be high enough — driven by demonstrated clinical outcomes and care team adoption — to provide revenue predictability supporting operational planning.",keywords:["annual","renewal","clinical outcomes","care team","adoption","predictability","revenue","driven"],revealed:false},
+    {text:"Expansion within hospital systems — adding additional service lines, surgical categories, or patient populations beyond cardiac — represents an achievable near-term revenue growth path.",keywords:["expansion","hospital system","service line","surgical","patient population","beyond cardiac","near-term","growth"],revealed:false},
+    {text:"Future reimbursement pathways where insurers or Medicare directly reimburse remote monitoring services represent a material revenue model improvement ClearHeart can position toward as the regulatory landscape evolves.",keywords:["reimbursement","insurer","Medicare","remote monitoring","future","material","improvement","position"],revealed:false}
+  ],
+  strategicAlignment:[
+    {text:"Building a standalone remote cardiac monitoring company rather than licensing the platform to an established medical device company or selling early to a strategic acquirer is the right long-term path.",keywords:["standalone","remote monitoring","cardiac","license","medical device","acquirer","strategic","long-term"],revealed:false},
+    {text:"The wellness monitoring classification strategy — avoiding full medical device regulation while delivering clinical value — is a durable strategic position that ClearHeart can maintain through commercial scaling.",keywords:["wellness","classification","FDA","regulation","durable","strategic","commercial","scaling"],revealed:false},
+    {text:"The cardiac post-surgical monitoring market is large enough and the readmission penalty incentive is strong enough to support a standalone venture-scale business without requiring expansion into adjacent clinical areas first.",keywords:["cardiac","post-surgical","monitoring","readmission","penalty","venture-scale","standalone","large"],revealed:false},
+    {text:"The founding team combined clinical, engineering, and health insurance expertise gives ClearHeart a genuine advantage in navigating the intersection of clinical credibility, technical execution, and payer dynamics.",keywords:["clinical","engineering","health insurance","expertise","advantage","credibility","payer","dynamics"],revealed:false},
+    {text:"Macro trends — growth in value-based care contracting, Medicare readmission penalty expansion, increasing hospital openness to digital health, and consumer wearable capability improvements — will sustain demand.",keywords:["value-based care","Medicare","digital health","wearable","macro","trend","sustain","penalty"],revealed:false}
+  ]
+};
+
+
+
 IJ.state = {
   run:        '',
   team:       '',
@@ -1887,6 +2494,324 @@ IJ.toggleCheatMode = function() {
   IJ.saveData({ cheatActive: IJ.cheatActive });
 };
 
+
+// ── BMC CANVAS ────────────────────────────────────────────────────────────────
+
+IJ.currentBlock = null; // id of currently open block
+
+IJ.renderBMC = function() {
+  const data = IJ.getData();
+  const diff = data.difficulty || 'hard';
+  const grid = document.getElementById('ij-bmc-grid');
+  if (!grid) return;
+
+  document.getElementById('ij-bmc-mode-badge').textContent =
+    diff === 'easy' ? '💡 Easy Mode — chips available' : '🔒 Hard Mode — type your own assumptions';
+
+  grid.innerHTML = IJ.BMC_BLOCKS.map(b => {
+    const blockData = (data.bmcBlocks || {})[b.id] || { assumptions:[], locked:false, score:0 };
+    const count = blockData.assumptions ? blockData.assumptions.length : 0;
+    const locked = blockData.locked || false;
+    const score  = blockData.score || 0;
+    const examined = count > 0 || locked;
+    return `<div class="ij-bmc-block ij-bmc-${b.area}${examined?' ij-bmc-examined':''}"
+                 data-block="${b.id}" data-dvf="${b.dvf}"
+                 onclick="IJ.openBlock('${b.id}')">
+      <div class="ij-bmc-block-label">${b.label}</div>
+      <div class="ij-bmc-block-dvf">${b.dvf.charAt(0).toUpperCase()+b.dvf.slice(1)}</div>
+      <div class="ij-bmc-block-count ${count>0?'ij-show':''}" id="ij-count-${b.id}">${count}</div>
+      <div class="ij-bmc-block-score" id="ij-score-${b.id}">${score>0?'+'+score.toFixed(2)+'pts':''}</div>
+      <div class="ij-bmc-block-locked ${locked?'ij-show':''}" id="ij-locked-${b.id}">🔒 Locked</div>
+    </div>`;
+  }).join('');
+
+  // Show prioritize button if any block has assumptions
+  const bmcBlocks = data.bmcBlocks || {};
+  const hasAny = Object.values(bmcBlocks).some(b => b.assumptions && b.assumptions.length > 0);
+  document.getElementById('ij-prioritize-btn').style.display = hasAny ? 'block' : 'none';
+};
+
+IJ.openBlock = function(blockId) {
+  const data = IJ.getData();
+  if ((data.bmcBlocks||{})[blockId]?.locked) {
+    IJ.openDrawer(blockId, true); // open in read-only review mode
+    return;
+  }
+  IJ.openDrawer(blockId, false);
+};
+
+IJ.openDrawer = function(blockId, readOnly) {
+  const data = IJ.getData();
+  const block = IJ.BMC_BLOCKS.find(b => b.id === blockId);
+  if (!block) return;
+
+  IJ.currentBlock = blockId;
+
+  // Set drawer header
+  document.getElementById('ij-drawer-block-name').textContent = block.label;
+  document.getElementById('ij-drawer-block-dvf').textContent =
+    block.dvf.charAt(0).toUpperCase() + block.dvf.slice(1) + ' — ' +
+    (block.dvf==='desirability'?'Do customers want this?':
+     block.dvf==='feasibility' ?'Can we build and run this?':'Does the math work?');
+
+  // Mark active block on canvas
+  document.querySelectorAll('.ij-bmc-block').forEach(el=>el.classList.remove('ij-bmc-active'));
+  const activeEl = document.querySelector(`[data-block="${blockId}"]`);
+  if (activeEl) activeEl.classList.add('ij-bmc-active');
+
+  // Render existing assumptions
+  IJ.renderDrawerAssumptions(blockId);
+
+  // Show correct entry mode
+  const diff = data.difficulty || 'hard';
+  document.getElementById('ij-hard-entry').style.display = diff==='hard' ? 'block' : 'none';
+  document.getElementById('ij-easy-entry').style.display  = diff==='easy' ? 'block' : 'none';
+
+  if (diff === 'easy') IJ.renderEasyChips(blockId);
+
+  // Lock/unlock footer buttons
+  const foot = document.querySelector('.ij-drawer-foot');
+  if (readOnly) {
+    foot.style.display = 'none';
+  } else {
+    foot.style.display = 'flex';
+    // If block has 8+ assumptions, disable add button
+    const blockData = (data.bmcBlocks||{})[blockId]||{};
+    const count = (blockData.assumptions||[]).length;
+    document.getElementById('ij-submit-assumption').disabled = count >= 8;
+  }
+
+  // Reset sliders
+  document.getElementById('ij-impact-slider').value = 3;
+  document.getElementById('ij-impact-val').textContent = 3;
+  document.getElementById('ij-uncertainty-slider').value = 3;
+  document.getElementById('ij-uncertainty-val').textContent = 3;
+
+  // Open drawer
+  document.getElementById('ij-drawer-overlay').classList.add('ij-open');
+  document.getElementById('ij-drawer').classList.add('ij-open');
+  IJ.hideStatus('ij-drawer-status');
+};
+
+IJ.closeDrawer = function() {
+  document.getElementById('ij-drawer-overlay').classList.remove('ij-open');
+  document.getElementById('ij-drawer').classList.remove('ij-open');
+  document.querySelectorAll('.ij-bmc-block').forEach(el=>el.classList.remove('ij-bmc-active'));
+  IJ.currentBlock = null;
+};
+
+IJ.renderDrawerAssumptions = function(blockId) {
+  const data = IJ.getData();
+  const blockData = (data.bmcBlocks||{})[blockId]||{};
+  const assumptions = blockData.assumptions || [];
+  const list = document.getElementById('ij-assumption-list');
+
+  if (assumptions.length === 0) {
+    list.innerHTML = '<p style="font-size:12px;color:var(--ij-muted);margin-bottom:12px;">No assumptions entered yet for this block.</p>';
+    return;
+  }
+
+  list.innerHTML = assumptions.map((a,i) => {
+    const matchClass = a.matchScore >= 3 ? 'ij-matched' : a.matchScore >= 1 ? 'ij-partial' : 'ij-unmatched';
+    const ptsLabel = (a.points||0) > 0 ? `+${a.points.toFixed(2)} pts` : '0 pts';
+    const revealHtml = a.reveal ? `<div class="ij-assumption-reveal">
+      <div class="ij-assumption-reveal-label">💡 Closest canonical assumption (+0.25 learning pts)</div>
+      ${a.reveal}
+    </div>` : '';
+    return `<div class="ij-assumption-item ${matchClass}">
+      <div class="ij-assumption-entry-text">${i+1}. ${a.text}</div>
+      <div class="ij-assumption-pts">${ptsLabel} · Impact ${a.impact} × Uncertainty ${a.uncertainty} = ${a.impact*a.uncertainty} priority</div>
+      ${revealHtml}
+    </div>`;
+  }).join('');
+};
+
+IJ.renderEasyChips = function(blockId) {
+  const data = IJ.getData();
+  const blockData = (data.bmcBlocks||{})[blockId]||{};
+  const usedTexts = (blockData.assumptions||[]).map(a=>a.canonicalId||'');
+  const company = data.company;
+  const canonical = (IJ.CANONICAL[company]||{})[blockId]||[];
+  const chips = document.getElementById('ij-easy-chips');
+
+  if (canonical.length === 0) {
+    chips.innerHTML = '<p style="font-size:12px;color:var(--ij-muted);">No chips available for this block.</p>';
+    return;
+  }
+
+  chips.innerHTML = canonical.map((ca,i) => {
+    const used = usedTexts.includes(i.toString());
+    return `<button class="ij-easy-chip ${used?'ij-used':''}"
+              ${used?'disabled':''}
+              onclick="IJ.selectEasyChip('${blockId}',${i})">
+      ${ca.text}
+    </button>`;
+  }).join('');
+};
+
+IJ.selectEasyChip = function(blockId, canonicalIndex) {
+  const data = IJ.getData();
+  const company = data.company;
+  const canonical = (IJ.CANONICAL[company]||{})[blockId]||[];
+  const ca = canonical[canonicalIndex];
+  if (!ca) return;
+
+  const impact = parseInt(document.getElementById('ij-impact-slider').value)||3;
+  const uncertainty = parseInt(document.getElementById('ij-uncertainty-slider').value)||3;
+
+  // Award points for easy mode (always full points for correct chip)
+  const blockData = (data.bmcBlocks||{})[blockId]||{assumptions:[],locked:false,score:0};
+  const count = blockData.assumptions.length;
+  const basePoints = IJ.getBasePoints(count);
+
+  const entry = {
+    text: ca.text,
+    impact, uncertainty,
+    matchScore: 8, // full match
+    points: basePoints + 0.25,
+    canonicalId: canonicalIndex.toString(),
+    reveal: null // no reveal needed in easy mode
+  };
+
+  IJ.saveAssumptionEntry(blockId, entry, basePoints + 0.25);
+  IJ.renderEasyChips(blockId);
+  IJ.renderDrawerAssumptions(blockId);
+};
+
+IJ.submitAssumption = function() {
+  const blockId = IJ.currentBlock;
+  if (!blockId) return;
+
+  const data = IJ.getData();
+  const diff = data.difficulty || 'hard';
+  const impact = parseInt(document.getElementById('ij-impact-slider').value)||3;
+  const uncertainty = parseInt(document.getElementById('ij-uncertainty-slider').value)||3;
+
+  if (diff === 'easy') {
+    IJ.showStatus('ij-drawer-status','warn','Click a chip above to add an assumption in Easy Mode.');
+    return;
+  }
+
+  // Hard mode — get text
+  const textarea = document.getElementById('ij-assumption-text');
+  const text = (textarea.value||'').trim();
+  if (!text || text.length < 10) {
+    IJ.showStatus('ij-drawer-status','err','Please enter a meaningful assumption (at least 10 characters).');
+    return;
+  }
+
+  const company = data.company;
+  const canonical = (IJ.CANONICAL[company]||{})[blockId]||[];
+  const blockData = (data.bmcBlocks||{})[blockId]||{assumptions:[],locked:false,score:0};
+  const count = blockData.assumptions.length;
+
+  if (count >= 8) {
+    IJ.showStatus('ij-drawer-status','warn','Maximum 8 assumptions per block.');
+    return;
+  }
+
+  // Keyword scoring — find best unrevealed canonical
+  const revealedIds = blockData.assumptions.map(a=>a.canonicalId).filter(Boolean);
+  const entryLower = text.toLowerCase();
+
+  let bestMatch = null, bestScore = -1, bestIdx = -1;
+  canonical.forEach((ca, i) => {
+    if (revealedIds.includes(i.toString())) return;
+    const matches = ca.keywords.filter(k => entryLower.includes(k.toLowerCase())).length;
+    if (matches > bestScore) { bestScore = matches; bestMatch = ca; bestIdx = i; }
+  });
+
+  const basePoints = IJ.getBasePoints(count);
+  let earnedBase = bestScore >= 3 ? basePoints : bestScore >= 1 ? basePoints * 0.5 : 0;
+  let revealHtml = null;
+
+  if (bestMatch) {
+    revealHtml = bestMatch.text;
+    earnedBase += 0.25; // learning bonus
+  }
+
+  const entry = {
+    text, impact, uncertainty,
+    matchScore: bestScore,
+    points: earnedBase,
+    canonicalId: bestIdx >= 0 ? bestIdx.toString() : null,
+    reveal: revealHtml
+  };
+
+  IJ.saveAssumptionEntry(blockId, entry, earnedBase);
+  textarea.value = '';
+  IJ.renderDrawerAssumptions(blockId);
+  IJ.showStatus('ij-drawer-status','ok',`+${earnedBase.toFixed(2)} pts${bestScore>=3?' — great match!':bestScore>=1?' — partial match':' — 0 pts, but here is the closest canonical assumption'}`);
+  document.getElementById('ij-submit-assumption').disabled = (count+1) >= 8;
+};
+
+IJ.getBasePoints = function(existingCount) {
+  const scale = [1,1,1,0.5,0.5,0.25,0.25,0.25];
+  return scale[existingCount] || 0;
+};
+
+IJ.saveAssumptionEntry = function(blockId, entry, earned) {
+  const data = IJ.getData();
+  const bmcBlocks = data.bmcBlocks || {};
+  const blockData = bmcBlocks[blockId] || {assumptions:[],locked:false,score:0};
+
+  blockData.assumptions = blockData.assumptions || [];
+  blockData.assumptions.push(entry);
+  blockData.score = (blockData.score||0) + earned;
+  bmcBlocks[blockId] = blockData;
+
+  const newEarned = (data.earnedPoints||0) + earned;
+  const newTotal  = newEarned - (data.lostPoints||0);
+
+  IJ.saveData({ bmcBlocks, earnedPoints: newEarned, totalPoints: newTotal });
+  IJ.updateScoreBar();
+  IJ.renderBMC();
+
+  // Update block badge
+  const badge = document.getElementById('ij-count-'+blockId);
+  if (badge) { badge.textContent = blockData.assumptions.length; badge.classList.add('ij-show'); }
+  const scoreEl = document.getElementById('ij-score-'+blockId);
+  if (scoreEl) scoreEl.textContent = '+' + blockData.score.toFixed(2) + 'pts';
+};
+
+IJ.lockBlock = function() {
+  const blockId = IJ.currentBlock;
+  if (!blockId) return;
+  const data = IJ.getData();
+  const bmcBlocks = data.bmcBlocks || {};
+  const blockData = bmcBlocks[blockId] || {assumptions:[],locked:false,score:0};
+
+  // Penalize for missing canonical assumptions
+  const company = data.company;
+  const canonical = (IJ.CANONICAL[company]||{})[blockId]||[];
+  const coveredIds = blockData.assumptions.map(a=>a.canonicalId).filter(Boolean).map(Number);
+  const missingCount = canonical.filter((_,i) => !coveredIds.includes(i)).length;
+  const penalty = missingCount * 0.5; // 0.5 pts per missed canonical
+
+  blockData.locked = true;
+  bmcBlocks[blockId] = blockData;
+
+  const newLost  = (data.lostPoints||0) + penalty;
+  const newTotal = (data.earnedPoints||0) - newLost;
+  IJ.saveData({ bmcBlocks, lostPoints: newLost, totalPoints: newTotal,
+                assumptionsLocked: (data.assumptionsLocked||0)+1 });
+  IJ.updateScoreBar();
+  IJ.renderBMC();
+  IJ.closeDrawer();
+
+  // Push to Sheets
+  IJ.pushScore({});
+  IJ.showStatus('ij-lobby-status','ok','Block locked!'); // won't show but triggers push
+};
+
+IJ.prioritizeAssumptions = function() {
+  IJ.setGamePhase('results');
+  IJ.closeDrawer();
+  // Results phase built in next chunk
+  document.getElementById('ij-phase-results').innerHTML =
+    '<div class="ij-phase-placeholder"><h3>📊 Prioritization coming in next build</h3><p>Your assumptions are saved. Results view — heat map, scatterplot, and test recommendations — coming next!</p></div>';
+};
+
 // ── GAME SCREEN ───────────────────────────────────────────────────────────────
 
 IJ.timer        = null; // interval handle
@@ -1910,6 +2835,9 @@ IJ.launchGameScreen = function() {
   // Start timer
   IJ.timerRemaining = data.timerSecs || IJ.DEFAULT_TIMER;
   IJ.startTimer();
+
+  // Render BMC canvas
+  IJ.renderBMC();
 
   // Set game phase
   IJ.setGamePhase(data.gamePhase || 'explore');
