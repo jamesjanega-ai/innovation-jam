@@ -841,8 +841,8 @@ body {
 .ij-rpill:hover{border-color:var(--ij-maroon);color:var(--ij-maroon);}
 .ij-rpill.ij-rpill-on{background:var(--ij-maroon);color:white;border-color:var(--ij-maroon);}
 .ij-rpill-sep{width:1px;background:var(--ij-border);height:16px;flex-shrink:0;}
-.ij-rolodex-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-height:520px;overflow-y:auto;padding-right:4px;}
-.ij-rc{background:var(--ij-white);border:1px solid var(--ij-border);border-radius:var(--ij-radius-md);padding:10px;position:relative;cursor:default;}
+.ij-rolodex-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-height:none;overflow-y:visible;padding-right:4px;padding-bottom:24px;}
+.ij-rc{background:var(--ij-white);border:1px solid var(--ij-border);border-radius:var(--ij-radius-md);padding:10px;position:relative;cursor:pointer;}
 .ij-rc:hover{border-color:var(--ij-maroon);box-shadow:0 2px 12px rgba(128,0,0,0.1);z-index:5;}
 .ij-rc-name{font-size:12px;font-weight:bold;color:var(--ij-text);margin-bottom:3px;}
 .ij-rc-badges{display:flex;gap:4px;margin-bottom:5px;flex-wrap:wrap;}
@@ -857,7 +857,7 @@ body {
 .ij-rc-add:hover{background:#600000;}
 .ij-rc-add.ij-rc-added{background:#1b5e20;cursor:default;}
 .ij-rc-explainer{display:none;position:absolute;left:0;right:0;top:0;background:var(--ij-white);border:2px solid var(--ij-maroon);border-radius:var(--ij-radius-md);padding:12px;z-index:20;box-shadow:0 4px 20px rgba(0,0,0,0.15);min-height:100%;}
-.ij-rc:hover .ij-rc-explainer{display:block;}
+.ij-rc.ij-rc-open .ij-rc-explainer{display:block;}
 .ij-rc-exp-section{font-size:9px;font-weight:bold;text-transform:uppercase;letter-spacing:0.4px;color:var(--ij-maroon);margin-bottom:3px;margin-top:8px;}
 .ij-rc-exp-section:first-child{margin-top:0;}
 .ij-rc-exp-text{font-size:11px;color:var(--ij-text);line-height:1.5;margin-bottom:4px;}
@@ -933,7 +933,7 @@ body {
   background: var(--ij-off);
   padding: 14px;
   overflow-y: auto;
-  max-height: 600px;
+  max-height: 660px;
 }
 .ij-plan-col-head {
   font-size: 10px;
@@ -1540,6 +1540,54 @@ input[type=range].ij-slider{width:100%;accent-color:var(--ij-maroon);}
               <option value="B">B (second session)</option>
               <option value="C">C (third session)</option>
               <option value="D">D</option>
+              <option value="E">E</option>
+              <option value="F">F</option>
+              <option value="G">G</option>
+              <option value="H">H</option>
+              <option value="I">I</option>
+              <option value="J">J</option>
+              <option value="K">K</option>
+              <option value="L">L</option>
+              <option value="M">M</option>
+              <option value="N">N</option>
+              <option value="O">O</option>
+              <option value="P">P</option>
+              <option value="Q">Q</option>
+              <option value="R">R</option>
+              <option value="S">S</option>
+              <option value="T">T</option>
+              <option value="U">U</option>
+              <option value="V">V</option>
+              <option value="W">W</option>
+              <option value="X">X</option>
+              <option value="Y">Y</option>
+              <option value="Z">Z</option>
+              <option value="AA">AA</option>
+              <option value="BB">BB</option>
+              <option value="CC">CC</option>
+              <option value="DD">DD</option>
+              <option value="EE">EE</option>
+              <option value="FF">FF</option>
+              <option value="GG">GG</option>
+              <option value="HH">HH</option>
+              <option value="II">II</option>
+              <option value="JJ">JJ</option>
+              <option value="KK">KK</option>
+              <option value="LL">LL</option>
+              <option value="MM">MM</option>
+              <option value="NN">NN</option>
+              <option value="OO">OO</option>
+              <option value="PP">PP</option>
+              <option value="QQ">QQ</option>
+              <option value="RR">RR</option>
+              <option value="SS">SS</option>
+              <option value="TT">TT</option>
+              <option value="UU">UU</option>
+              <option value="VV">VV</option>
+              <option value="WW">WW</option>
+              <option value="XX">XX</option>
+              <option value="YY">YY</option>
+              <option value="ZZ">ZZ</option>
             </select>
           </div>
         </div>
@@ -1551,6 +1599,14 @@ input[type=range].ij-slider{width:100%;accent-color:var(--ij-maroon);}
                    onclick="IJ.adminSetDifficulty('hard')">🔒 HARD</div>
               <div class="ij-diff-btn" id="ij-admin-diff-easy"
                    onclick="IJ.adminSetDifficulty('easy')">💡 EASY</div>
+            </div>
+          </div>
+          <div class="ij-field" style="margin-bottom:12px;">
+            <label class="ij-label">Run Budget ($ per team — 0 = unlimited)</label>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
+              <span style="font-size:14px;color:var(--ij-muted);">$</span>
+              <input type="number" id="ij-admin-budget" class="ij-input" min="0" step="5" value="0" placeholder="0 = unlimited" style="width:120px;" />
+              <span style="font-size:11px;color:var(--ij-muted);">Teams see this in their planning bar</span>
             </div>
           </div>
           <div class="ij-field">
@@ -1583,6 +1639,11 @@ input[type=range].ij-slider{width:100%;accent-color:var(--ij-maroon);}
           </button>
         </div>
         <div class="ij-status" id="ij-run-status" style="margin-top:12px;"></div>
+        <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--ij-border);">
+          <div style="font-size:10px;font-weight:bold;color:var(--ij-muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:8px;">UAT Tools</div>
+          <button class="ij-btn" style="width:auto;padding:8px 14px;font-size:12px;border-color:#f59e0b;color:#92400e;background:#fef9c3;" onclick="IJ.uatReset()">⚠ Reset My Score &amp; Tests (UAT only)</button>
+          <div style="font-size:10px;color:var(--ij-muted);margin-top:6px;">Clears scores and test history. Keeps team name and company.</div>
+        </div>
         <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--ij-border);">
           <div style="font-size:12px;font-weight:bold;color:var(--ij-gray);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.4px;">Test Timer Settings</div>
           <div style="display:flex;align-items:center;gap:12px;">
@@ -1700,6 +1761,13 @@ input[type=range].ij-slider{width:100%;accent-color:var(--ij-maroon);}
               color:rgba(255,200,200,0.8);border-radius:4px;font-size:10px;
               text-decoration:none;white-space:nowrap;flex-shrink:0;
               font-family:Arial,sans-serif;letter-spacing:0.3px;"
+    <button id="ij-pause-btn"
+       style="margin-left:6px;padding:4px 10px;background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.8);border:none;border-radius:4px;font-size:10px;cursor:pointer;white-space:nowrap;flex-shrink:0;font-family:Arial,sans-serif;"
+       onclick="IJ.togglePause()" title="Pause or resume your session timer">
+      ⏸ Pause
+    </button>
+    <a href="#"
+       style="margin-left:6px;padding:4px 10px;background:rgba(255,255,255,0.08);color:rgba(255,200,200,0.8);border-radius:4px;font-size:10px;text-decoration:none;white-space:nowrap;flex-shrink:0;font-family:Arial,sans-serif;"
        title="Leave game and return to lobby" onclick="IJ.leaveGame();return false;">✕ Leave</a>
   </div>
 
@@ -1863,7 +1931,7 @@ input[type=range].ij-slider{width:100%;accent-color:var(--ij-maroon);}
           <div class="ij-test-progress-label" id="ij-test-progress-label">0%</div>
         </div>
         <div class="ij-test-phrase" id="ij-test-phrase">Preparing experiment...</div>
-        <div id="ij-test-explainer" style="background:#f7f4f4;border-radius:8px;padding:12px 14px;margin-top:4px;font-size:12px;color:#58595B;line-height:1.5;overflow-y:auto;max-height:220px;">
+        <div id="ij-test-explainer" style="background:#f7f4f4;border-radius:8px;padding:12px 14px;margin-top:4px;font-size:12px;color:#58595B;line-height:1.5;overflow-y:auto;max-height:320px;">
           <div style="font-weight:bold;color:#800000;margin-bottom:4px;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;">What This Test Does</div>
           <div id="ij-explainer-description" style="margin-bottom:8px;"></div>
           <div style="font-weight:bold;color:#800000;margin-bottom:4px;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;">Input for Test</div>
@@ -2988,6 +3056,10 @@ IJ.registerTeam = async function() {
 
 IJ.finalizeRegistration = function({ run, team, company, companyName, timer, diff }) {
   // Save to localStorage
+  IJ.planTrays = {};
+  IJ.activePlanAC = 0;
+  IJ.rolodexDVF = 'all';
+  IJ.rolodexType = 'all';
   IJ.saveData({
     run, team, company, companyName,
     difficulty:        diff,
@@ -3004,7 +3076,11 @@ IJ.finalizeRegistration = function({ run, team, company, companyName, timer, dif
     testsRun:          0,
     infoCallsUsed:     0,
     bmcBlocks:         {},
-    gamePhase:         'explore'
+    gamePhase:         'explore',
+    assumptionTestRuns:{},
+    runTestIds:        [],
+    assumptionConfidence:{},
+    planTrays:         {}
   });
 
   IJ.showStatus('ij-lobby-status', 'ok',
@@ -3406,17 +3482,16 @@ IJ.runTestCountdown = function(seconds) {
 };
 
 IJ.resolveTest = function() {
-  const ctx = IJ.currentTestCtx;
+  var ctx = IJ.currentTestCtx;
   if (!ctx) return;
-  const test = ctx.test;
+  var test = ctx.test;
 
   // Determine outcome
-  let outcome;
+  var outcome;
   if (test.id === 106) {
-    // Customer Interview always succeeds but always needs follow-up
     outcome = 'success_followup';
   } else {
-    const roll = Math.random();
+    var roll = Math.random();
     if (roll < 0.30) {
       outcome = 'ambiguous';
     } else if (roll < 0.30 + (test.evidence/100) * 0.70) {
@@ -3426,104 +3501,127 @@ IJ.resolveTest = function() {
     }
   }
 
-  // Calculate confidence gain
-  const weight = ctx.assumptionScore / ctx.totalScore;
-  const data = IJ.getData();
-  let confGain = 0;
-  const successGain = (test.evidence/100) * weight * 100;
+  // Per-assumption confidence tracking
+  var data = IJ.getData();
+  var acKey = ctx.assumptionIdx;
+  var assumptionConf = data.assumptionConfidence || {};
+  var currentAC = assumptionConf[acKey] || 0;
 
+  // How much this test contributes to THIS assumption
+  var headroom = Math.max(0, 100 - currentAC);
+  var rawGain = test.evidence;
+  var acGain = 0;
   if (outcome === 'success' || outcome === 'success_followup') {
-    confGain = successGain;
+    acGain = rawGain * (headroom / 100);
   } else if (outcome === 'ambiguous') {
-    confGain = successGain * 0.5;
+    acGain = rawGain * (headroom / 100) * 0.4;
   } else {
-    confGain = -2;
+    acGain = -3;
   }
+  var newAC = Math.max(0, Math.min(100, currentAC + acGain));
+  assumptionConf[acKey] = newAC;
 
-  // Update scores
-  const newConf    = Math.max(0, Math.min(100, (data.confidence||0) + confGain));
-  const newEarned  = (data.earnedPoints||0) + 3;
-  const newTotal   = newEarned - (data.lostPoints||0);
-  const costSpent  = test.cost * 2.5;
-  const newDRDolls = (data.deRiskingDollars||0) + costSpent;
-  const newTests   = (data.testsRun||0) + 1;
+  // Recalculate overall confidence from all assumptions
+  var list = IJ.buildPrioritizedList();
+  var totalScore = list.reduce(function(s,a){ return s + a.score; }, 0);
+  if (totalScore <= 0) totalScore = 25;
+  // Cap so strategic testing of top assumptions is rewarding
+  var denominator = Math.min(totalScore, 250);
+
+  var rawOverall = 0;
+  list.forEach(function(a, i) {
+    var ac = assumptionConf[i] || 0;
+    rawOverall += (ac / 100) * (a.score / denominator);
+  });
+  rawOverall = rawOverall * 100;
+
+  // Diminishing returns above 75% to force breadth over depth
+  var newConf;
+  if (rawOverall <= 75) {
+    newConf = rawOverall;
+  } else {
+    var excess = rawOverall - 75;
+    newConf = 75 + excess * 0.25;
+  }
+  newConf = Math.max(0, Math.min(100, newConf));
+
+  var newEarned  = (data.earnedPoints||0) + 3;
+  var newTotal   = newEarned - (data.lostPoints||0);
+  var costSpent  = test.cost * 2.5;
+  var newDRDolls = (data.deRiskingDollars||0) + costSpent;
+  var newTests   = (data.testsRun||0) + 1;
 
   IJ.saveData({
-    confidence: newConf,
-    earnedPoints: newEarned,
-    totalPoints: newTotal,
-    deRiskingDollars: newDRDolls,
-    testsRun: newTests
+    confidence: newConf, earnedPoints: newEarned, totalPoints: newTotal,
+    deRiskingDollars: newDRDolls, testsRun: newTests,
+    assumptionConfidence: assumptionConf
   });
   IJ.updateScoreBar();
-
-  // Push to Sheets
   IJ.pushScore({});
-
-  // Mark test as run to prevent re-running
   IJ.markTestRun(test.id);
 
-  // Update plan tray if running from plan
   if (IJ.planPendingAC !== null && IJ.planPendingTest !== null) {
     IJ.planMarkOutcome(test.id, outcome);
   }
 
-  // Show outcome
-  IJ.showTestOutcome(outcome, test, confGain, newConf);
+  IJ.showTestOutcome(outcome, test, acGain, newConf);
 };
 
-IJ.showTestOutcome = function(outcome, test, confGain, newConf) {
+IJ.showTestOutcome = function(outcome, test, acGain, newConf) {
   document.getElementById('ij-test-running').style.display = 'none';
-  const outcomeEl = document.getElementById('ij-test-outcome');
-  const icon   = document.getElementById('ij-outcome-icon');
-  const title  = document.getElementById('ij-outcome-title');
-  const desc   = document.getElementById('ij-outcome-desc');
-  const actions = document.getElementById('ij-test-actions');
+  var outcomeEl = document.getElementById('ij-test-outcome');
+  var icon    = document.getElementById('ij-outcome-icon');
+  var title   = document.getElementById('ij-outcome-title');
+  var desc    = document.getElementById('ij-outcome-desc');
+  var actions = document.getElementById('ij-test-actions');
 
   outcomeEl.style.display = 'block';
+  var gainStr  = (acGain > 0 ? '+' : '') + acGain.toFixed(1) + '% assumption confidence';
+  var spentStr = '+3 pts · $' + (test.cost*2.5).toFixed(2) + ' spent';
+  var overStr  = 'Overall: ' + newConf.toFixed(1) + '%';
 
   if (outcome === 'success' || outcome === 'success_followup') {
     outcomeEl.className = 'ij-test-outcome ij-show ij-outcome-success';
     icon.textContent = '✅';
     title.textContent = 'Success!';
-    desc.textContent = `+${confGain.toFixed(1)}% confidence · +3 pts · $${(test.cost*2.5).toFixed(2)} spent`;
+    desc.textContent = gainStr + ' · ' + spentStr + ' · ' + overStr;
 
     if (outcome === 'success_followup' || newConf < 80) {
-      const paTests = (test.pairAfter||[]).map(id => IJ.TESTS.find(t=>t.id===id)).filter(Boolean);
-      let nextHtml = '';
-      if (paTests.length > 0 && (outcome==='success_followup')) {
-        nextHtml = `<div style="margin-top:12px;font-size:12px;font-weight:bold;color:var(--ij-gray);">Customer Interviews always need follow-up — pick a Pair After test:</div>
-          <div class="ij-pair-after-list">${paTests.map(t=>`<button class="ij-pair-after-btn" onclick="IJ.closeTestOverlay();IJ.runTest(${t.id},${IJ.currentTestCtx.assumptionIdx},${IJ.currentTestCtx.assumptionScore})">${t.name} · ${t.evidence}% evidence</button>`).join('')}</div>`;
+      var paTests = (test.pairAfter||[]).map(function(id){ return IJ.TESTS.find(function(t){ return t.id===id; }); }).filter(Boolean);
+      var nextHtml = '';
+      if (paTests.length > 0 && outcome === 'success_followup') {
+        nextHtml = '<div style="margin-top:12px;font-size:12px;font-weight:bold;color:var(--ij-gray);">Customer Interviews always need follow-up. Pick a Pair After test:</div>'
+          + '<div class="ij-pair-after-list">' + paTests.map(function(t){
+            return '<button class="ij-pair-after-btn" onclick="IJ.closeTestOverlay();IJ.runTest('+t.id+','+IJ.currentTestCtx.assumptionIdx+','+IJ.currentTestCtx.assumptionScore+')">'+t.name+' · '+t.evidence+'%</button>';
+          }).join('') + '</div>';
       }
-      actions.innerHTML = nextHtml +
-        `<button class="ij-btn ij-btn-primary" style="margin-top:12px;" onclick="IJ.closeTestOverlay()">Continue Testing →</button>`;
+      actions.innerHTML = nextHtml + '<button class="ij-btn ij-btn-primary" style="margin-top:12px;" onclick="IJ.closeTestOverlay()">Continue Testing →</button>';
     } else {
-      // Win!
-      setTimeout(() => { IJ.closeTestOverlay(); IJ.showWinScreen(); }, 800);
+      setTimeout(function() { IJ.closeTestOverlay(); IJ.showWinScreen(); }, 800);
       actions.innerHTML = '';
     }
 
   } else if (outcome === 'ambiguous') {
     outcomeEl.className = 'ij-test-outcome ij-show ij-outcome-ambiguous';
-    icon.textContent = '🤔';
+    icon.textContent = '❓';
     title.textContent = 'Ambiguous Results';
-    desc.textContent = `+${confGain.toFixed(1)}% confidence (partial) · +3 pts · $${(test.cost*2.5).toFixed(2)} spent. Run a Pair After test to triangulate.`;
-    const paTests = (test.pairAfter||[]).map(id => IJ.TESTS.find(t=>t.id===id)).filter(Boolean);
-    const paHtml = paTests.length > 0
-      ? `<div class="ij-pair-after-list">${paTests.map(t=>`<button class="ij-pair-after-btn" onclick="IJ.closeTestOverlay();IJ.runTest(${t.id},${IJ.currentTestCtx.assumptionIdx},${IJ.currentTestCtx.assumptionScore})">${t.name} · ${t.evidence}% evidence</button>`).join('')}</div>`
+    desc.textContent = gainStr + ' (partial) · ' + spentStr + '. Run a Pair After test to triangulate.';
+    var paTests2 = (test.pairAfter||[]).map(function(id){ return IJ.TESTS.find(function(t){ return t.id===id; }); }).filter(Boolean);
+    var paHtml = paTests2.length > 0
+      ? '<div class="ij-pair-after-list">' + paTests2.map(function(t){
+          return '<button class="ij-pair-after-btn" onclick="IJ.closeTestOverlay();IJ.runTest('+t.id+','+IJ.currentTestCtx.assumptionIdx+','+IJ.currentTestCtx.assumptionScore+')">'+t.name+' · '+t.evidence+'%</button>';
+        }).join('') + '</div>'
       : '<p style="font-size:12px;color:var(--ij-muted);">No pair-after tests available.</p>';
-    actions.innerHTML = `<div style="font-size:12px;font-weight:bold;color:var(--ij-gray);margin-bottom:6px;">Run a Pair After test to triangulate:</div>${paHtml}
-      <button class="ij-btn ij-btn-secondary" style="margin-top:8px;" onclick="IJ.closeTestOverlay()">Skip — Continue Testing</button>`;
+    actions.innerHTML = '<div style="font-size:12px;font-weight:bold;color:var(--ij-gray);margin-bottom:6px;">Run a Pair After test:</div>'
+      + paHtml + '<button class="ij-btn ij-btn-secondary" style="margin-top:8px;" onclick="IJ.closeTestOverlay()">Skip — Continue</button>';
 
   } else {
-    // Negative
     outcomeEl.className = 'ij-test-outcome ij-show ij-outcome-negative';
     icon.textContent = '❌';
     title.textContent = 'Negative Result';
-    desc.textContent = `${confGain.toFixed(1)}% confidence · +3 pts · $${(test.cost*2.5).toFixed(2)} spent. Consider tweaking the feature and retesting.`;
-    actions.innerHTML = `
-      <button class="ij-btn ij-btn-primary" onclick="IJ.tweakAndRetest()">🔧 Tweak a Feature → Retest</button>
-      <button class="ij-btn ij-btn-secondary" onclick="IJ.closeTestOverlay()">Accept & Continue</button>`;
+    desc.textContent = gainStr + ' · ' + spentStr + '. Consider tweaking and retesting.';
+    actions.innerHTML = '<button class="ij-btn ij-btn-primary" onclick="IJ.tweakAndRetest()">Tweak a Feature → Retest</button>'
+      + '<button class="ij-btn ij-btn-secondary" onclick="IJ.closeTestOverlay()">Accept &amp; Continue</button>';
   }
 };
 
@@ -3698,16 +3796,27 @@ IJ.getPlanTotals = function() {
 };
 
 IJ.updatePlanBar = function() {
-  const totals = IJ.getPlanTotals();
-  const qEl = document.getElementById('ij-plan-queued');
-  const bEl = document.getElementById('ij-plan-budget');
-  const tEl = document.getElementById('ij-plan-time');
+  var totals = IJ.getPlanTotals();
+  var qEl = document.getElementById('ij-plan-queued');
+  var bEl = document.getElementById('ij-plan-budget');
+  var tEl = document.getElementById('ij-plan-time');
   if (qEl) qEl.textContent = totals.tests;
-  if (bEl) bEl.textContent = '$' + totals.cost.toFixed(2);
   if (tEl) {
-    const hrs = Math.floor(totals.time / 60);
-    const mins = totals.time % 60;
+    var hrs = Math.floor(totals.time / 60);
+    var mins = totals.time % 60;
     tEl.textContent = hrs > 0 ? hrs + 'h ' + mins + 'm' : mins + 'm';
+  }
+  var data = IJ.getData();
+  var ceiling = parseFloat(data.runBudget || 0);
+  var spent = totals.cost;
+  if (bEl) {
+    if (ceiling > 0) {
+      bEl.textContent = '$' + spent.toFixed(2) + ' / $' + ceiling.toFixed(2);
+      bEl.style.color = spent > ceiling ? '#ffcccc' : 'white';
+    } else {
+      bEl.textContent = '$' + spent.toFixed(2);
+      bEl.style.color = 'white';
+    }
   }
 };
 
@@ -3987,7 +4096,7 @@ IJ.renderRolodex = function() {
     var addCls   = queued ? 'ij-rc-add ij-rc-added' : 'ij-rc-add';
     var addEvt   = queued ? '' : 'onclick="IJ.planAddTest('+t.id+')"';
 
-    return '<div class="ij-rc">'
+    return '<div class="ij-rc" onclick="IJ.toggleRolodexCard(this)">'
       +'<div class="ij-rc-name">'+t.name+'</div>'
       +'<div class="ij-rc-badges"><span class="'+bCls+'">'+bTxt+'</span><span class="ij-rc-badge-type">'+type+'</span><span class="ij-rc-badge-type">'+dvfL+'</span></div>'
       +'<div class="ij-rc-desc">'+short+'</div>'
@@ -4253,7 +4362,7 @@ IJ.renderRankList = function(list) {
           + '<div class="ij-ari-text">' + a.text + '</div>'
           + '<div class="ij-ari-meta">' + a.blockLabel + ' · ' + a.dvf.charAt(0).toUpperCase() + a.dvf.slice(1) + ' · Impact ' + a.impact + ' × Uncertainty ' + a.uncertainty + '</div>'
         + '</div>'
-        + '<div class="ij-ari-score">' + a.score + '<br><span style="font-size:10px;font-weight:normal;color:var(--ij-muted);">priority</span></div>'
+        + '<div class="ij-ari-score">' + (Math.round(a.score*100)/100) + '<br><span style="font-size:10px;font-weight:normal;color:var(--ij-muted);">priority</span></div>'
         + '<div style="font-size:11px;color:var(--ij-maroon);font-weight:bold;white-space:nowrap;margin-left:12px;padding:6px 10px;background:#fff5f5;border-radius:6px;border:1px solid var(--ij-maroon);">Plan tests →</div>'
       + '</div>'
     + '</div>';
@@ -4650,6 +4759,57 @@ IJ.lockBlock = function() {
   IJ.pushScore({});
   IJ.showStatus('ij-lobby-status','ok','Block locked!'); // won't show but triggers push
 };
+
+
+// ── PAUSE / RESUME TIMER ─────────────────────────────────────────────────────
+IJ.timerPaused = false;
+
+IJ.togglePause = function() {
+  var btn = document.getElementById('ij-pause-btn');
+  if (!IJ.timerPaused) {
+    IJ.timerPaused = true;
+    if (IJ.timer) { clearInterval(IJ.timer); IJ.timer = null; }
+    if (btn) btn.textContent = '▶ Resume';
+    if (btn) btn.style.background = 'rgba(255,200,0,0.3)';
+  } else {
+    IJ.timerPaused = false;
+    IJ.startTimer();
+    if (btn) btn.textContent = '⏸ Pause';
+    if (btn) btn.style.background = 'rgba(255,255,255,0.12)';
+  }
+};
+
+// ── UAT RESET ────────────────────────────────────────────────────────────────
+IJ.uatReset = function() {
+  if (!confirm('Reset your score and test history? Keeps your team name and company.')) return;
+  IJ.planTrays = {};
+  IJ.activePlanAC = 0;
+  IJ.saveData({
+    earnedPoints: 0, lostPoints: 0, totalPoints: 0,
+    confidence: 0, deRiskingDollars: 0, testsRun: 0,
+    bmcBlocks: {}, gamePhase: 'explore',
+    assumptionTestRuns: {}, runTestIds: [],
+    assumptionConfidence: {}, planTrays: {}
+  });
+  IJ.closeAdminModal();
+  IJ.renderBMC();
+  IJ.updateScoreBar();
+  alert('Score and test history cleared. Reload to reset timer.');
+};
+
+// ── ROLODEX CARD CLICK EXPAND ─────────────────────────────────────────────────
+IJ.expandedCard = null;
+
+IJ.toggleRolodexCard = function(el) {
+  if (IJ.expandedCard && IJ.expandedCard !== el) {
+    IJ.expandedCard.classList.remove('ij-rc-open');
+  }
+  el.classList.toggle('ij-rc-open');
+  IJ.expandedCard = el.classList.contains('ij-rc-open') ? el : null;
+};
+
+// ── SAVE BUDGET ON RUN CREATE ─────────────────────────────────────────────────
+// (hooked into createRun — budget saved with run data)
 
 // ── GAME SCREEN ───────────────────────────────────────────────────────────────
 
