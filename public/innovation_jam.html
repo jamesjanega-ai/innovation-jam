@@ -832,6 +832,131 @@ body {
   margin-bottom: 16px;
 }
 
+
+/* ── TEST LOOP ───────────────────────────────────────────── */
+.ij-test-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 9000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.ij-test-overlay.ij-open { display: flex; }
+.ij-test-modal {
+  background: var(--ij-white);
+  border-radius: var(--ij-radius-lg);
+  box-shadow: var(--ij-shadow-lg);
+  width: 100%;
+  max-width: 520px;
+  overflow: hidden;
+}
+.ij-test-modal-head {
+  background: var(--ij-maroon);
+  color: white;
+  padding: 16px 20px;
+}
+.ij-test-modal-name { font-size: 16px; font-weight: bold; margin-bottom: 4px; }
+.ij-test-modal-type { font-size: 11px; opacity: 0.8; }
+.ij-test-modal-body { padding: 20px; }
+.ij-test-progress-wrap {
+  background: var(--ij-off);
+  border-radius: 8px;
+  height: 36px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  position: relative;
+}
+.ij-test-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--ij-maroon), #c00);
+  border-radius: 8px;
+  width: 0%;
+  transition: width 0.5s linear;
+}
+.ij-test-progress-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--ij-text);
+  font-family: Arial, sans-serif;
+}
+.ij-test-phrase {
+  text-align: center;
+  font-size: 13px;
+  color: var(--ij-muted);
+  font-style: italic;
+  min-height: 20px;
+  margin-bottom: 16px;
+}
+.ij-test-outcome {
+  display: none;
+  text-align: center;
+  padding: 16px;
+  border-radius: var(--ij-radius-md);
+  margin-bottom: 16px;
+}
+.ij-test-outcome.ij-show { display: block; }
+.ij-outcome-success { background: #e8f5e9; border: 2px solid #4caf50; }
+.ij-outcome-ambiguous { background: #fff8e1; border: 2px solid #ff9800; }
+.ij-outcome-negative { background: #ffebee; border: 2px solid #f44336; }
+.ij-outcome-icon { font-size: 36px; margin-bottom: 8px; }
+.ij-outcome-title { font-size: 18px; font-weight: bold; margin-bottom: 6px; }
+.ij-outcome-desc { font-size: 12px; color: var(--ij-muted); }
+.ij-test-actions { display: flex; flex-direction: column; gap: 8px; }
+.ij-pair-after-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+.ij-pair-after-btn {
+  background: var(--ij-off);
+  border: 1.5px solid var(--ij-border);
+  border-radius: var(--ij-radius-md);
+  padding: 8px 12px;
+  font-size: 12px;
+  font-family: Arial, sans-serif;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+}
+.ij-pair-after-btn:hover { border-color: var(--ij-maroon); background: #fdf5f5; }
+
+/* ── WIN SCREEN ──────────────────────────────────────────── */
+.ij-win-screen {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: var(--ij-maroon);
+  z-index: 9500;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  padding: 40px;
+}
+.ij-win-screen.ij-open { display: flex; }
+.ij-win-title { font-size: 48px; font-weight: bold; margin-bottom: 8px; }
+.ij-win-sub { font-size: 20px; opacity: 0.85; margin-bottom: 32px; }
+.ij-win-scores {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.ij-win-score-item { text-align: center; }
+.ij-win-score-val { font-size: 36px; font-weight: bold; }
+.ij-win-score-lbl { font-size: 12px; opacity: 0.75; text-transform: uppercase; letter-spacing: 0.5px; }
+
 /* ── BMC CANVAS ──────────────────────────────────────────── */
 .ij-bmc-wrap{background:var(--ij-white);border-radius:var(--ij-radius-lg);box-shadow:var(--ij-shadow);overflow:hidden;}
 .ij-bmc-header{background:var(--ij-maroon);color:white;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;font-weight:bold;font-size:13px;}
@@ -1266,6 +1391,48 @@ input[type=range].ij-slider{width:100%;accent-color:var(--ij-maroon);}
   </div><!-- /game-body -->
 </div><!-- /screen-game -->
 
+
+
+<!-- ============================================================
+     TEST EXECUTION OVERLAY
+     ============================================================ -->
+<div class="ij-test-overlay" id="ij-test-overlay">
+  <div class="ij-test-modal">
+    <div class="ij-test-modal-head">
+      <div class="ij-test-modal-name" id="ij-test-modal-name">Running Test...</div>
+      <div class="ij-test-modal-type" id="ij-test-modal-type">Discovery · Exploration</div>
+    </div>
+    <div class="ij-test-modal-body">
+      <div id="ij-test-running">
+        <div class="ij-test-progress-wrap">
+          <div class="ij-test-progress-fill" id="ij-test-progress-fill"></div>
+          <div class="ij-test-progress-label" id="ij-test-progress-label">0%</div>
+        </div>
+        <div class="ij-test-phrase" id="ij-test-phrase">Preparing experiment...</div>
+      </div>
+      <div class="ij-test-outcome" id="ij-test-outcome">
+        <div class="ij-outcome-icon" id="ij-outcome-icon"></div>
+        <div class="ij-outcome-title" id="ij-outcome-title"></div>
+        <div class="ij-outcome-desc" id="ij-outcome-desc"></div>
+      </div>
+      <div class="ij-test-actions" id="ij-test-actions"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     WIN SCREEN
+     ============================================================ -->
+<div class="ij-win-screen" id="ij-win-screen">
+  <div style="font-size:64px;margin-bottom:8px;">🎉</div>
+  <div class="ij-win-title">80% Confidence!</div>
+  <div class="ij-win-sub">You have enough evidence to proceed with this innovation.</div>
+  <div class="ij-win-scores" id="ij-win-scores"></div>
+  <button class="ij-btn" style="background:white;color:var(--ij-maroon);font-size:16px;padding:14px 32px;"
+          onclick="document.getElementById('ij-win-screen').classList.remove('ij-open');">
+    View Full Results
+  </button>
+</div>
 
 <!-- DRAWER -->
 <div class="ij-drawer-overlay" id="ij-drawer-overlay" onclick="IJ.closeDrawer()"></div>
@@ -2676,6 +2843,263 @@ IJ.blockToDVF = function(blockId) {
 };
 
 
+
+// ── TEST LOOP ─────────────────────────────────────────────────────────────────
+
+IJ.PHRASES = [
+  "Gathering materials...",
+  "Securing budget...",
+  "Ran out of Post-Its! Hitting the store!",
+  "Perfect End User found — Ubering them over!",
+  "Legal says maybe. Drafting workaround...",
+  "Prototype survived the drop test. Barely.",
+  "Scheduling conflicts resolved. Miraculously.",
+  "Stakeholder finally replied. It's a yes... ish.",
+  "Booking the conference room. For the third time.",
+  "Someone ate the snacks. Re-ordering.",
+  "Wi-Fi in the testing room is back up!",
+  "Participant signed the consent form!",
+  "The whiteboard marker actually works!",
+  "Zoom link sent. Fingers crossed.",
+  "First draft of the discussion guide: done.",
+  "Pilot participant confirmed. Still showing up!",
+  "Found the USB adapter. Finally."
+];
+
+IJ.currentTestCtx = null; // {test, assumptionIdx, assumptionScore, totalScore}
+IJ.testTimerHandle = null;
+IJ.testPhraseTick = null;
+
+IJ.getTotalAssumptionScore = function() {
+  const data = IJ.getData();
+  const bmcBlocks = data.bmcBlocks || {};
+  let total = 0;
+  Object.values(bmcBlocks).forEach(b => {
+    (b.assumptions||[]).forEach(a => { total += (a.impact||3)*(a.uncertainty||3); });
+  });
+  return total || 25; // fallback to avoid divide-by-zero
+};
+
+IJ.runTest = function(testId, assumptionIdx, assumptionScore) {
+  const test = IJ.TESTS.find(t => t.id === testId);
+  if (!test) return;
+
+  const totalScore = IJ.getTotalAssumptionScore();
+  IJ.currentTestCtx = { test, assumptionIdx, assumptionScore, totalScore };
+
+  // Show overlay
+  document.getElementById('ij-test-modal-name').textContent = test.name;
+  document.getElementById('ij-test-modal-type').textContent =
+    (test.disc ? 'Discovery' : 'Validation') + ' · ' + (test.evidence + '% avg evidence strength');
+  document.getElementById('ij-test-running').style.display = 'block';
+  document.getElementById('ij-test-outcome').className = 'ij-test-outcome';
+  document.getElementById('ij-test-outcome').style.display = 'none';
+  document.getElementById('ij-test-actions').innerHTML = '';
+  document.getElementById('ij-test-progress-fill').style.width = '0%';
+  document.getElementById('ij-test-progress-fill').style.transition = 'none';
+  document.getElementById('ij-test-progress-label').textContent = 'Starting...';
+  document.getElementById('ij-test-phrase').textContent = 'Preparing experiment...';
+  document.getElementById('ij-test-overlay').classList.add('ij-open');
+
+  // Cheat mode or real timer
+  const data = IJ.getData();
+  if (IJ.cheatActive || data.cheatActive) {
+    IJ.resolveTest();
+  } else {
+    IJ.runTestCountdown(20);
+  }
+};
+
+IJ.runTestCountdown = function(seconds) {
+  let elapsed = 0;
+  const total = seconds * 1000;
+  const interval = 500;
+  let phraseIdx = Math.floor(Math.random() * IJ.PHRASES.length);
+
+  // Start smooth progress bar
+  setTimeout(() => {
+    document.getElementById('ij-test-progress-fill').style.transition = `width ${total}ms linear`;
+    document.getElementById('ij-test-progress-fill').style.width = '100%';
+  }, 50);
+
+  IJ.testTimerHandle = setInterval(() => {
+    elapsed += interval;
+    const pct = Math.min(100, Math.round((elapsed/total)*100));
+    document.getElementById('ij-test-progress-label').textContent = pct + '%';
+
+    // Rotate phrase every 3 seconds
+    if (elapsed % 3000 === 0) {
+      phraseIdx = (phraseIdx + 1) % IJ.PHRASES.length;
+      document.getElementById('ij-test-phrase').textContent = IJ.PHRASES[phraseIdx];
+    }
+
+    if (elapsed >= total) {
+      clearInterval(IJ.testTimerHandle);
+      IJ.resolveTest();
+    }
+  }, interval);
+};
+
+IJ.resolveTest = function() {
+  const ctx = IJ.currentTestCtx;
+  if (!ctx) return;
+  const test = ctx.test;
+
+  // Determine outcome
+  let outcome;
+  if (test.id === 106) {
+    // Customer Interview always succeeds but always needs follow-up
+    outcome = 'success_followup';
+  } else {
+    const roll = Math.random();
+    if (roll < 0.30) {
+      outcome = 'ambiguous';
+    } else if (roll < 0.30 + (test.evidence/100) * 0.70) {
+      outcome = 'success';
+    } else {
+      outcome = 'negative';
+    }
+  }
+
+  // Calculate confidence gain
+  const weight = ctx.assumptionScore / ctx.totalScore;
+  const data = IJ.getData();
+  let confGain = 0;
+  const successGain = (test.evidence/100) * weight * 100;
+
+  if (outcome === 'success' || outcome === 'success_followup') {
+    confGain = successGain;
+  } else if (outcome === 'ambiguous') {
+    confGain = successGain * 0.5;
+  } else {
+    confGain = -2;
+  }
+
+  // Update scores
+  const newConf    = Math.max(0, Math.min(100, (data.confidence||0) + confGain));
+  const newEarned  = (data.earnedPoints||0) + 3;
+  const newTotal   = newEarned - (data.lostPoints||0);
+  const costSpent  = test.cost * 2.5;
+  const newDRDolls = (data.deRiskingDollars||0) + costSpent;
+  const newTests   = (data.testsRun||0) + 1;
+
+  IJ.saveData({
+    confidence: newConf,
+    earnedPoints: newEarned,
+    totalPoints: newTotal,
+    deRiskingDollars: newDRDolls,
+    testsRun: newTests
+  });
+  IJ.updateScoreBar();
+
+  // Push to Sheets
+  IJ.pushScore({});
+
+  // Show outcome
+  IJ.showTestOutcome(outcome, test, confGain, newConf);
+};
+
+IJ.showTestOutcome = function(outcome, test, confGain, newConf) {
+  document.getElementById('ij-test-running').style.display = 'none';
+  const outcomeEl = document.getElementById('ij-test-outcome');
+  const icon   = document.getElementById('ij-outcome-icon');
+  const title  = document.getElementById('ij-outcome-title');
+  const desc   = document.getElementById('ij-outcome-desc');
+  const actions = document.getElementById('ij-test-actions');
+
+  outcomeEl.style.display = 'block';
+
+  if (outcome === 'success' || outcome === 'success_followup') {
+    outcomeEl.className = 'ij-test-outcome ij-show ij-outcome-success';
+    icon.textContent = '✅';
+    title.textContent = 'Success!';
+    desc.textContent = `+${confGain.toFixed(1)}% confidence · +3 pts · $${(test.cost*2.5).toFixed(2)} spent`;
+
+    if (outcome === 'success_followup' || newConf < 80) {
+      const paTests = (test.pairAfter||[]).map(id => IJ.TESTS.find(t=>t.id===id)).filter(Boolean);
+      let nextHtml = '';
+      if (paTests.length > 0 && (outcome==='success_followup')) {
+        nextHtml = `<div style="margin-top:12px;font-size:12px;font-weight:bold;color:var(--ij-gray);">Customer Interviews always need follow-up — pick a Pair After test:</div>
+          <div class="ij-pair-after-list">${paTests.map(t=>`<button class="ij-pair-after-btn" onclick="IJ.closeTestOverlay();IJ.runTest(${t.id},${IJ.currentTestCtx.assumptionIdx},${IJ.currentTestCtx.assumptionScore})">${t.name} · ${t.evidence}% evidence</button>`).join('')}</div>`;
+      }
+      actions.innerHTML = nextHtml +
+        `<button class="ij-btn ij-btn-primary" style="margin-top:12px;" onclick="IJ.closeTestOverlay()">Continue Testing →</button>`;
+    } else {
+      // Win!
+      setTimeout(() => { IJ.closeTestOverlay(); IJ.showWinScreen(); }, 800);
+      actions.innerHTML = '';
+    }
+
+  } else if (outcome === 'ambiguous') {
+    outcomeEl.className = 'ij-test-outcome ij-show ij-outcome-ambiguous';
+    icon.textContent = '🤔';
+    title.textContent = 'Ambiguous Results';
+    desc.textContent = `+${confGain.toFixed(1)}% confidence (partial) · +3 pts · $${(test.cost*2.5).toFixed(2)} spent. Run a Pair After test to triangulate.`;
+    const paTests = (test.pairAfter||[]).map(id => IJ.TESTS.find(t=>t.id===id)).filter(Boolean);
+    const paHtml = paTests.length > 0
+      ? `<div class="ij-pair-after-list">${paTests.map(t=>`<button class="ij-pair-after-btn" onclick="IJ.closeTestOverlay();IJ.runTest(${t.id},${IJ.currentTestCtx.assumptionIdx},${IJ.currentTestCtx.assumptionScore})">${t.name} · ${t.evidence}% evidence</button>`).join('')}</div>`
+      : '<p style="font-size:12px;color:var(--ij-muted);">No pair-after tests available.</p>';
+    actions.innerHTML = `<div style="font-size:12px;font-weight:bold;color:var(--ij-gray);margin-bottom:6px;">Run a Pair After test to triangulate:</div>${paHtml}
+      <button class="ij-btn ij-btn-secondary" style="margin-top:8px;" onclick="IJ.closeTestOverlay()">Skip — Continue Testing</button>`;
+
+  } else {
+    // Negative
+    outcomeEl.className = 'ij-test-outcome ij-show ij-outcome-negative';
+    icon.textContent = '❌';
+    title.textContent = 'Negative Result';
+    desc.textContent = `${confGain.toFixed(1)}% confidence · +3 pts · $${(test.cost*2.5).toFixed(2)} spent. Consider tweaking the feature and retesting.`;
+    actions.innerHTML = `
+      <button class="ij-btn ij-btn-primary" onclick="IJ.tweakAndRetest()">🔧 Tweak a Feature → Retest</button>
+      <button class="ij-btn ij-btn-secondary" onclick="IJ.closeTestOverlay()">Accept & Continue</button>`;
+  }
+};
+
+IJ.tweakAndRetest = function() {
+  const ctx = IJ.currentTestCtx;
+  if (!ctx) return;
+  // Rerun same test (costs another 20 seconds)
+  document.getElementById('ij-test-running').style.display = 'block';
+  document.getElementById('ij-test-outcome').className = 'ij-test-outcome';
+  document.getElementById('ij-test-outcome').style.display = 'none';
+  document.getElementById('ij-test-actions').innerHTML = '';
+  document.getElementById('ij-test-progress-fill').style.width = '0%';
+  document.getElementById('ij-test-progress-fill').style.transition = 'none';
+  document.getElementById('ij-test-progress-label').textContent = 'Tweaking...';
+  document.getElementById('ij-test-phrase').textContent = 'Incorporating feedback into next iteration...';
+  const data = IJ.getData();
+  if (IJ.cheatActive || data.cheatActive) {
+    IJ.resolveTest();
+  } else {
+    setTimeout(() => IJ.runTestCountdown(20), 200);
+  }
+};
+
+IJ.closeTestOverlay = function() {
+  if (IJ.testTimerHandle) { clearInterval(IJ.testTimerHandle); IJ.testTimerHandle = null; }
+  document.getElementById('ij-test-overlay').classList.remove('ij-open');
+  // Re-render results to reflect new confidence
+  IJ.renderResults();
+};
+
+IJ.showWinScreen = function() {
+  const data = IJ.getData();
+  const scores = document.getElementById('ij-win-scores');
+  scores.innerHTML = [
+    {label:'Confidence',val:data.confidence.toFixed(1)+'%'},
+    {label:'Total Points',val:(data.totalPoints||0).toFixed(2)},
+    {label:'AI Calls',val:(data.aiCalls||0)},
+    {label:'$ Spent',val:'$'+(data.deRiskingDollars||0).toFixed(2)},
+    {label:'Tests Run',val:(data.testsRun||0)}
+  ].map(s=>`<div class="ij-win-score-item">
+    <div class="ij-win-score-val">${s.val}</div>
+    <div class="ij-win-score-lbl">${s.label}</div>
+  </div>`).join('');
+  document.getElementById('ij-win-screen').classList.add('ij-open');
+  IJ.saveData({status:'complete'});
+  IJ.pushScore({status:'complete'});
+};
+
+
 // ── RESULTS VIEW ──────────────────────────────────────────────────────────────
 
 IJ.prioritizeAssumptions = function() {
@@ -2907,7 +3331,14 @@ IJ.renderRankList = function(list) {
             <span>Requires: ${t.requires}</span>
           </div>
         </div>
-        <div class="ij-test-evidence ${evClass}">${t.evidence}%</div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
+          <div class="ij-test-evidence ${evClass}">${t.evidence}%</div>
+          <button class="ij-btn ij-btn-primary"
+                  style="padding:6px 12px;font-size:11px;width:auto;white-space:nowrap;"
+                  onclick="IJ.runTest(${t.id},${idx},${a.score})">
+            \u25b6 Run Test
+          </button>
+        </div>
       </div>`;
     }).join('');
     return `<div class="ij-assumption-rank-item" id="ij-rank-item-${idx}">
