@@ -1027,7 +1027,8 @@ input[type=range].ij-slider{width:100%;accent-color:var(--ij-maroon);}
     <div class="ij-header-logo">
       <img src="https://images.squarespace-cdn.com/content/v1/68ff9bf138d63d51324c9b28/9ae04eaf-a113-48fb-8fb5-ff2dfff1a69d/uchicago-booth-logo.png?format=2500w"
            alt="Chicago Booth"
-           onerror="this.style.display='none'">
+           onerror="this.style.display='none'"
+           onclick="IJ.checkLogoCheat()" style="cursor:pointer;" title="Click 5x quickly for speed mode">
       <div>
         <div class="ij-header-title">INNOVATION JAM</div>
         <div class="ij-header-subtitle">De-Risking Challenge — Chicago Booth</div>
@@ -1226,6 +1227,18 @@ input[type=range].ij-slider{width:100%;accent-color:var(--ij-maroon);}
           </button>
         </div>
         <div class="ij-status" id="ij-run-status" style="margin-top:12px;"></div>
+        <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--ij-border);">
+          <div style="font-size:12px;font-weight:bold;color:var(--ij-gray);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.4px;">Test Timer Settings</div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <button class="ij-btn ij-btn-ghost" id="ij-speed-mode-btn"
+                    style="width:auto;padding:8px 16px;font-size:13px;"
+                    onclick="IJ.adminToggleSpeedMode()">
+              ⚡ Enable Speed Mode (skip 20s timers)
+            </button>
+            <span id="ij-speed-mode-status" style="font-size:12px;color:var(--ij-muted);"></span>
+          </div>
+          <div style="font-size:11px;color:var(--ij-muted);margin-top:6px;">Speed Mode makes all test timers instant. Tell students to click the Booth logo 5× to activate on their device.</div>
+        </div>
       </div>
     </div>
 
@@ -1421,6 +1434,14 @@ input[type=range].ij-slider{width:100%;accent-color:var(--ij-maroon);}
           <div class="ij-test-progress-label" id="ij-test-progress-label">0%</div>
         </div>
         <div class="ij-test-phrase" id="ij-test-phrase">Preparing experiment...</div>
+        <div id="ij-test-explainer" style="background:#f7f4f4;border-radius:8px;padding:12px 14px;margin-top:4px;font-size:12px;color:#58595B;line-height:1.6;">
+          <div style="font-weight:bold;color:#800000;margin-bottom:6px;font-size:11px;text-transform:uppercase;letter-spacing:0.4px;">What this test does</div>
+          <div id="ij-explainer-measures" style="margin-bottom:6px;"></div>
+          <div style="font-weight:bold;color:#800000;margin-bottom:4px;font-size:11px;text-transform:uppercase;letter-spacing:0.4px;">What you need</div>
+          <div id="ij-explainer-requires" style="margin-bottom:6px;"></div>
+          <div style="font-weight:bold;color:#800000;margin-bottom:4px;font-size:11px;text-transform:uppercase;letter-spacing:0.4px;">Evidence strength</div>
+          <div id="ij-explainer-evidence"></div>
+        </div>
       </div>
       <div class="ij-test-outcome" id="ij-test-outcome">
         <div class="ij-outcome-icon" id="ij-outcome-icon"></div>
@@ -1474,12 +1495,12 @@ input[type=range].ij-slider{width:100%;accent-color:var(--ij-maroon);}
     <div class="ij-slider-group">
       <div class="ij-slider-field">
         <div class="ij-slider-label">Impact <span class="ij-slider-val" id="ij-impact-val">3</span></div>
-        <input type="range" class="ij-slider" id="ij-impact-slider" min="1" max="5" value="3" oninput="document.getElementById('ij-impact-val').textContent=this.value">
+        <input type="range" class="ij-slider" id="ij-impact-slider" min="1" max="5" step="0.5" value="3" oninput="document.getElementById('ij-impact-val').textContent=parseFloat(this.value).toFixed(1)">
         <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--ij-muted);"><span>1 Fine</span><span>5 Catastrophic</span></div>
       </div>
       <div class="ij-slider-field">
         <div class="ij-slider-label">Uncertainty <span class="ij-slider-val" id="ij-uncertainty-val">3</span></div>
-        <input type="range" class="ij-slider" id="ij-uncertainty-slider" min="1" max="5" value="3" oninput="document.getElementById('ij-uncertainty-val').textContent=this.value">
+        <input type="range" class="ij-slider" id="ij-uncertainty-slider" min="1" max="5" step="0.5" value="3" oninput="document.getElementById('ij-uncertainty-val').textContent=parseFloat(this.value).toFixed(1)">
         <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--ij-muted);"><span>1 Certain</span><span>5 Very uncertain</span></div>
       </div>
     </div>
@@ -2736,21 +2757,22 @@ IJ.hideStatus = function(elId) {
   el.textContent = '';
 };
 
-// ── CHEAT CODE LISTENER ───────────────────────────────────────────────────────
-IJ.cheatBuffer = '';
-IJ.cheatCode   = 'jkl;';
+// ── CHEAT / SPEED MODE ────────────────────────────────────────────────────────
 IJ.cheatActive = false;
 
-document.addEventListener('keydown', function(e) {
-  if (!e.ctrlKey) { IJ.cheatBuffer = ''; return; }
-  IJ.cheatBuffer += e.key;
-  if (IJ.cheatBuffer.length > IJ.cheatCode.length)
-    IJ.cheatBuffer = IJ.cheatBuffer.slice(-IJ.cheatCode.length);
-  if (IJ.cheatBuffer === IJ.cheatCode) {
-    IJ.cheatBuffer = '';
+// Speed mode can be toggled from Admin panel OR by clicking the logo 5x
+IJ.logoClickCount = 0;
+IJ.logoClickTimer = null;
+
+IJ.checkLogoCheat = function() {
+  IJ.logoClickCount++;
+  clearTimeout(IJ.logoClickTimer);
+  IJ.logoClickTimer = setTimeout(() => { IJ.logoClickCount = 0; }, 2000);
+  if (IJ.logoClickCount >= 5) {
+    IJ.logoClickCount = 0;
     IJ.toggleCheatMode();
   }
-});
+};
 
 IJ.toggleCheatMode = function() {
   IJ.cheatActive = !IJ.cheatActive;
@@ -2899,6 +2921,7 @@ IJ.runTest = function(testId, assumptionIdx, assumptionScore) {
   document.getElementById('ij-test-modal-name').textContent = test.name;
   document.getElementById('ij-test-modal-type').textContent =
     (test.disc ? 'Discovery' : 'Validation') + ' · ' + (test.evidence + '% avg evidence strength');
+  IJ.populateTestExplainer(test);
   document.getElementById('ij-test-running').style.display = 'block';
   document.getElementById('ij-test-outcome').className = 'ij-test-outcome';
   document.getElementById('ij-test-outcome').style.display = 'none';
@@ -3003,6 +3026,9 @@ IJ.resolveTest = function() {
   // Push to Sheets
   IJ.pushScore({});
 
+  // Mark test as run to prevent re-running
+  IJ.markTestRun(test.id);
+
   // Show outcome
   IJ.showTestOutcome(outcome, test, confGain, newConf);
 };
@@ -3105,6 +3131,71 @@ IJ.showWinScreen = function() {
   document.getElementById('ij-win-screen').classList.add('ij-open');
   IJ.saveData({status:'complete'});
   IJ.pushScore({status:'complete'});
+};
+
+
+
+// ── ADMIN SPEED MODE ─────────────────────────────────────────────────────────
+IJ.adminToggleSpeedMode = function() {
+  IJ.cheatActive = !IJ.cheatActive;
+  IJ.saveData({ cheatActive: IJ.cheatActive });
+  const btn = document.getElementById('ij-speed-mode-btn');
+  const status = document.getElementById('ij-speed-mode-status');
+  if (IJ.cheatActive) {
+    btn.textContent = '⚡ Disable Speed Mode';
+    btn.style.background = 'var(--ij-maroon)';
+    btn.style.color = 'white';
+    if (status) status.textContent = 'ACTIVE — test timers are instant';
+  } else {
+    btn.textContent = '⚡ Enable Speed Mode (skip 20s timers)';
+    btn.style.background = '';
+    btn.style.color = '';
+    if (status) status.textContent = 'Off — normal 20s timers';
+  }
+};
+
+// ── POPULATE TEST EXPLAINER IN OVERLAY ───────────────────────────────────────
+IJ.populateTestExplainer = function(test) {
+  const mEl = document.getElementById('ij-explainer-measures');
+  const rEl = document.getElementById('ij-explainer-requires');
+  const eEl = document.getElementById('ij-explainer-evidence');
+  if (!mEl) return;
+
+  mEl.innerHTML = test.measures || 'Measures customer and market signals.';
+  rEl.innerHTML = test.requires || 'Access to target customers or data.';
+
+  const ev = test.evidence;
+  let evColor = ev >= 70 ? '#0d47a1' : ev >= 40 ? '#1b5e20' : '#e65100';
+  let evLabel = ev >= 70
+    ? 'High (' + ev + '%) — results are strong and defensible'
+    : ev >= 40
+    ? 'Moderate (' + ev + '%) — useful signal, consider pairing with another test'
+    : 'Low (' + ev + '%) — weak signal; always run a follow-up';
+  let discLabel = test.disc
+    ? 'Discovery test — helps you understand the problem space'
+    : 'Validation test — confirms whether your solution works';
+
+  eEl.innerHTML = '<span style="font-weight:bold;color:' + evColor + '">' + evLabel + '</span><br>'
+    + '<span style="color:#72635C;font-style:italic;">' + discLabel + '</span>';
+};
+
+// ── TRACK ALREADY-RUN TESTS ──────────────────────────────────────────────────
+IJ.getRunTests = function() {
+  const data = IJ.getData();
+  return data.runTestIds || [];
+};
+
+IJ.markTestRun = function(testId) {
+  const data = IJ.getData();
+  const runIds = data.runTestIds || [];
+  if (!runIds.includes(testId)) {
+    runIds.push(testId);
+    IJ.saveData({ runTestIds: runIds });
+  }
+};
+
+IJ.hasTestBeenRun = function(testId) {
+  return IJ.getRunTests().includes(testId);
 };
 
 
@@ -3341,11 +3432,9 @@ IJ.renderRankList = function(list) {
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
           <div class="ij-test-evidence ${evClass}">${t.evidence}%</div>
-          <button class="ij-btn ij-btn-primary"
-                  style="padding:6px 12px;font-size:11px;width:auto;white-space:nowrap;"
-                  onclick="IJ.runTest(${t.id},${idx},${a.score})">
-            \u25b6 Run Test
-          </button>
+          ${IJ.hasTestBeenRun(t.id)
+            ? '<span style="font-size:10px;color:var(--ij-muted);padding:6px 10px;background:var(--ij-off);border-radius:4px;display:inline-block;">\u2713 Already Run</span>'
+            : '<button class="ij-btn ij-btn-primary" style="padding:6px 12px;font-size:11px;width:auto;white-space:nowrap;" onclick="IJ.runTest(' + t.id + ',' + idx + ',' + a.score + ')">\u25b6 Run Test</button>'}
         </div>
       </div>`;
     }).join('');
@@ -3527,8 +3616,8 @@ IJ.selectEasyChip = function(blockId, canonicalIndex) {
   const ca = canonical[canonicalIndex];
   if (!ca) return;
 
-  const impact = parseInt(document.getElementById('ij-impact-slider').value)||3;
-  const uncertainty = parseInt(document.getElementById('ij-uncertainty-slider').value)||3;
+  const impact = parseFloat(document.getElementById('ij-impact-slider').value)||3;
+  const uncertainty = parseFloat(document.getElementById('ij-uncertainty-slider').value)||3;
 
   // Award points for easy mode (always full points for correct chip)
   const blockData = (data.bmcBlocks||{})[blockId]||{assumptions:[],locked:false,score:0};
@@ -3555,8 +3644,8 @@ IJ.submitAssumption = function() {
 
   const data = IJ.getData();
   const diff = data.difficulty || 'hard';
-  const impact = parseInt(document.getElementById('ij-impact-slider').value)||3;
-  const uncertainty = parseInt(document.getElementById('ij-uncertainty-slider').value)||3;
+  const impact = parseFloat(document.getElementById('ij-impact-slider').value)||3;
+  const uncertainty = parseFloat(document.getElementById('ij-uncertainty-slider').value)||3;
 
   if (diff === 'easy') {
     IJ.showStatus('ij-drawer-status','warn','Click a chip above to add an assumption in Easy Mode.');
