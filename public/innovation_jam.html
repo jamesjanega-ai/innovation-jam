@@ -1135,7 +1135,7 @@ input[type=range].ij-slider{width:100%;accent-color:var(--ij-maroon);}
 
   <footer class="ij-footer">
     Innovation Jam &copy; Clarity Group &amp; Chicago Booth
-    <a href="?admin=true" id="ij-admin-link">Admin</a>
+    <a href="#" id="ij-admin-link" onclick="IJ.openAdminModal();return false;">Admin</a>
   </footer>
 
 </div><!-- /screen-lobby -->
@@ -1320,12 +1320,12 @@ input[type=range].ij-slider{width:100%;accent-color:var(--ij-maroon);}
       <div class="ij-bar-label" id="ij-bar-team-label">Team</div>
       <div class="ij-bar-value" id="ij-bar-team-name" style="font-size:12px; max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">—</div>
     </div>
-    <a href="?admin=true"
+    <a href="#"
        style="margin-left:12px;padding:4px 10px;background:rgba(255,255,255,0.12);
               color:rgba(255,255,255,0.6);border-radius:4px;font-size:10px;
               text-decoration:none;white-space:nowrap;flex-shrink:0;
               font-family:Arial,sans-serif;letter-spacing:0.3px;"
-       title="Admin Panel">⚙ Admin</a>
+       title="Admin Panel" onclick="IJ.openAdminModal();return false;">⚙ Admin</a>
   </div>
 
   <!-- Game Body -->
@@ -2314,12 +2314,6 @@ IJ.init = function() {
   IJ.updateRunCode();
   IJ.wireInputValidation();
 
-  // Check if admin mode requested
-  if (window.location.search.includes('admin=true')) {
-    IJ.openAdminModal();
-    return;
-  }
-
   // Check if already registered
   const saved = IJ.getData();
   if (saved.registered && saved.team && saved.company && saved.run) {
@@ -2562,11 +2556,7 @@ IJ.finalizeRegistration = function({ run, team, company, companyName, timer, dif
 
 // ── ADMIN SCREEN ──────────────────────────────────────────────────────────────
 IJ.openAdminModal = function() {
-  // Check if already authenticated this session
-  if (sessionStorage.getItem(IJ.ADMIN_KEY) === 'true') {
-    IJ.enterAdmin();
-    return;
-  }
+  // Always show password form — never skip to admin directly
   document.getElementById('ij-pw-overlay').classList.add('ij-show');
   setTimeout(() => document.getElementById('ij-admin-pw-input').focus(), 100);
 };
