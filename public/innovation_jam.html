@@ -3134,7 +3134,7 @@ IJ.renderResults = function() {
   if (!phase) return;
 
   if (list.length === 0) {
-    phase.innerHTML = '<div class="ij-phase-placeholder"><h3>No assumptions yet</h3><p>Go back and enter assumptions in the BMC blocks first.</p><button class="ij-btn ij-btn-primary" style="width:auto;margin-top:16px;" onclick="IJ.setGamePhase('explore');IJ.renderBMC();">← Back to BMC</button></div>';
+    phase.innerHTML = '<div class="ij-phase-placeholder"><h3>No assumptions yet</h3><p>Go back and enter assumptions in the BMC blocks first.</p><button class="ij-btn ij-btn-primary" style="width:auto;margin-top:16px;" onclick="IJ.setGamePhase(\'explore\');IJ.renderBMC();">&#8592; Back to BMC</button></div>';
     return;
   }
 
