@@ -76,7 +76,30 @@ app.get('/api/sheets', async (req, res) => {
     const params  = new URLSearchParams(req.query);
     const fullUrl = `${scriptUrl}?${params.toString()}`;
     const response = await fetch(fullUrl);
-    const data = await response.json();
+    const text = await response.text();
+
+    // Detect HTML response (Apps Script error or auth wall)
+    if (text.trimStart().startsWith('<')) {
+      console.error('Apps Script GET returned HTML (not JSON). First 300 chars:\n', text.substring(0, 300));
+      return res.status(502).json({
+        success: false,
+        error: 'Apps Script returned HTML instead of JSON — check deployment permissions or script errors.',
+        hint: text.substring(0, 300)
+      });
+    }
+
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (parseErr) {
+      console.error('Apps Script GET — JSON parse failed. Raw response:\n', text.substring(0, 300));
+      return res.status(502).json({
+        success: false,
+        error: 'Apps Script GET response was not valid JSON.',
+        hint: text.substring(0, 300)
+      });
+    }
+
     res.json(data);
   } catch (err) {
     console.error('Apps Script GET error:', err.message);
@@ -92,7 +115,36 @@ app.post('/api/sheets', async (req, res) => {
   }
   try {
     const { statusCode, body } = await postWithRedirect(scriptUrl, req.body);
-    const data = JSON.parse(body);
+
+    // Detect HTML response (Apps Script error page or Google login wall)
+    if (body.trimStart().startsWith('<')) {
+      console.error(
+        `Apps Script POST returned HTML (not JSON). action="${req.body.action}" statusCode=${statusCode}\n` +
+        'First 300 chars of response:\n' + body.substring(0, 300)
+      );
+      return res.status(502).json({
+        success: false,
+        error: 'Apps Script returned HTML instead of JSON.',
+        diagnosis: 'Either the Apps Script has a runtime error, or the deployment is not set to "Anyone, even anonymous". Check Deploy → Manage deployments in Apps Script.',
+        hint: body.substring(0, 300)
+      });
+    }
+
+    let data;
+    try {
+      data = JSON.parse(body);
+    } catch (parseErr) {
+      console.error(
+        `Apps Script POST — JSON parse failed. action="${req.body.action}" statusCode=${statusCode}\n` +
+        'Raw response:\n' + body.substring(0, 300)
+      );
+      return res.status(502).json({
+        success: false,
+        error: 'Apps Script response was not valid JSON.',
+        hint: body.substring(0, 300)
+      });
+    }
+
     res.status(statusCode >= 400 ? statusCode : 200).json(data);
   } catch (err) {
     console.error('Apps Script POST error:', err.message);
