@@ -1468,6 +1468,9 @@ input[type=range].ij-slider{width:100%;accent-color:var(--ij-maroon);}
       <div class="ij-label" style="font-size:11px;margin-bottom:8px;">Select a Critical Assumption:</div>
       <div class="ij-easy-chips" id="ij-easy-chips"></div>
     </div>
+    <div style="font-size:11px;font-weight:bold;color:var(--ij-maroon);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.4px;">
+      ↓ Set sliders for the next assumption you add
+    </div>
     <div class="ij-slider-group">
       <div class="ij-slider-field">
         <div class="ij-slider-label">Impact <span class="ij-slider-val" id="ij-impact-val">3</span></div>
@@ -1637,7 +1640,7 @@ IJ.COMPANY_DATA = {
 };
 // ── BMC BLOCK CONFIG ─────────────────────────────────────────────────────────
 IJ.BMC_BLOCKS = [
-  {id:'keyPartners',           label:'Key Partners',           dvf:'feasibility',  area:'kp'},
+  {id:'keyPartnerships',        label:'Key Partnerships',       dvf:'feasibility',  area:'kp'},
   {id:'keyActivities',         label:'Key Activities',         dvf:'feasibility',  area:'ka'},
   {id:'valueProposition',      label:'Value Propositions',     dvf:'desirability', area:'vp'},
   {id:'customerRelationships', label:'Customer Relationships', dvf:'desirability', area:'cr'},
@@ -3670,14 +3673,6 @@ IJ.lockBlock = function() {
   // Push to Sheets
   IJ.pushScore({});
   IJ.showStatus('ij-lobby-status','ok','Block locked!'); // won't show but triggers push
-};
-
-IJ.prioritizeAssumptions = function() {
-  IJ.setGamePhase('results');
-  IJ.closeDrawer();
-  // Results phase built in next chunk
-  document.getElementById('ij-phase-results').innerHTML =
-    '<div class="ij-phase-placeholder"><h3>📊 Prioritization coming in next build</h3><p>Your assumptions are saved. Results view — heat map, scatterplot, and test recommendations — coming next!</p></div>';
 };
 
 // ── GAME SCREEN ───────────────────────────────────────────────────────────────
