@@ -1495,12 +1495,12 @@ input[type=range].ij-slider{width:100%;accent-color:var(--ij-maroon);}
     <div class="ij-slider-group">
       <div class="ij-slider-field">
         <div class="ij-slider-label">Impact <span class="ij-slider-val" id="ij-impact-val">3</span></div>
-        <input type="range" class="ij-slider" id="ij-impact-slider" min="1" max="5" step="0.5" value="3" oninput="document.getElementById('ij-impact-val').textContent=parseFloat(this.value).toFixed(1)">
+        <input type="range" class="ij-slider" id="ij-impact-slider" min="1" max="5" step="0.05" value="3" oninput="document.getElementById('ij-impact-val').textContent=parseFloat(this.value).toFixed(2)">
         <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--ij-muted);"><span>1 Fine</span><span>5 Catastrophic</span></div>
       </div>
       <div class="ij-slider-field">
         <div class="ij-slider-label">Uncertainty <span class="ij-slider-val" id="ij-uncertainty-val">3</span></div>
-        <input type="range" class="ij-slider" id="ij-uncertainty-slider" min="1" max="5" step="0.5" value="3" oninput="document.getElementById('ij-uncertainty-val').textContent=parseFloat(this.value).toFixed(1)">
+        <input type="range" class="ij-slider" id="ij-uncertainty-slider" min="1" max="5" step="0.05" value="3" oninput="document.getElementById('ij-uncertainty-val').textContent=parseFloat(this.value).toFixed(2)">
         <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--ij-muted);"><span>1 Certain</span><span>5 Very uncertain</span></div>
       </div>
     </div>
@@ -2907,7 +2907,10 @@ IJ.getTotalAssumptionScore = function() {
   Object.values(bmcBlocks).forEach(b => {
     (b.assumptions||[]).forEach(a => { total += (a.impact||3)*(a.uncertainty||3); });
   });
-  return total || 25; // fallback to avoid divide-by-zero
+  // Cap denominator at 250 (equivalent to 10 perfect 5x5 assumptions)
+  // This ensures strategic testing of top assumptions can reach 80% confidence
+  // in a reasonable number of tests without requiring all 30+ assumptions tested
+  return Math.min(total || 25, 250);
 };
 
 IJ.runTest = function(testId, assumptionIdx, assumptionScore) {
@@ -3180,22 +3183,38 @@ IJ.populateTestExplainer = function(test) {
 };
 
 // ── TRACK ALREADY-RUN TESTS ──────────────────────────────────────────────────
-IJ.getRunTests = function() {
+// Track runs per assumption: { assumptionKey: [testId, testId...] }
+IJ.getAssumptionRunTests = function(assumptionIdx) {
   const data = IJ.getData();
-  return data.runTestIds || [];
+  const runs = data.assumptionTestRuns || {};
+  return runs[assumptionIdx] || [];
 };
 
 IJ.markTestRun = function(testId) {
+  // Also track in assumptionTestRuns for the current assumption
   const data = IJ.getData();
-  const runIds = data.runTestIds || [];
-  if (!runIds.includes(testId)) {
-    runIds.push(testId);
-    IJ.saveData({ runTestIds: runIds });
+  const ctx = IJ.currentTestCtx;
+  if (ctx && ctx.assumptionIdx !== undefined) {
+    const runs = data.assumptionTestRuns || {};
+    const key = ctx.assumptionIdx;
+    if (!runs[key]) runs[key] = [];
+    if (!runs[key].includes(testId)) runs[key].push(testId);
+    // Also track globally for display
+    const globalRuns = data.runTestIds || [];
+    if (!globalRuns.includes(testId)) globalRuns.push(testId);
+    IJ.saveData({ assumptionTestRuns: runs, runTestIds: globalRuns });
   }
 };
 
+// Per assumption: has this specific test been run for THIS assumption?
+IJ.hasTestBeenRunForAssumption = function(testId, assumptionIdx) {
+  return IJ.getAssumptionRunTests(assumptionIdx).includes(testId);
+};
+
+// Global: has this test been run for ANY assumption? (for display purposes)
 IJ.hasTestBeenRun = function(testId) {
-  return IJ.getRunTests().includes(testId);
+  const data = IJ.getData();
+  return (data.runTestIds || []).includes(testId);
 };
 
 
@@ -3413,7 +3432,10 @@ IJ.renderRankList = function(list) {
   const container = document.getElementById('ij-rank-list');
   if (!container) return;
   container.innerHTML = list.map((a, idx) => {
-    const tests = IJ.getTestsForDVF(a.dvfChar).slice(0,3);
+    const runForThis = IJ.getAssumptionRunTests(idx);
+    const tests = IJ.getTestsForDVF(a.dvfChar)
+      .filter(t => !runForThis.includes(t.id)) // exclude already-run for this assumption
+      .slice(0, 5); // show top 5 available tests
     const testCards = tests.map((t,ti) => {
       const evClass = t.evidence >= 70 ? 'ij-ev-high' : t.evidence >= 40 ? 'ij-ev-mid' : 'ij-ev-low';
       const typeClass = t.disc ? '' : 'ij-validation';
@@ -3527,7 +3549,20 @@ IJ.openDrawer = function(blockId, readOnly) {
   document.getElementById('ij-hard-entry').style.display = diff==='hard' ? 'block' : 'none';
   document.getElementById('ij-easy-entry').style.display  = diff==='easy' ? 'block' : 'none';
 
-  if (diff === 'easy') IJ.renderEasyChips(blockId);
+  if (diff === 'easy') {
+    IJ.renderEasyChips(blockId);
+    // Hide global sliders in easy mode - sliders are now inline per chip
+    const sliderGroup = document.querySelector('.ij-slider-group');
+    const sliderLabel = sliderGroup?.previousElementSibling;
+    if (sliderGroup) sliderGroup.style.display = 'none';
+    if (sliderLabel) sliderLabel.style.display = 'none';
+  } else {
+    // Show global sliders in hard mode
+    const sliderGroup = document.querySelector('.ij-slider-group');
+    const sliderLabel = sliderGroup?.previousElementSibling;
+    if (sliderGroup) sliderGroup.style.display = 'flex';
+    if (sliderLabel) sliderLabel.style.display = 'block';
+  }
 
   // Lock/unlock footer buttons
   const foot = document.querySelector('.ij-drawer-foot');
@@ -3558,6 +3593,7 @@ IJ.closeDrawer = function() {
   document.getElementById('ij-drawer').classList.remove('ij-open');
   document.querySelectorAll('.ij-bmc-block').forEach(el=>el.classList.remove('ij-bmc-active'));
   IJ.currentBlock = null;
+  IJ.pendingChipIdx = null; // reset pending chip on drawer close
 };
 
 IJ.renderDrawerAssumptions = function(blockId) {
@@ -3586,57 +3622,125 @@ IJ.renderDrawerAssumptions = function(blockId) {
   }).join('');
 };
 
+
+IJ.updChipImpact = function(v) {
+  const el = document.getElementById('ij-chip-iv');
+  if (el) el.textContent = parseFloat(v).toFixed(2);
+};
+IJ.updChipUncert = function(v) {
+  const el = document.getElementById('ij-chip-uv');
+  if (el) el.textContent = parseFloat(v).toFixed(2);
+};
+
+IJ.pendingChipIdx = null; // index of chip awaiting slider confirmation
+
 IJ.renderEasyChips = function(blockId) {
   const data = IJ.getData();
   const blockData = (data.bmcBlocks||{})[blockId]||{};
-  const usedTexts = (blockData.assumptions||[]).map(a=>a.canonicalId||'');
+  const usedIds = (blockData.assumptions||[]).map(a=>a.canonicalId||'');
   const company = data.company;
   const canonical = (IJ.CANONICAL[company]||{})[blockId]||[];
   const chips = document.getElementById('ij-easy-chips');
+  if (!chips) return;
 
   if (canonical.length === 0) {
-    chips.innerHTML = '<p style="font-size:12px;color:var(--ij-muted);">No chips available for this block.</p>';
+    chips.innerHTML = '<p style="font-size:12px;color:var(--ij-muted);">No chips available.</p>';
     return;
   }
 
-  chips.innerHTML = canonical.map((ca,i) => {
-    const used = usedTexts.includes(i.toString());
-    return `<button class="ij-easy-chip ${used?'ij-used':''}"
-              ${used?'disabled':''}
-              onclick="IJ.selectEasyChip('${blockId}',${i})">
-      ${ca.text}
-    </button>`;
-  }).join('');
+  let html = '';
+  canonical.forEach(function(ca, i) {
+    const used = usedIds.includes(String(i));
+    const isPending = IJ.pendingChipIdx === i;
+    const usedA = used ? (blockData.assumptions||[]).find(function(a){ return a.canonicalId === String(i); }) : null;
+    const usedBadge = usedA
+      ? '<span style="font-size:9px;display:block;color:var(--ij-muted);margin-top:2px;">Impact '
+          + parseFloat(usedA.impact).toFixed(1) + ' × Uncertainty '
+          + parseFloat(usedA.uncertainty).toFixed(1) + ' = '
+          + (usedA.impact * usedA.uncertainty).toFixed(1) + ' priority</span>'
+      : '';
+
+    const btnStyle = isPending ? 'border-color:var(--ij-maroon);background:#fdf5f5;font-weight:bold;' : '';
+    const btnClass = 'ij-easy-chip' + (used ? ' ij-used' : '');
+
+    html += '<div style="margin-bottom:6px;">'
+      + '<button class="' + btnClass + '"'
+      + (used ? ' disabled' : '')
+      + ' data-block="' + blockId + '" data-idx="' + i + '"'
+      + ' style="' + btnStyle + '"'
+      + ' onclick="IJ.handleChipClick(this)">'
+      + (used ? '&#10003; ' : '') + ca.text + usedBadge
+      + '</button>';
+
+    if (isPending) {
+      html += '<div style="background:#fdf5f5;border:1.5px solid var(--ij-maroon);border-radius:8px;padding:12px;margin-top:4px;">'
+        + '<div style="font-size:11px;font-weight:bold;color:var(--ij-maroon);margin-bottom:10px;">Set scores for this assumption:</div>'
+        + '<div style="display:flex;gap:16px;margin-bottom:10px;">'
+          + '<div style="flex:1;">'
+            + '<div style="font-size:11px;font-weight:bold;color:var(--ij-gray);display:flex;justify-content:space-between;margin-bottom:4px;">Impact <span id="ij-chip-iv" style="color:var(--ij-maroon);font-size:14px;">3.00</span></div>'
+            + '<input type="range" id="ij-chip-impact" min="1" max="5" step="0.05" value="3"'
+            + ' style="width:100%;accent-color:var(--ij-maroon);"'
+            + ' oninput="IJ.updChipImpact(this.value)">'
+            + '<div style="display:flex;justify-content:space-between;font-size:9px;color:var(--ij-muted);"><span>1 Fine</span><span>5 Catastrophic</span></div>'
+          + '</div>'
+          + '<div style="flex:1;">'
+            + '<div style="font-size:11px;font-weight:bold;color:var(--ij-gray);display:flex;justify-content:space-between;margin-bottom:4px;">Uncertainty <span id="ij-chip-uv" style="color:var(--ij-maroon);font-size:14px;">3.00</span></div>'
+            + '<input type="range" id="ij-chip-uncertainty" min="1" max="5" step="0.05" value="3"'
+            + ' style="width:100%;accent-color:var(--ij-maroon);"'
+            + ' oninput="IJ.updChipUncert(this.value)">'
+            + '<div style="display:flex;justify-content:space-between;font-size:9px;color:var(--ij-muted);"><span>1 Certain</span><span>5 Very uncertain</span></div>'
+          + '</div>'
+        + '</div>'
+        + '<div style="display:flex;gap:8px;">'
+          + '<button class="ij-btn ij-btn-primary" style="flex:1;padding:8px;"'
+          + ' data-block="' + blockId + '" data-idx="' + i + '"'
+          + ' onclick="IJ.confirmChip(this)">&#10003; Add This Assumption</button>'
+          + '<button class="ij-btn ij-btn-secondary" style="width:auto;padding:8px 14px;"'
+          + ' data-block="' + blockId + '" onclick="IJ.cancelChip(this)">Cancel</button>'
+        + '</div>'
+      + '</div>';
+    }
+    html += '</div>';
+  });
+  chips.innerHTML = html;
 };
 
-IJ.selectEasyChip = function(blockId, canonicalIndex) {
+IJ.handleChipClick = function(btn) {
+  const blockId = btn.dataset.block;
+  const idx = parseInt(btn.dataset.idx);
+  IJ.pendingChipIdx = (IJ.pendingChipIdx === idx) ? null : idx;
+  IJ.renderEasyChips(blockId);
+};
+
+IJ.cancelChip = function(btn) {
+  const blockId = btn.dataset.block;
+  IJ.pendingChipIdx = null;
+  IJ.renderEasyChips(blockId);
+};
+
+IJ.confirmChip = function(btn) {
+  const blockId = btn.dataset.block;
+  const canonicalIndex = parseInt(btn.dataset.idx);
   const data = IJ.getData();
   const company = data.company;
   const canonical = (IJ.CANONICAL[company]||{})[blockId]||[];
   const ca = canonical[canonicalIndex];
   if (!ca) return;
-
-  const impact = parseFloat(document.getElementById('ij-impact-slider').value)||3;
-  const uncertainty = parseFloat(document.getElementById('ij-uncertainty-slider').value)||3;
-
-  // Award points for easy mode (always full points for correct chip)
-  const blockData = (data.bmcBlocks||{})[blockId]||{assumptions:[],locked:false,score:0};
-  const count = blockData.assumptions.length;
-  const basePoints = IJ.getBasePoints(count);
-
-  const entry = {
-    text: ca.text,
-    impact, uncertainty,
-    matchScore: 8, // full match
-    points: basePoints + 0.25,
-    canonicalId: canonicalIndex.toString(),
-    reveal: null // no reveal needed in easy mode
-  };
-
-  IJ.saveAssumptionEntry(blockId, entry, basePoints + 0.25);
+  const impact      = parseFloat(document.getElementById('ij-chip-impact')?.value)||3;
+  const uncertainty = parseFloat(document.getElementById('ij-chip-uncertainty')?.value)||3;
+  const blockData   = (data.bmcBlocks||{})[blockId]||{assumptions:[],locked:false,score:0};
+  const count       = blockData.assumptions.length;
+  const basePoints  = IJ.getBasePoints(count);
+  const entry = { text:ca.text, impact, uncertainty,
+    matchScore:8, points:basePoints+0.25,
+    canonicalId:String(canonicalIndex), reveal:null };
+  IJ.pendingChipIdx = null;
+  IJ.saveAssumptionEntry(blockId, entry, basePoints+0.25);
   IJ.renderEasyChips(blockId);
   IJ.renderDrawerAssumptions(blockId);
 };
+
+IJ.selectEasyChip = function(blockId, idx) { IJ.pendingChipIdx = idx; IJ.renderEasyChips(blockId); };
 
 IJ.submitAssumption = function() {
   const blockId = IJ.currentBlock;
@@ -3792,7 +3896,12 @@ IJ.launchGameScreen = function() {
   IJ.renderBMC();
 
   // Set game phase
-  IJ.setGamePhase(data.gamePhase || 'explore');
+  const resumePhase = data.gamePhase || 'explore';
+  IJ.setGamePhase(resumePhase);
+  // If resuming from results view, re-render it
+  if (resumePhase === 'results') {
+    setTimeout(() => IJ.renderResults(), 100);
+  }
 };
 
 // ── NARRATIVE ─────────────────────────────────────────────────────────────────
