@@ -452,6 +452,54 @@ body {
 .ij-score-table tr:nth-child(even) td { background: var(--ij-off); }
 .ij-score-table tr:hover td { background: #f0e8e8; }
 .ij-rank-1 td:first-child { color: var(--ij-maroon); font-weight: bold; }
+
+/* ── CERTAINTY BADGE on assumption cards ─────────────────── */
+.ij-certainty-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-size: 9px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  flex-shrink: 0;
+}
+.ij-cert-red    { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+.ij-cert-yellow { background: #fef9c3; color: #78350f; border: 1px solid #fde047; }
+.ij-cert-green  { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+
+/* ── WIDER SCOREBOARD ────────────────────────────────────── */
+.ij-score-table { min-width: 960px; }
+
+/* ── RANKING WEIGHTS SLIDERS ─────────────────────────────── */
+.ij-weight-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.ij-weight-label {
+  width: 130px;
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--ij-text);
+  flex-shrink: 0;
+}
+.ij-weight-slider {
+  flex: 1;
+  accent-color: var(--ij-maroon);
+  height: 4px;
+}
+.ij-weight-pct {
+  width: 40px;
+  text-align: right;
+  font-size: 13px;
+  font-weight: bold;
+  color: var(--ij-maroon);
+  flex-shrink: 0;
+}
 .ij-status-badge {
   display: inline-block;
   padding: 2px 8px;
@@ -1659,6 +1707,44 @@ input[type=range].ij-slider{width:100%;accent-color:var(--ij-maroon);}
       </div>
     </div>
 
+    <!-- Ranking Weights -->
+    <div class="ij-admin-section">
+      <div class="ij-admin-section-head" style="display:flex; align-items:center; justify-content:space-between;">
+        <span>⚖️ Ranking Weights</span>
+        <button class="ij-btn" style="background:rgba(255,255,255,0.2); color:white; border:none;
+                        padding:5px 12px; font-size:11px; cursor:pointer;"
+                onclick="IJ.resetWeights()">↺ Reset to Defaults</button>
+      </div>
+      <div class="ij-admin-section-body">
+        <div style="font-size:11px; color:var(--ij-muted); margin-bottom:14px;">
+          Adjust how teams are ranked on the scoreboard. Weights always sum to 100%. Moving one slider redistributes the remainder across the others proportionally.
+        </div>
+        <div class="ij-weight-row">
+          <div class="ij-weight-label">🎯 Confidence</div>
+          <input type="range" class="ij-weight-slider" id="ij-w-conf" min="0" max="100" value="50" oninput="IJ.onWeightChange('conf', this.value)">
+          <div class="ij-weight-pct" id="ij-w-conf-pct">50%</div>
+        </div>
+        <div class="ij-weight-row">
+          <div class="ij-weight-label">💰 Budget Efficiency</div>
+          <input type="range" class="ij-weight-slider" id="ij-w-budget" min="0" max="100" value="30" oninput="IJ.onWeightChange('budget', this.value)">
+          <div class="ij-weight-pct" id="ij-w-budget-pct">30%</div>
+        </div>
+        <div class="ij-weight-row">
+          <div class="ij-weight-label">📊 Total Points</div>
+          <input type="range" class="ij-weight-slider" id="ij-w-points" min="0" max="100" value="15" oninput="IJ.onWeightChange('points', this.value)">
+          <div class="ij-weight-pct" id="ij-w-points-pct">15%</div>
+        </div>
+        <div class="ij-weight-row">
+          <div class="ij-weight-label">⏱️ Speed to 80%</div>
+          <input type="range" class="ij-weight-slider" id="ij-w-time" min="0" max="100" value="5" oninput="IJ.onWeightChange('time', this.value)">
+          <div class="ij-weight-pct" id="ij-w-time-pct">5%</div>
+        </div>
+        <div style="font-size:11px; color:var(--ij-muted); margin-top:4px;">
+          Total: <strong id="ij-w-total">100%</strong> — Rankings update live on the scoreboard below.
+        </div>
+      </div>
+    </div>
+
     <!-- Live Scoreboard -->
     <div class="ij-admin-section">
       <div class="ij-admin-section-head" style="display:flex; align-items:center; justify-content:space-between;">
@@ -1674,7 +1760,7 @@ input[type=range].ij-slider{width:100%;accent-color:var(--ij-maroon);}
         <table class="ij-score-table" id="ij-admin-scoreboard">
           <thead>
             <tr>
-              <th>#</th>
+              <th>Ranking</th>
               <th>Team</th>
               <th>Company</th>
               <th>Confidence</th>
@@ -3199,6 +3285,49 @@ IJ.refreshScoreboard = async function() {
   }
 };
 
+IJ.rankWeights = { conf: 50, budget: 30, points: 15, time: 5 };
+
+IJ.computeWeightedRank = function(teams) {
+  if (!teams || teams.length === 0) return teams;
+  var w = IJ.rankWeights;
+
+  // Normalisation ranges
+  var maxConf   = Math.max.apply(null, teams.map(function(t){ return t.confidence || 0; })) || 1;
+  var maxPts    = Math.max.apply(null, teams.map(function(t){ return t.totalPoints || 0; }));
+  var minPts    = Math.min.apply(null, teams.map(function(t){ return t.totalPoints || 0; }));
+  var ptRange   = (maxPts - minPts) || 1;
+  var maxSpent  = Math.max.apply(null, teams.map(function(t){ return t.deRiskingDollars || 0; })) || 1;
+  // Time: use lastUpdated — earlier timestamp = better (lower unix ms)
+  var timestamps = teams.map(function(t){ return t.lastUpdated ? new Date(t.lastUpdated).getTime() : Date.now(); });
+  var minTs = Math.min.apply(null, timestamps);
+  var maxTs = Math.max.apply(null, timestamps);
+  var tsRange = (maxTs - minTs) || 1;
+
+  teams.forEach(function(t, i) {
+    var confScore   = (t.confidence || 0) / Math.max(maxConf, 80);               // 0–1, scaled to 80% target
+    var budgetScore = 1 - ((t.deRiskingDollars || 0) / maxSpent);                // lower spend = higher score
+    var pointsScore = ptRange > 0 ? ((t.totalPoints||0) - minPts) / ptRange : 0; // 0–1
+    var ts          = t.lastUpdated ? new Date(t.lastUpdated).getTime() : maxTs;
+    var timeScore   = 1 - ((ts - minTs) / tsRange);                              // earlier = higher score
+
+    t.weightedScore = (confScore * w.conf + budgetScore * w.budget + pointsScore * w.points + timeScore * w.time) / 100;
+  });
+
+  teams.sort(function(a, b){ return b.weightedScore - a.weightedScore; });
+
+  teams.forEach(function(t, i){ t.rank = i + 1; });
+  return teams;
+};
+
+IJ.rankLabel = function(rank, total) {
+  var suffix = rank === 1 ? 'st' : rank === 2 ? 'nd' : rank === 3 ? 'rd' : 'th';
+  if (rank === 1) return '<strong style="color:var(--ij-maroon);">🥇 1st — Leader</strong>';
+  if (rank === 2) return '🥈 2nd Place';
+  if (rank === 3) return '🥉 3rd Place';
+  if (rank === total) return rank + suffix + ' Place <span style="font-size:10px;color:var(--ij-muted);">— Last</span>';
+  return rank + suffix + ' Place';
+};
+
 IJ.renderScoreboard = function(teams) {
   const tbody = document.getElementById('ij-scoreboard-body');
   if (!teams || teams.length === 0) {
@@ -3206,6 +3335,10 @@ IJ.renderScoreboard = function(teams) {
       No teams registered yet.</td></tr>`;
     return;
   }
+
+  // Apply weighted ranking (client-side, admin only)
+  teams = IJ.computeWeightedRank(teams);
+  var total = teams.length;
 
   tbody.innerHTML = teams.map((t, i) => {
     const statusBadge = t.status === 'complete'
@@ -3220,17 +3353,20 @@ IJ.renderScoreboard = function(teams) {
 
     const rankClass = i === 0 ? 'ij-rank-1' : '';
 
+    // Confidence bar: 80% = full bar
+    const confWidth = Math.min((t.confidence / 80) * 100, 100);
+
     return `<tr class="${rankClass}">
-      <td style="font-weight:bold; color:${i===0?'var(--ij-maroon)':'var(--ij-muted)'};">${t.rank}</td>
+      <td style="white-space:nowrap;">${IJ.rankLabel(t.rank, total)}</td>
       <td style="font-weight:bold;">${t.team}</td>
       <td>${IJ.COMPANIES.find(c=>c.name===t.company||c.id===t.company)?.name || t.company}</td>
       <td>
         <div style="display:flex; align-items:center; gap:6px;">
-          <div style="flex:1; height:8px; background:var(--ij-border); border-radius:4px; overflow:hidden; max-width:80px;">
-            <div style="height:100%; width:${Math.min(t.confidence/0.8*100,100)}%;
-                        background:var(--ij-confidence-color); border-radius:4px;"></div>
+          <div style="flex:1; height:8px; background:var(--ij-border); border-radius:4px; overflow:hidden; min-width:80px;">
+            <div style="height:100%; width:${confWidth}%;
+                        background:var(--ij-confidence-color); border-radius:4px; transition:width 0.4s;"></div>
           </div>
-          <span style="font-size:12px; font-weight:bold;">${t.confidence}%</span>
+          <span style="font-size:12px; font-weight:bold;">${t.confidence.toFixed(1)}%</span>
         </div>
       </td>
       <td style="font-weight:bold;">${t.totalPoints.toFixed(2)}</td>
@@ -3252,6 +3388,70 @@ IJ.startScoreboardAutoRefresh = function() {
       IJ.refreshScoreboard();
     }
   }, 5 * 60 * 1000);
+};
+
+// ── RANKING WEIGHT SLIDERS ─────────────────────────────────────────────────────
+// Cascade rule: moving one slider redistributes remainder to the others
+// proportionally. Order of precedence: conf → budget → points → time.
+IJ.WEIGHT_KEYS   = ['conf', 'budget', 'points', 'time'];
+IJ.WEIGHT_LABELS = { conf:'Confidence', budget:'Budget', points:'Points', time:'Time' };
+
+IJ.onWeightChange = function(changed, rawVal) {
+  var val = parseInt(rawVal, 10);
+  val = Math.max(0, Math.min(100, val));
+
+  var others = IJ.WEIGHT_KEYS.filter(function(k){ return k !== changed; });
+  var othersSum = others.reduce(function(s,k){ return s + IJ.rankWeights[k]; }, 0);
+  var remainder = 100 - val;
+
+  IJ.rankWeights[changed] = val;
+
+  if (othersSum === 0) {
+    // Distribute remainder equally
+    others.forEach(function(k){ IJ.rankWeights[k] = Math.round(remainder / others.length); });
+    // Fix rounding
+    var diff = 100 - IJ.WEIGHT_KEYS.reduce(function(s,k){ return s + IJ.rankWeights[k]; }, 0);
+    IJ.rankWeights[others[others.length - 1]] += diff;
+  } else {
+    // Distribute proportionally
+    var allocated = 0;
+    others.forEach(function(k, i) {
+      if (i < others.length - 1) {
+        var share = Math.round((IJ.rankWeights[k] / othersSum) * remainder);
+        IJ.rankWeights[k] = share;
+        allocated += share;
+      } else {
+        IJ.rankWeights[k] = remainder - allocated;
+      }
+    });
+  }
+
+  // Clamp all to 0+
+  IJ.WEIGHT_KEYS.forEach(function(k){ IJ.rankWeights[k] = Math.max(0, IJ.rankWeights[k]); });
+
+  IJ.syncWeightUI();
+  IJ.refreshScoreboard(); // re-rank live
+};
+
+IJ.syncWeightUI = function() {
+  IJ.WEIGHT_KEYS.forEach(function(k) {
+    var slider = document.getElementById('ij-w-' + k);
+    var pct    = document.getElementById('ij-w-' + k + '-pct');
+    if (slider) slider.value = IJ.rankWeights[k];
+    if (pct)    pct.textContent = IJ.rankWeights[k] + '%';
+  });
+  var total = IJ.WEIGHT_KEYS.reduce(function(s,k){ return s + IJ.rankWeights[k]; }, 0);
+  var totEl = document.getElementById('ij-w-total');
+  if (totEl) {
+    totEl.textContent = total + '%';
+    totEl.style.color = total === 100 ? 'var(--ij-maroon)' : '#b71c1c';
+  }
+};
+
+IJ.resetWeights = function() {
+  IJ.rankWeights = { conf: 50, budget: 30, points: 15, time: 5 };
+  IJ.syncWeightUI();
+  IJ.refreshScoreboard();
 };
 
 // ── NAVIGATION ────────────────────────────────────────────────────────────────
@@ -3837,7 +4037,11 @@ IJ.updatePlanBar = function() {
   if (bEl) {
     if (ceiling > 0) {
       bEl.textContent = '$' + spent.toFixed(2) + ' / $' + ceiling.toFixed(2);
-      bEl.style.color = spent > ceiling ? '#ffcccc' : 'white';
+      var pct = spent / ceiling;
+      if (pct >= 1.0)       bEl.style.color = '#ff4444';  // over budget — bright red
+      else if (pct >= 0.85) bEl.style.color = '#ff9933';  // warning — orange
+      else if (pct >= 0.60) bEl.style.color = '#ffd700';  // caution — yellow
+      else                  bEl.style.color = '#66ff99';  // healthy — green
     } else {
       bEl.textContent = '$' + spent.toFixed(2);
       bEl.style.color = 'white';
@@ -3999,11 +4203,20 @@ IJ.renderPlanAssumptions = function() {
     const coach = IJ.JAMES_RECOMMENDS[a.blockId] || ('This is a ' + dvfLabel + ' uncertainty. Choose tests that match the ' + dvfLabel + ' dimension and build evidence progressively from Exploration through Validation.');
     const isActive = idx === IJ.activePlanAC;
 
+    // Certainty badge — reads per-assumption confidence from saved state
+    var savedData = IJ.getData();
+    var ac = (savedData.assumptionConfidence || {})[idx] || 0;
+    var certClass, certLabel;
+    if (ac >= 80)      { certClass = 'ij-cert-green';  certLabel = '● ' + Math.round(ac) + '% — Certain'; }
+    else if (ac >= 40) { certClass = 'ij-cert-yellow'; certLabel = '● ' + Math.round(ac) + '% — Testing'; }
+    else               { certClass = 'ij-cert-red';    certLabel = '● ' + Math.round(ac) + '% — Uncertain'; }
+
     return '<div class="ij-pac' + (isActive ? ' ij-pac-active' : '') + '" id="ij-pac-' + idx + '" onclick="IJ.togglePlanAC(' + idx + ')">'
       + '<div class="ij-pac-row">'
         + '<div class="ij-pac-rank">' + (idx + 1) + '</div>'
-        + '<div class="ij-pac-text">' + a.text.substring(0, 70) + (a.text.length > 70 ? '…' : '') + '</div>'
+        + '<div class="ij-pac-text">' + a.text.substring(0, 60) + (a.text.length > 60 ? '…' : '') + '</div>'
         + '<div class="ij-pac-meta">'
+          + '<span class="ij-certainty-dot ' + certClass + '">' + certLabel + '</span>'
           + '<span class="ij-assumption-badge ' + dvfClass + '" style="font-size:9px;padding:1px 5px;border-radius:3px;font-weight:bold;">' + a.dvf.charAt(0).toUpperCase() + '</span>'
           + '<span style="font-size:9px;color:var(--ij-muted);background:var(--ij-off);padding:1px 5px;border-radius:3px;">' + a.blockLabel + '</span>'
           + '<span style="font-size:9px;font-weight:bold;color:var(--ij-maroon);">' + a.score + '</span>'
