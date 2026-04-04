@@ -1707,6 +1707,74 @@ input[type=range].ij-slider{width:100%;accent-color:var(--ij-maroon);}
       </div>
     </div>
 
+    <!-- Run Configuration (Push to Teams) -->
+    <div class="ij-admin-section">
+      <div class="ij-admin-section-head">📡 Run Configuration — Push to All Teams</div>
+      <div class="ij-admin-section-body">
+        <div style="font-size:11px;color:var(--ij-muted);margin-bottom:18px;">
+          Changes push to all team browsers within 15 seconds via live polling. No page refresh needed on team devices.
+        </div>
+
+        <!-- Budget Cap -->
+        <div class="ij-admin-row" style="margin-bottom:20px; align-items:flex-end;">
+          <div class="ij-field" style="flex:1;">
+            <label class="ij-label">Run Budget ($ per team — 0 = unlimited)</label>
+            <input type="number" class="ij-input" id="ij-cfg-budget" value="0" min="0" step="5"
+                   style="max-width:160px;"
+                   placeholder="0 = unlimited">
+          </div>
+          <button class="ij-btn ij-btn-primary" onclick="IJ.pushRunConfig('budget')"
+                  style="white-space:nowrap; flex-shrink:0;">
+            💾 Save &amp; Push Budget
+          </button>
+        </div>
+
+        <!-- Confidence Target -->
+        <div class="ij-admin-row" style="margin-bottom:20px; align-items:flex-end;">
+          <div class="ij-field" style="flex:1;">
+            <label class="ij-label">Confidence Target (% to win — default 80%)</label>
+            <input type="number" class="ij-input" id="ij-cfg-conf-target" value="80" min="5" max="100" step="5"
+                   style="max-width:160px;">
+            <div style="font-size:10px;color:var(--ij-muted);margin-top:4px;">
+              Teams' confidence bars and win conditions rescale to this target instantly.
+            </div>
+          </div>
+          <button class="ij-btn ij-btn-primary" onclick="IJ.pushRunConfig('confidence')"
+                  style="white-space:nowrap; flex-shrink:0;">
+            🎯 Push Confidence Target
+          </button>
+        </div>
+
+        <!-- Surprise Message -->
+        <div style="margin-bottom:16px;">
+          <label class="ij-label">Surprise Event Message (leave blank to clear)</label>
+          <textarea id="ij-cfg-surprise" rows="2"
+                    style="width:100%;border:1px solid var(--ij-border);border-radius:var(--ij-radius-md);
+                           padding:8px 10px;font-size:12px;font-family:Arial,sans-serif;resize:vertical;"
+                    placeholder="e.g. 📉 Parent company had a bad quarter — all team budgets cut to $75. Adjust your plans!"></textarea>
+          <div style="display:flex;gap:10px;margin-top:8px;">
+            <button class="ij-btn ij-btn-primary" onclick="IJ.pushRunConfig('surprise')"
+                    style="white-space:nowrap;">
+              📣 Push Surprise to Teams
+            </button>
+            <button class="ij-btn ij-btn-secondary" onclick="IJ.clearSurprise()"
+                    style="white-space:nowrap;">
+              ✕ Clear Surprise
+            </button>
+          </div>
+        </div>
+
+        <!-- Live status -->
+        <div id="ij-cfg-status" style="font-size:12px;color:var(--ij-muted);margin-top:4px;"></div>
+        <div style="margin-top:14px;padding:10px 14px;background:var(--ij-off);border-radius:var(--ij-radius-md);font-size:11px;">
+          <strong>Currently live:</strong>
+          <span id="ij-cfg-live-budget">Budget: unlimited</span> ·
+          <span id="ij-cfg-live-conf">Target: 80%</span> ·
+          <span id="ij-cfg-live-surprise">No surprise active</span>
+        </div>
+      </div>
+    </div>
+
     <!-- Ranking Weights -->
     <div class="ij-admin-section">
       <div class="ij-admin-section-head" style="display:flex; align-items:center; justify-content:space-between;">
@@ -1803,6 +1871,23 @@ input[type=range].ij-slider{width:100%;accent-color:var(--ij-maroon);}
      SCREEN 3: GAME
      ============================================================ -->
 <div id="ij-screen-game" class="ij-screen">
+
+<!-- Surprise Banner — pushed from Admin, dismissable -->
+<div id="ij-surprise-banner" style="display:none; position:fixed; top:48px; left:0; right:0; z-index:8500;
+     background:linear-gradient(135deg,#b8860b,#ffd700); color:#1a1000;
+     padding:12px 20px; box-shadow:0 4px 16px rgba(0,0,0,0.3);
+     display:none; align-items:center; gap:12px; font-family:Arial,sans-serif;">
+  <span style="font-size:18px; flex-shrink:0;">⚡</span>
+  <div style="flex:1;">
+    <div style="font-weight:bold; font-size:13px; margin-bottom:2px;">Instructor Update</div>
+    <div id="ij-surprise-text" style="font-size:12px; line-height:1.4;"></div>
+  </div>
+  <button onclick="IJ.dismissSurprise()"
+          style="background:rgba(0,0,0,0.15); border:none; color:#1a1000; border-radius:4px;
+                 padding:4px 10px; font-size:12px; cursor:pointer; flex-shrink:0; font-family:Arial,sans-serif;">
+    ✕ Dismiss
+  </button>
+</div>
 
   <!-- Sticky Scoreboard Bar -->
   <div class="ij-score-bar" id="ij-score-bar">
@@ -3229,6 +3314,7 @@ IJ.enterAdmin = function() {
   IJ.showScreen('admin');
   IJ.updateRunCode();
   IJ.refreshScoreboard();
+  IJ.loadAdminRunConfig();
 };
 
 IJ.createRun = async function() {
@@ -3294,9 +3380,11 @@ IJ.computeWeightedRank = function(teams) {
   // Check if a budget cap is active (stored in first team's run, or via admin setting)
   // We detect this by checking localStorage for runBudget
   var savedBudget = 0;
+  var savedTarget = 80;
   try {
     var sd = JSON.parse(localStorage.getItem('ij_game_state_v1') || '{}');
     savedBudget = parseFloat(sd.runBudget || 0);
+    savedTarget = parseFloat(sd.confidenceTarget || 80);
   } catch(e) {}
   var hasBudgetCap = savedBudget > 0;
 
@@ -3313,7 +3401,7 @@ IJ.computeWeightedRank = function(teams) {
   var tsRange = (maxTs - minTs) || 1;
 
   teams.forEach(function(t, i) {
-    var confScore   = (t.confidence || 0) / Math.max(maxConf, 80);               // 0–1, scaled to 80% target
+    var confScore   = (t.confidence || 0) / Math.max(maxConf, savedTarget);        // 0–1, scaled to target
 
     // Budget: only compare teams when a cap is set.
     // Without a cap, spending money means you're playing — don't penalise that.
@@ -3373,8 +3461,9 @@ IJ.renderScoreboard = function(teams) {
 
     const rankClass = i === 0 ? 'ij-rank-1' : '';
 
-    // Confidence bar: 80% = full bar
-    const confWidth = Math.min((t.confidence / 80) * 100, 100);
+    // Confidence bar: confidenceTarget = full bar
+    const confTarget = 80; // scoreboard uses stored value; admin browser reads from its own localStorage
+    const confWidth = Math.min((t.confidence / confTarget) * 100, 100);
 
     return `<tr class="${rankClass}">
       <td style="white-space:nowrap;">${IJ.rankLabel(t.rank, total)}</td>
@@ -3826,7 +3915,7 @@ IJ.showTestOutcome = function(outcome, test, acGain, newConf) {
     title.textContent = 'Success!';
     desc.textContent = gainStr + ' · ' + spentStr + ' · ' + overStr;
 
-    if (outcome === 'success_followup' || newConf < 80) {
+    if (outcome === 'success_followup' || newConf < (IJ.getData().confidenceTarget || 80)) {
       var paTests = (test.pairAfter||[]).map(function(id){ return IJ.TESTS.find(function(t){ return t.id===id; }); }).filter(Boolean);
       var nextHtml = '';
       if (paTests.length > 0 && outcome === 'success_followup') {
@@ -4672,10 +4761,13 @@ IJ.renderBMC = function() {
     </div>`;
   }).join('');
 
-  // Show prioritize button if any block has assumptions
+  // Show prioritize button if any block has assumptions OR is locked
+  // (locked with no assumptions = player engaged but got penalised; still allow advance)
   const bmcBlocks = data.bmcBlocks || {};
-  const hasAny = Object.values(bmcBlocks).some(b => b.assumptions && b.assumptions.length > 0);
-  document.getElementById('ij-prioritize-btn').style.display = hasAny ? 'block' : 'none';
+  const hasEngaged = Object.values(bmcBlocks).some(b =>
+    b.locked || (b.assumptions && b.assumptions.length > 0)
+  );
+  document.getElementById('ij-prioritize-btn').style.display = hasEngaged ? 'block' : 'none';
 };
 
 IJ.openBlock = function(blockId) {
@@ -5157,6 +5249,9 @@ IJ.launchGameScreen = function() {
   IJ.timerRemaining = data.timerSecs || IJ.DEFAULT_TIMER;
   IJ.startTimer();
 
+  // Start run config polling (budget cap, confidence target, surprise events)
+  IJ.startRunConfigPoll();
+
   // Render BMC canvas
   IJ.renderBMC();
 
@@ -5337,20 +5432,27 @@ IJ.updateScoreBar = function() {
   const lost     = data.lostPoints       || 0;
   const total    = data.totalPoints      || (earned - lost);
   const conf     = data.confidence       || 0;
+  const target   = data.confidenceTarget || 80;
 
   document.getElementById('ij-bar-earned').textContent  = '+' + earned.toFixed(2);
   document.getElementById('ij-bar-lost').textContent    = lost.toFixed(2);
   document.getElementById('ij-bar-total').textContent   = total.toFixed(2);
 
-  // Confidence bar — max display 80%
-  const confPct  = Math.min(conf, 80);
-  const fillPct  = (confPct / 80) * 100;
+  // Confidence bar — full bar = confidenceTarget
+  const fillPct  = Math.min((conf / target) * 100, 100);
   document.getElementById('ij-bar-confidence-fill').style.width = fillPct + '%';
   document.getElementById('ij-bar-confidence-pct').textContent  = conf.toFixed(1) + '%';
 
+  // Update win-line tooltip
+  const winLine = document.getElementById('ij-bar-confidence-fill');
+  const winLineEl = document.querySelector('.ij-confidence-win-line');
+  if (winLineEl) winLineEl.title = 'Win at ' + target + '%';
+
   // Win flash
-  if (conf >= 80) {
+  if (conf >= target) {
     document.getElementById('ij-bar-confidence-fill').style.background = '#ffd600';
+  } else {
+    document.getElementById('ij-bar-confidence-fill').style.background = '';
   }
 };
 
@@ -5412,6 +5514,191 @@ document.addEventListener('DOMContentLoaded', function() {
     // Will be handled by restoreLobbyState → launchGameScreen path
   }
 });
+
+// ── RUN CONFIG — ADMIN PUSH ───────────────────────────────────────────────────
+
+IJ.getAdminRunCode = function() {
+  return (document.getElementById('ij-admin-run-code') || {}).value?.trim() || '';
+};
+
+IJ.pushRunConfig = async function(field) {
+  const runCode = IJ.getAdminRunCode();
+  if (!runCode) {
+    IJ.showCfgStatus('No active run — start a run first.', true);
+    return;
+  }
+
+  // Read current live config from Apps Script first, then merge
+  let existing = { budget: 0, confidenceTarget: 80, surpriseMsg: '', surpriseTs: '' };
+  try {
+    const got = await IJ.appsScriptGet({ action: 'getRunConfig', run: runCode });
+    if (got.success) existing = { ...existing, ...got };
+  } catch(e) {}
+
+  const payload = { action: 'setRunConfig', run: runCode, ...existing };
+
+  if (field === 'budget') {
+    payload.budget = parseFloat(document.getElementById('ij-cfg-budget').value) || 0;
+  } else if (field === 'confidence') {
+    payload.confidenceTarget = parseFloat(document.getElementById('ij-cfg-conf-target').value) || 80;
+  } else if (field === 'surprise') {
+    payload.surpriseMsg = document.getElementById('ij-cfg-surprise').value.trim();
+    payload.surpriseTs  = new Date().toISOString();
+  }
+
+  try {
+    const res = await IJ.appsScriptPost(payload);
+    if (res.success) {
+      IJ.showCfgStatus('✓ Pushed — teams receive it within 15 seconds.', false);
+      IJ.refreshLiveCfgDisplay(payload);
+    } else {
+      IJ.showCfgStatus('Push failed: ' + (res.error || 'unknown error'), true);
+    }
+  } catch(e) {
+    IJ.showCfgStatus('Push failed: ' + e.message, true);
+  }
+};
+
+IJ.clearSurprise = async function() {
+  document.getElementById('ij-cfg-surprise').value = '';
+  const runCode = IJ.getAdminRunCode();
+  if (!runCode) return;
+  let existing = { budget: 0, confidenceTarget: 80, surpriseMsg: '', surpriseTs: '' };
+  try {
+    const got = await IJ.appsScriptGet({ action: 'getRunConfig', run: runCode });
+    if (got.success) existing = { ...existing, ...got };
+  } catch(e) {}
+  existing.surpriseMsg = '';
+  existing.surpriseTs  = '';
+  existing.action = 'setRunConfig';
+  existing.run    = runCode;
+  try {
+    await IJ.appsScriptPost(existing);
+    IJ.showCfgStatus('✓ Surprise cleared.', false);
+    IJ.refreshLiveCfgDisplay(existing);
+  } catch(e) {}
+};
+
+IJ.showCfgStatus = function(msg, isError) {
+  const el = document.getElementById('ij-cfg-status');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.color = isError ? '#b71c1c' : '#1b5e20';
+  setTimeout(function() { el.textContent = ''; }, 5000);
+};
+
+IJ.refreshLiveCfgDisplay = function(cfg) {
+  const bEl = document.getElementById('ij-cfg-live-budget');
+  const cEl = document.getElementById('ij-cfg-live-conf');
+  const sEl = document.getElementById('ij-cfg-live-surprise');
+  if (bEl) bEl.textContent = 'Budget: ' + (cfg.budget > 0 ? '$' + cfg.budget + '/team' : 'unlimited');
+  if (cEl) cEl.textContent = 'Target: ' + (cfg.confidenceTarget || 80) + '%';
+  if (sEl) sEl.textContent = cfg.surpriseMsg ? '📣 "' + cfg.surpriseMsg.substring(0, 40) + (cfg.surpriseMsg.length > 40 ? '…' : '') + '"' : 'No surprise active';
+};
+
+// Load current config into admin panel when admin screen opens
+IJ.loadAdminRunConfig = async function() {
+  const runCode = IJ.getAdminRunCode();
+  if (!runCode) return;
+  try {
+    const cfg = await IJ.appsScriptGet({ action: 'getRunConfig', run: runCode });
+    if (!cfg.success) return;
+    const bInput = document.getElementById('ij-cfg-budget');
+    const cInput = document.getElementById('ij-cfg-conf-target');
+    if (bInput) bInput.value = cfg.budget || 0;
+    if (cInput) cInput.value = cfg.confidenceTarget || 80;
+    IJ.refreshLiveCfgDisplay(cfg);
+  } catch(e) {}
+};
+
+// ── RUN CONFIG — TEAM POLLING ─────────────────────────────────────────────────
+
+IJ.runConfigPollHandle = null;
+IJ.lastSurpriseTs = '';
+
+IJ.startRunConfigPoll = function() {
+  if (IJ.runConfigPollHandle) clearInterval(IJ.runConfigPollHandle);
+  IJ.pollRunConfig(); // immediate first poll
+  IJ.runConfigPollHandle = setInterval(IJ.pollRunConfig, 15000);
+};
+
+IJ.stopRunConfigPoll = function() {
+  if (IJ.runConfigPollHandle) { clearInterval(IJ.runConfigPollHandle); IJ.runConfigPollHandle = null; }
+};
+
+IJ.pollRunConfig = async function() {
+  const data = IJ.getData();
+  if (!data.run || !data.registered) return;
+  try {
+    const cfg = await IJ.appsScriptGet({ action: 'getRunConfig', run: data.run });
+    if (cfg.success) IJ.applyRunConfig(cfg);
+  } catch(e) {
+    // Non-fatal — silent fail, will retry in 15s
+  }
+};
+
+IJ.applyRunConfig = function(cfg) {
+  const data = IJ.getData();
+  const changed = {};
+
+  // Budget cap
+  const newBudget = parseFloat(cfg.budget || 0);
+  if (newBudget !== (parseFloat(data.runBudget) || 0)) {
+    changed.runBudget = newBudget;
+  }
+
+  // Confidence target
+  const newTarget = parseFloat(cfg.confidenceTarget || 80);
+  const oldTarget = parseFloat(data.confidenceTarget || 80);
+  if (newTarget !== oldTarget) {
+    changed.confidenceTarget = newTarget;
+    // If current confidence already meets new (lower) target and game not done — win
+    if ((data.confidence || 0) >= newTarget && data.status !== 'complete') {
+      setTimeout(function() { IJ.closeTestOverlay(); IJ.showWinScreen(); }, 200);
+    }
+  }
+
+  // Surprise message — only show if timestamp is new
+  const newTs = cfg.surpriseTs || '';
+  if (newTs && newTs !== IJ.lastSurpriseTs && cfg.surpriseMsg) {
+    IJ.lastSurpriseTs = newTs;
+    changed.lastSurpriseTs = newTs;
+    IJ.showSurpriseBanner(cfg.surpriseMsg);
+  } else if (!cfg.surpriseMsg) {
+    IJ.hideSurpriseBanner();
+  }
+
+  if (Object.keys(changed).length > 0) {
+    IJ.saveData(changed);
+    IJ.updatePlanBar();
+    IJ.updateScoreBar();
+  }
+};
+
+// ── SURPRISE BANNER ───────────────────────────────────────────────────────────
+
+IJ.surpriseDismissHandle = null;
+
+IJ.showSurpriseBanner = function(msg) {
+  const banner = document.getElementById('ij-surprise-banner');
+  const text   = document.getElementById('ij-surprise-text');
+  if (!banner || !text) return;
+  text.textContent = msg;
+  banner.style.display = 'flex';
+  // Auto-dismiss after 30 seconds
+  if (IJ.surpriseDismissHandle) clearTimeout(IJ.surpriseDismissHandle);
+  IJ.surpriseDismissHandle = setTimeout(IJ.dismissSurprise, 30000);
+};
+
+IJ.hideSurpriseBanner = function() {
+  const banner = document.getElementById('ij-surprise-banner');
+  if (banner) banner.style.display = 'none';
+};
+
+IJ.dismissSurprise = function() {
+  IJ.hideSurpriseBanner();
+  if (IJ.surpriseDismissHandle) { clearTimeout(IJ.surpriseDismissHandle); IJ.surpriseDismissHandle = null; }
+};
 </script>
 
 </body>
