@@ -4076,8 +4076,8 @@ IJ.planAddTest = function(testId) {
   const key = IJ.activePlanAC;
   if (!IJ.planTrays[key]) IJ.planTrays[key] = [];
   const tray = IJ.planTrays[key];
-  if (tray.length >= 5) {
-    IJ.showStatus('ij-drawer-status', 'warn', 'Maximum 5 tests per assumption.');
+  if (tray.length >= 10) {
+    IJ.showStatus('ij-drawer-status', 'warn', 'Maximum 10 tests per assumption.');
     return;
   }
   if (tray.find(function(x) { return x.testId === testId; })) {
@@ -4102,6 +4102,12 @@ IJ.planAddTest = function(testId) {
 
 IJ.planRemoveTest = function(acKey, testId) {
   if (!IJ.planTrays[acKey]) return;
+  // Block removal of any test that has already been run — cost is spent, outcome is recorded
+  const item = IJ.planTrays[acKey].find(function(x) { return x.testId === testId; });
+  if (item && item.outcome !== null) {
+    IJ.showStatus('ij-drawer-status', 'warn', 'Cannot remove a completed test — the budget has already been spent.');
+    return;
+  }
   IJ.planTrays[acKey] = IJ.planTrays[acKey].filter(function(x) { return x.testId !== testId; });
   IJ.updatePlanBar();
   IJ.renderPlanTray(acKey);
@@ -4151,7 +4157,7 @@ IJ.renderPlanTray = function(acKey) {
   const countEl = document.getElementById('ij-pac-count-' + acKey);
   if (countEl) countEl.textContent = tray.length ? tray.length + ' test' + (tray.length > 1 ? 's' : '') + ' queued' : '0 tests';
 
-  const SLOT_COUNT = Math.min(5, Math.max(3, tray.length + 1));
+  const SLOT_COUNT = Math.min(10, Math.max(3, tray.length + 1));
   let html = '';
   tray.forEach(function(item, i) {
     const t = IJ.TESTS.find(function(x) { return x.id === item.testId; });
@@ -4162,8 +4168,12 @@ IJ.renderPlanTray = function(acKey) {
     const acConf = Math.round(((IJ.getData().assumptionConfidence || {})[acKey] || 0));
     const confBadge = alreadyRun ? '<span style="font-size:9px;background:#e8f5e9;color:#1b5e20;padding:1px 4px;border-radius:3px;font-weight:bold;">' + acConf + '% certain</span>' : '';
     const costDots = '●'.repeat(t.cost) + '○'.repeat(5 - t.cost);
+    // Remove button: disabled (greyed, no click) for run tests — can't undo a test or recover its cost
+    const removeBtn = alreadyRun
+      ? '<button class="ij-tray-remove" disabled title="Cannot remove a completed test" style="opacity:0.25;cursor:not-allowed;">×</button>'
+      : '<button class="ij-tray-remove" onclick="IJ.planRemoveTest(' + acKey + ',' + t.id + ')" title="Remove test">×</button>';
     html += '<div class="ij-tray-card">'
-      + '<button class="ij-tray-remove" onclick="IJ.planRemoveTest(' + acKey + ',' + t.id + ')">×</button>'
+      + removeBtn
       + '<div class="ij-tray-card-name">' + t.name + '</div>' + (typeof confBadge !== 'undefined' ? confBadge : '')
       + '<div class="ij-tray-card-meta">$' + (t.cost*2.5).toFixed(2) + ' · ' + t.evidence + '% ev</div>'
       + (alreadyRun ? '<div class="ij-tray-card-outcome ' + outcomeClass + '">' + outcomeLabel + '</div>' : '')
@@ -4178,7 +4188,7 @@ IJ.renderPlanTray = function(acKey) {
     + '</div>';
   });
   // Empty slots
-  for (let s = tray.length; s < SLOT_COUNT && s < 5; s++) {
+  for (let s = tray.length; s < SLOT_COUNT && s < 10; s++) {
     html += '<div class="ij-tray-slot">+ Slot ' + (s + 1) + '</div>';
   }
   el.innerHTML = html;
