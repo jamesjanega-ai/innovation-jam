@@ -400,7 +400,7 @@ body {
 .ij-admin-body {
   flex: 1;
   padding: 32px;
-  max-width: 900px;
+  max-width: 1400px;
   margin: 0 auto;
   width: 100%;
 }
@@ -3291,6 +3291,15 @@ IJ.computeWeightedRank = function(teams) {
   if (!teams || teams.length === 0) return teams;
   var w = IJ.rankWeights;
 
+  // Check if a budget cap is active (stored in first team's run, or via admin setting)
+  // We detect this by checking localStorage for runBudget
+  var savedBudget = 0;
+  try {
+    var sd = JSON.parse(localStorage.getItem('ij_game_state_v1') || '{}');
+    savedBudget = parseFloat(sd.runBudget || 0);
+  } catch(e) {}
+  var hasBudgetCap = savedBudget > 0;
+
   // Normalisation ranges
   var maxConf   = Math.max.apply(null, teams.map(function(t){ return t.confidence || 0; })) || 1;
   var maxPts    = Math.max.apply(null, teams.map(function(t){ return t.totalPoints || 0; }));
@@ -3305,10 +3314,21 @@ IJ.computeWeightedRank = function(teams) {
 
   teams.forEach(function(t, i) {
     var confScore   = (t.confidence || 0) / Math.max(maxConf, 80);               // 0–1, scaled to 80% target
-    var budgetScore = 1 - ((t.deRiskingDollars || 0) / maxSpent);                // lower spend = higher score
+
+    // Budget: only compare teams when a cap is set.
+    // Without a cap, spending money means you're playing — don't penalise that.
+    var budgetScore;
+    if (hasBudgetCap) {
+      budgetScore = 1 - Math.min((t.deRiskingDollars || 0) / savedBudget, 1);   // lower vs cap = better
+    } else {
+      budgetScore = maxSpent > 0
+        ? 1 - ((t.deRiskingDollars || 0) / maxSpent)                            // relative: lower spend = better
+        : 0;                                                                     // everyone equal if no spending yet
+    }
+
     var pointsScore = ptRange > 0 ? ((t.totalPoints||0) - minPts) / ptRange : 0; // 0–1
     var ts          = t.lastUpdated ? new Date(t.lastUpdated).getTime() : maxTs;
-    var timeScore   = 1 - ((ts - minTs) / tsRange);                              // earlier = higher score
+    var timeScore   = tsRange > 1 ? 1 - ((ts - minTs) / tsRange) : 0;            // earlier = higher; 0 if all same
 
     t.weightedScore = (confScore * w.conf + budgetScore * w.budget + pointsScore * w.points + timeScore * w.time) / 100;
   });
@@ -3873,6 +3893,8 @@ IJ.tweakAndRetest = function() {
 IJ.closeTestOverlay = function() {
   if (IJ.testTimerHandle) { clearInterval(IJ.testTimerHandle); IJ.testTimerHandle = null; }
   document.getElementById('ij-test-overlay').classList.remove('ij-open');
+  // Refresh certainty badges on assumption cards
+  IJ.renderPlanAssumptions();
   // Re-render results to reflect new confidence
   IJ.renderResults();
 };
@@ -4099,10 +4121,11 @@ IJ.planMoveTest = function(acKey, testId, dir) {
 IJ.planRunTest = function(acKey, testId) {
   const a = IJ.buildPrioritizedList()[acKey];
   if (!a) return;
-  IJ.runTest(testId, acKey, a.score);
-  // After test resolves, update tray card with outcome
+  // Set pending state BEFORE runTest — in Speed Mode resolveTest fires
+  // synchronously, so planPendingAC must already be set when planMarkOutcome runs
   IJ.planPendingAC = acKey;
   IJ.planPendingTest = testId;
+  IJ.runTest(testId, acKey, a.score);
 };
 
 // Called after test resolves — update tray card with outcome
