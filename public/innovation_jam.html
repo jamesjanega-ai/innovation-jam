@@ -1486,11 +1486,7 @@ input[type=range].ij-slider{width:100%;accent-color:var(--ij-maroon);}
           <label class="ij-label">Session Timer</label>
           <div class="ij-timer-wheels">
             <div class="ij-timer-wheel">
-              <select id="ij-timer-h">
-                <option value="0">0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-              </select>
+              <select id="ij-timer-h"></select>
               <label>hr</label>
             </div>
             <div class="ij-timer-sep">:</div>
@@ -1504,7 +1500,7 @@ input[type=range].ij-slider{width:100%;accent-color:var(--ij-maroon);}
               <label>sec</label>
             </div>
           </div>
-          <div class="ij-input-hint">Default: 45 minutes. Adjust if your instructor sets a different time.</div>
+          <div class="ij-input-hint">Default: 45 minutes in class. For solo practice, set up to 72 hours — the timer saves when you close the tab, so you can dip in and out.</div>
         </div>
 
         <!-- Difficulty -->
@@ -1661,10 +1657,7 @@ input[type=range].ij-slider{width:100%;accent-color:var(--ij-maroon);}
             <label class="ij-label">Default Timer</label>
             <div class="ij-timer-wheels">
               <div class="ij-timer-wheel">
-                <select id="ij-admin-timer-h">
-                  <option value="0">0</option>
-                  <option value="1">1</option>
-                </select>
+                <select id="ij-admin-timer-h"></select>
                 <label>hr</label>
               </div>
               <div class="ij-timer-sep">:</div>
@@ -3088,9 +3081,22 @@ IJ.autoLoadRun = async function() {
 
 // ── TIMER WHEELS ──────────────────────────────────────────────────────────────
 IJ.buildTimerWheels = function(hId, mId, sId) {
+  const hSel = document.getElementById(hId);
   const mSel = document.getElementById(mId);
   const sSel = document.getElementById(sId);
   if (!mSel || !sSel) return;
+
+  // Hours: 0 to 72 (supports solo practice over up to 3 days)
+  if (hSel) {
+    hSel.innerHTML = '';
+    for (let i = 0; i <= 72; i++) {
+      hSel.innerHTML += `<option value="${i}">${i}</option>`;
+    }
+  }
+
+  // Minutes and seconds: 0 to 59
+  mSel.innerHTML = '';
+  sSel.innerHTML = '';
   for (let i = 0; i < 60; i++) {
     const v = i.toString().padStart(2, '0');
     mSel.innerHTML += `<option value="${i}">${v}</option>`;
